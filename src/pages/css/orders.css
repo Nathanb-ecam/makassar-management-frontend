@@ -1,0 +1,92 @@
+.orders-list{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    /* margin-left:100px;
+    width: calc(100%-100px); */
+    border: 1px solid var(--light-gray);
+    
+}
+
+
+
+.orders-list .title-row{
+    border-bottom: 1px solid var(--light-gray);
+    display: flex;
+    /* justify-content: space-around; */
+    width: 100%;
+    background-color: var(--light-white);
+    /* padding:5px 10px; */
+    text-align: center;
+    
+}
+
+.orders-list .title-row div{
+    width: 200px;
+    font-size: 1.2rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    /* color:white; */
+    /* margin:5px 0; */
+    
+
+}
+
+
+.orders-list .customer-row .customer-base-info{
+    /* padding:5px 10px; */
+    display: flex;
+    /* justify-content: space-around; */
+    width: 100%;
+}
+
+
+.orders-list .customer-row .customer-base-info div{
+
+    text-align: center;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin: 5px 0;
+    border:1px solid black;
+    width: 200px;
+    height: 2rem;
+}
+
+.orders-list .customer-row .dropdown-arrow{
+    transform: rotate(90deg);
+    
+}
+
+.customer-more-info{
+    flex-direction: row;
+    border:1px solid red;
+}
+
+.customer-more-info .bag-infos, .customer-more-info .customer-infos{
+    /* padding:20px 0; */
+}
+
+.customer-more-info .bag-infos{
+    background:blue;
+    width: 100%;
+}
+.customer-more-info .customer-infos{
+    background:green;
+    width: 200px;
+    
+}
+.customer-more-info .customer-infos .customer-card{
+    width: 100%;
+}
+.customer-more-info .bag-image{
+    object-fit: cover;
+    width: 100px;
+    height: 100px;
+}
+
+.customer-infos{
+    background: var(--light-white);
+    border: 1px solid black;
+}
