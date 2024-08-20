@@ -10,6 +10,7 @@ import { formatTime } from '../utils/formatTime.tsx';
 
 
 import ArrowRightIcon from '@mui/icons-material/ArrowRight';
+import { FaAngleLeft } from "react-icons/fa6";
 import { IconButton } from '@mui/material';
 
 import "./css/orders.css"
@@ -25,7 +26,9 @@ const Orders = () => {
   
   const [rotatedRows, setRotatedRows] = useState<{ [key: number]: boolean }>({});
 
-  const [bags, setBags] = useState<Bag[]>([]); 
+  // const [bags, setBags] = useState<Bag[]>([]); 
+  const [bagsWithQuantity, setBagsWithQuantity] = useState<Map<string, { bag: Bag; quantity: number }>>(new Map());
+
   const [customer, setCustomer] = useState<Customer>({}); 
 
 
@@ -37,8 +40,8 @@ const Orders = () => {
 
     if (!rotatedRows[index]){
       const currentOrder = orders?.find(o => o.id == ord.id)
-
       const orderBags = currentOrder?.bags
+
       console.log("orderbags",orderBags)
       const bagIds = orderBags ? Object.keys(orderBags) : [];
   
@@ -47,7 +50,14 @@ const Orders = () => {
         console.log("New bags",bagIds)
         const resp = await getBagsWithIds(auth,bagIds)
         if(Array.isArray(resp) && resp.length!= 0){
-          setBags(resp)
+          const newBagsWithQuantity = new Map<string, { bag: Bag; quantity: number }>();
+
+          resp.forEach((bag) => {
+            const quantity = orderBags[bag.id]; // Assuming `orderBags` has bag IDs as keys and quantities as values
+            newBagsWithQuantity.set(bag.id, { bag, quantity });
+          });
+
+          setBagsWithQuantity(newBagsWithQuantity);
         }else{
           console.log("No updated data for bags")
         }
@@ -89,6 +99,7 @@ const Orders = () => {
 
                 </div>
                 
+              
                 {orders.map((order,index)=>(    
                   <div className='customer-row' key={index}>
                     
@@ -96,11 +107,18 @@ const Orders = () => {
                       {/* <div>{order.customerId}</div> */}
                       <div>{formatTime(order.createdAt)}</div>
                       <div>{formatTime(order.updatedAt)}</div>
-                      <div>{order.totalPrice}</div>
+                      <div>{order.totalPrice} €</div>
                       <div>{order.plannedDate? order.plannedDate : '/'}</div>
                       <div>{order.description}</div>
                       <div>
-                        <IconButton
+                        <FaAngleLeft className='arrow-button'
+                                onClick={() => handleClick(index,order)}
+                                style={{
+                                  transform: rotatedRows[index] ? 'rotate(90deg)' : 'rotate(270deg)',
+                                
+                                }}
+                         />
+                        {/* <IconButton
                           onClick={() => handleClick(index,order)}
                           style={{
                             transform: rotatedRows[index] ? 'rotate(90deg)' : 'rotate(180deg)',
@@ -108,17 +126,17 @@ const Orders = () => {
                           }}
                         >
                           <ArrowRightIcon />
-                        </IconButton>
+                        </IconButton> */}
                       </div>
                     </div>
 
-                    <div className='customer-more-info' style={{
+                    <div className='order-details' style={{
                       display: rotatedRows[index] ? 'flex' : 'none',
                       }}>
                         <div className='customer-infos'>
                           {customer 
                           ? <div className='customer-card'>
-                              <h5>{customer.name} ({customer.shippingCountry})</h5>
+                              <h4>{customer.name} ({customer.shippingCountry})</h4>
                               <p>{customer.phone}</p>
                               <p>{customer.mail}</p>
                               <p>{customer.shippingAddress}</p>
@@ -130,12 +148,13 @@ const Orders = () => {
 
                         <div className='bag-infos'>
                           {/* {JSON.stringify(order.bags)} */}
-                          {bags && bags.length!=0 && bags.map((bag,index)=>(
+                          {bagsWithQuantity && bagsWithQuantity.size!=0 && Array.from(bagsWithQuantity.values()).map(({bag,quantity},index)=>(
                           <div key={index} className='bag-item-card'>
                             <div>Modèle: {bag.marketingName}</div>
                             {bag.imageUrls?.map((imgUrl,index)=>(
                               <img className='bag-image' key={index} src={`http://localhost:8080/uploads/${imgUrl}`} alt={`${imgUrl}-${index}`} />
                             ))}
+                            <div>Quantité: {quantity}</div>
                             <div>SKU: {bag.sku}</div>
                           </div>
                           ))}
@@ -149,30 +168,6 @@ const Orders = () => {
   
               </div>
             
-            
-
-
-              //   <Table bordered hover className="table">
-              //   <thead className="thead-light">
-              //       <tr>
-              //           <th scope="col"></th>
-              //           <th scope="col">User id</th>
-              //           <th scope="col">Amount</th>
-              //           <th scope="col">Refund</th>
-              //       </tr>
-              //   </thead>
-              //   <tbody>
-              //       {orders && orders.length>0 && orders.map((order,index)=>(
-              //           <tr key={index}>
-              //               <th scope="row">{index+1}</th>
-              //               <td>{order.customerId ?? 'Null'}</td>
-              //               <td>{order.price ?? 'Null'}</td>
-              //               {/* <td><input type="checkbox"  checked={order.refund} disabled /></td> */}
-              //           </tr>
-              //       ))}
-      
-              //   </tbody>
-              // </Table>
               : <p>Pas de commandes</p>
         }
 

@@ -2,23 +2,26 @@
     display: flex;
     flex-direction: column;
     justify-content: space-evenly;
+    /* width: 100%; */
     /* margin-left:100px;
     width: calc(100%-100px); */
-    border: 1px solid var(--light-gray);
+    /* border: 1px solid var(--light-gray); */
+    /* border-radius: 25px; */
+    box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
     
 }
 
-
+    
 
 .orders-list .title-row{
-    border-bottom: 1px solid var(--light-gray);
     display: flex;
-    /* justify-content: space-around; */
     width: 100%;
-    background-color: var(--light-white);
+    background-color: var(--light-green);
+    color: white;
     /* padding:5px 10px; */
     text-align: center;
-    
+    overflow: hidden;
+    border-radius:10px 10px 0 0;
 }
 
 .orders-list .title-row div{
@@ -33,6 +36,14 @@
 
 }
 
+.orders-list .customer-row{
+    border-bottom: 1px solid var(--light-grey);
+}
+
+.orders-list .customer-row:last-child{
+    border-bottom: 3px solid var(--light-green);
+    
+}
 
 .orders-list .customer-row .customer-base-info{
     /* padding:5px 10px; */
@@ -49,44 +60,66 @@
     overflow: hidden;
     text-overflow: ellipsis;
     margin: 5px 0;
-    border:1px solid black;
+
     width: 200px;
     height: 2rem;
 }
+
+
+
+.orders-list .customer-row .customer-base-info:hover{
+    /* color:blue; */
+    color:var(--light-green);
+}
+
 
 .orders-list .customer-row .dropdown-arrow{
     transform: rotate(90deg);
     
 }
 
-.customer-more-info{
+.order-details{
+    padding:10px;
     flex-direction: row;
-    border:1px solid red;
-}
-
-.customer-more-info .bag-infos, .customer-more-info .customer-infos{
-    /* padding:20px 0; */
-}
-
-.customer-more-info .bag-infos{
-    background:blue;
-    width: 100%;
-}
-.customer-more-info .customer-infos{
-    background:green;
-    width: 200px;
     
+    border:2px solid var(--light-green);
 }
-.customer-more-info .customer-infos .customer-card{
+
+
+
+.customer-base-info .arrow-button{
+    color: var(--light-green);
+    font-size: 1.4rem;
+}
+.order-details .customer-infos, .order-details .bag-infos{
+    padding: 10px;
+}
+
+.order-details .customer-infos{
+ width: 25%;    
+}
+
+.order-details .customer-infos .customer-card{
     width: 100%;
 }
-.customer-more-info .bag-image{
+.order-details .bag-image{
     object-fit: cover;
     width: 100px;
     height: 100px;
 }
 
 .customer-infos{
-    background: var(--light-white);
-    border: 1px solid black;
+
+    /* background: var(--light-white); */
+    /* border: 3px solid var(--light-green);
+    border-radius:10px; */
+}
+
+.customer-infos .customer-card h4{
+    color: var(--light-green);
+    /* border-bottom: 2px solid var(--light-green); */
+}
+
+.bag-infos{
+    /* border-radius:10px 10px 0 0; */
 }

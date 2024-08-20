@@ -7,11 +7,17 @@
 :root {
   --black: rgb(0,0,0);
   --dark-black: #161718;
-  --light-black: #2b2d2f;
+  --light-black: #525355;
   --light-gray: #b7c0c7;
+  /* --light-gray: #b7c0c7; */
+  --light-grey: rgb(233,230,232);
+
   --light-white: #dcdcdc;
   --light-green: #039040;
-  --light-purple: #730cda;
+  --light-green: #0a6a34;
+  /* --light-green: #d6d133; */
+  /* --light-purple: #730cda; */
+  --light-purple: rgb(234,51,247);
 
   
 }
