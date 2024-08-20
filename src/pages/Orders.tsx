@@ -16,7 +16,7 @@ import { IconButton } from '@mui/material';
 import "./css/orders.css"
 import { useOrdersContext } from '../hooks/useOrders.tsx';
 import { getBagsWithIds } from '../api/calls/Bags.tsx';
-import { getCustomerById } from '../api/calls/Customer.tsx';
+import { getAllCustomers, getCustomerById } from '../api/calls/Customer.tsx';
 
 
 const Orders = () => {
@@ -29,7 +29,32 @@ const Orders = () => {
   // const [bags, setBags] = useState<Bag[]>([]); 
   const [bagsWithQuantity, setBagsWithQuantity] = useState<Map<string, { bag: Bag; quantity: number }>>(new Map());
 
-  const [customer, setCustomer] = useState<Customer>({}); 
+  // const [customer, setCustomer] = useState<Customer>({}); 
+  const [customers, setCustomers] = useState<Customer[]>([]); 
+  // const [customers, setCustomers] = useState<Map<string,{customer: Customer}>>(new Map()); 
+
+  useEffect(()=>{
+
+    const fetchCustomers = async () => {
+      try{
+
+        const customers = await getAllCustomers(auth);
+        // const newCustomersIdMapped = new Map<string, {customer: Customer}>()
+  
+        // customers.forEach((cust) => {
+        //   newCustomersIdMapped.set(cust.id,cust)
+        // });
+        // setCustomers(newCustomersIdMapped)
+        setCustomers(customers)
+        // console.log("deb", customers)
+      }catch(error){
+        console.error("deb",)
+      }
+    }
+    fetchCustomers()
+  }
+  ,[]);
+
 
 
   const handleClick = async (index: number,ord : Order) => {
@@ -63,16 +88,6 @@ const Orders = () => {
         }
       }
 
-
-      const customerId = currentOrder?.customerId
-      console.log("customerId",customerId)
-      if(customerId != customer.id){
-        const resp = await getCustomerById(auth,customerId)
-        setCustomer(resp)
-      }
-
-      
-
     }
 
   };
@@ -80,98 +95,129 @@ const Orders = () => {
   if (loading) return <p>Loading ...</p>
   if (error) return <p>{error}</p>
 
+ 
   
+
+
+
   return (
     <div className="page">
         {/* {orders && JSON.stringify(orders, null, 2)} */}
-        { orders && orders.length != 0 ?
-             
-              <div className='orders-list'>
-                <div className='title-row'>
-                  {/* <div>ClientId</div> */}
-                  <div>Date de création</div>
-                  <div>Dernière modification</div>
-                  <div>Prix total</div>
-                  <div>Date prévue</div>
-                  <div>Description</div>
-
-                  <div>Détails</div>
-
-                </div>
-                
+        <div className="orders">
+          <div className='title-section'>
+            <h1 className="main-title">Mes commandes</h1>
+            <button className='create-order-button'>Nouvelle commande</button>
+          </div>
+          { orders && orders.length != 0 ?
               
-                {orders.map((order,index)=>(    
-                  <div className='customer-row' key={index}>
-                    
-                    <div className='customer-base-info'>       
-                      {/* <div>{order.customerId}</div> */}
-                      <div>{formatTime(order.createdAt)}</div>
-                      <div>{formatTime(order.updatedAt)}</div>
-                      <div>{order.totalPrice} €</div>
-                      <div>{order.plannedDate? order.plannedDate : '/'}</div>
-                      <div>{order.description}</div>
-                      <div>
-                        <FaAngleLeft className='arrow-button'
-                                onClick={() => handleClick(index,order)}
-                                style={{
-                                  transform: rotatedRows[index] ? 'rotate(90deg)' : 'rotate(270deg)',
-                                
-                                }}
-                         />
-                        {/* <IconButton
-                          onClick={() => handleClick(index,order)}
-                          style={{
-                            transform: rotatedRows[index] ? 'rotate(90deg)' : 'rotate(180deg)',
-                            transition: 'transform 0.5s',
-                          }}
-                        >
-                          <ArrowRightIcon />
-                        </IconButton> */}
-                      </div>
-                    </div>
+                <div className='orders-list'>
+                  <div className='title-row'>
+                    <div>Client</div>
+                    <div>Date de création</div>
+                    <div>Dernière modification</div>
+                    <div>Prix total</div>
+                    <div>Date prévue</div>
+                    <div>Description</div>
 
-                    <div className='order-details' style={{
-                      display: rotatedRows[index] ? 'flex' : 'none',
-                      }}>
-                        <div className='customer-infos'>
-                          {customer 
-                          ? <div className='customer-card'>
-                              <h4>{customer.name} ({customer.shippingCountry})</h4>
-                              <p>{customer.phone}</p>
-                              <p>{customer.mail}</p>
-                              <p>{customer.shippingAddress}</p>
-                              <p>{customer.shippingPostalCode}</p>
-                            </div>
-                          : <div>Customer not found</div>
-                          }
-                        </div>
-
-                        <div className='bag-infos'>
-                          {/* {JSON.stringify(order.bags)} */}
-                          {bagsWithQuantity && bagsWithQuantity.size!=0 && Array.from(bagsWithQuantity.values()).map(({bag,quantity},index)=>(
-                          <div key={index} className='bag-item-card'>
-                            <div>Modèle: {bag.marketingName}</div>
-                            {bag.imageUrls?.map((imgUrl,index)=>(
-                              <img className='bag-image' key={index} src={`http://localhost:8080/uploads/${imgUrl}`} alt={`${imgUrl}-${index}`} />
-                            ))}
-                            <div>Quantité: {quantity}</div>
-                            <div>SKU: {bag.sku}</div>
-                          </div>
-                          ))}
-                        </div>
-        
-                    </div>
+                    <div>Détails</div>
 
                   </div>
-                ))
-                }
-  
-              </div>
+                  
+                
+                  {orders.map((order,index)=>{
+                    const customer = customers.find(c => c.id === order.customerId)
+                    return customer ? (    
             
-              : <p>Pas de commandes</p>
-        }
+                    <div className='customer-row' key={index}>
+                      
+                      <div className='customer-base-info'>       
+                        <div>{ customer.name }</div>
+                        <div>{formatTime(order.createdAt)}</div>
+                        <div>{formatTime(order.updatedAt)}</div>
+                        <div>{order.totalPrice} €</div>
+                        <div>{order.plannedDate? order.plannedDate : '/'}</div>
+                        <div>{order.description}</div>
+                        <div>
+                          <FaAngleLeft className='arrow-button'
+                                  onClick={() => handleClick(index,order)}
+                                  style={{
+                                    transform: rotatedRows[index] ? 'rotate(90deg)' : 'rotate(270deg)',
+                                  
+                                  }}
+                          />
+                          {/* <IconButton
+                            onClick={() => handleClick(index,order)}
+                            style={{
+                              transform: rotatedRows[index] ? 'rotate(90deg)' : 'rotate(180deg)',
+                              transition: 'transform 0.5s',
+                            }}
+                          >
+                            <ArrowRightIcon />
+                          </IconButton> */}
+                        </div>
+                      </div>
 
+                      <div className='order-details' style={{
+                        display: rotatedRows[index] ? 'flex' : 'none',
+                        }}>
+                          {customer ? 
+                            <div className='customer-infos'>
+                              <h4 className='title'>Coordonnées client</h4>
+                              <div className='customer-card'>
+                                {/* <h4 className='title'>{customer.name  } ({customer.shippingCountry})</h4> */}
+                                <div className='phone'>{customer.phone}</div>
+                                <div className='mail'>{customer.mail}</div>
+                                <div className='shippingAddress'>{customer.shippingAddress}, {customer.shippingPostalCode} {customer.shippingCountry}</div>
+                                
+                              </div>
+                              <div className='order-description'>{order.description ? <div> Description: {order.description}</div> : null}</div>
+                            </div>
+                            : <p>Customer not found</p>
+                          }
+  
+      
+  
 
+                          <div className='bag-infos'>
+                            {/* {JSON.stringify(order.bags)} */}
+                            <h4 className='title'>Sacs</h4>
+                            <div className='bags-list'>   
+                              {bagsWithQuantity && bagsWithQuantity.size!=0 && Array.from(bagsWithQuantity.values()).map(({bag,quantity},index)=>(
+                                                
+                                  <div key={index} className='bag-item-card'>
+                                    <div className="title">{bag.marketingName}</div>
+                                    <div className='bags-carousel'>
+                                      {bag.imageUrls?.map((imgUrl,index)=>(
+                                        <img className='bag-image' key={index} src={`http://localhost:8080/uploads/${imgUrl}`} alt={`${imgUrl}-${index}`} />
+                                      ))}
+                                    </div>
+                                    <div className='card-bottom-text'>
+                                      <div className="left">
+                                        <div>Quantité: {quantity}</div>
+                                        <div>SKU: {bag.sku}</div>
+                                      </div>
+                                      <div className="right">
+                                        <div>{bag.retailPrice}€</div>
+                                      </div>
+                                    </div>
+                                  </div>
+                              ))}
+                            </div>
+                          </div>
+          
+                      </div>
+
+                    </div>
+                    ) : null})
+                  }
+    
+                </div>
+              
+                : <p>Pas de commandes</p>
+          }
+
+        </div>
+        
   </div>
   );
 };

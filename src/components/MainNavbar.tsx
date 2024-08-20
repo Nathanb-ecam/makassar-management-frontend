@@ -19,7 +19,7 @@ const MainNavbar = () => {
   const navigate = useNavigate()
   
   const navigateTo = (path,item) => {
-    // setVisibleNavbar(false)
+    setVisibleNavbar(false)
     setSelectedItem(item)
     navigate(path)
     

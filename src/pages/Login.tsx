@@ -10,8 +10,6 @@ import  axios  from '../api/axios';
 
 
 
-const LOGIN_URL = "/login" 
-
 
 const LoginForm = () => {
   
@@ -29,7 +27,7 @@ const LoginForm = () => {
 
     try{
       const response = await axios.post(
-        LOGIN_URL,
+        "/login",
         JSON.stringify(user),
         {
           headers: {'Content-type':'application/json'},
@@ -69,7 +67,8 @@ const LoginForm = () => {
   return (
     <div className='login-page'>
       <div className='login-left-section'>
-        <img src="/src/assets/logo.png" alt="logo makassar" />
+        <h1>La ca serait cool d'avoir <br/>qqch à raconter</h1>
+        <img src="/src/assets/f.png" alt="logo makassar" />
       </div>
       <div className='login-right-section'>
         <h1>Rien que ça bosse</h1>
