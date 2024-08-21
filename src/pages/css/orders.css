@@ -16,23 +16,27 @@
 }
 
 .orders .main-title{
-    color: var(--light-green);
+    color: var(--primary);
+    font-weight: bold;
+    
 }
 
 
 .orders .create-order-button{
-    border: 2px solid var(--light-green);
-    border-radius: 5px;
+    /* border: 2px solid var(--primary);
+    border-radius: 5px; */
+    border: none;
     background: inherit;
-    color: var(--light-green);
+    color: var(--primary);
     padding: 0 25px;
     margin: 5px;
     
 }
 
 .order-plus-button{
-    font-size: 35px;
-    color: var(--light-green);
+    font-size: 45px;
+    color: var(--primary);
+    border: none;
 
 }
 
@@ -65,12 +69,14 @@
 .orders-list .title-row{
     display: flex;
     width: 100%;
-    background-color: var(--light-green);
+    background-color: var(--primary);
     color: white;
     /* padding:5px 10px; */
     text-align: center;
     overflow: hidden;
     border-radius:10px 10px 0 0;
+    font-weight: lighter;
+    
 }
 
 .orders-list .title-row div{
@@ -90,7 +96,7 @@
 }
 
 .orders-list .customer-row:last-child{
-    /* border-bottom: 1px solid var(--light-green); */
+    /* border-bottom: 1px solid var(--primary); */
     
 }
 
@@ -109,7 +115,7 @@
     overflow: hidden;
     text-overflow: ellipsis;
     margin: 5px 0;
-
+    font-weight: lighter;
     width: 200px;
     height: 2rem;
 }
@@ -118,7 +124,8 @@
 
 .orders-list .customer-row .customer-base-info:hover{
     /* color:blue; */
-    color:var(--light-green);
+    color:var(--primary);
+    font-weight: bold;
 }
 
 
@@ -128,16 +135,24 @@
 }
 
 .order-details{
+    display: none;
     padding:10px;
     flex-direction: row;
-    
-    border:2px solid var(--light-green);
+    border:2px solid var(--primary);
+    transition: max-height 1s ease-in-out;
+}
+
+.customer-row .expanded {
+    display: flex;
+}
+
+.customer-row .collapsed {
+    display: none;
 }
 
 
-
 .customer-base-info .arrow-button{
-    color: var(--light-green);
+    color: var(--primary);
     font-size: 1.4rem;
 }
 
@@ -158,6 +173,11 @@
     /* background-color: cadetblue; */
 }
 
+.order-details .customer-infos .customer-card .title{
+    font-weight: bold;
+    color: black;
+    font-size: .9rem;
+}
 
 .customer-infos .order-description, .customer-infos .customer-card, .bag-item-card{
     margin-top: 20px;
@@ -166,7 +186,7 @@
 
 
 .customer-infos h4{
-    color: var(--light-green);
+    color: var(--primary);
 
 }
 
@@ -176,7 +196,12 @@
 }
 
 .bag-infos .title{
-    color: var(--light-green);
+    color: var(--primary);
+}
+
+.bags-section-title{
+    display: flex;
+    justify-content: space-between;
 }
 
 .order-details .bag-infos .bags-list{
@@ -184,6 +209,24 @@
     width: 100%;
     
 }
+
+
+.button-apply-order-changes{
+    opacity: 0;
+    padding: 5px 15px;
+    height: 100%;
+    border: none;
+    background: var(--primary);
+    color: white;
+    border-radius: 5px;
+}
+
+
+.bags-section-title .active{
+    opacity: 1;
+}
+
+
 
 
 

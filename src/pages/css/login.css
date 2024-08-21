@@ -7,7 +7,7 @@
 
 
 .login-left-section{
-    /* background-color: var(--light-green); */
+    /* background-color: var(--primary); */
     width: 60vw;
     display: flex;
     justify-content: center;
@@ -19,7 +19,7 @@
     display: none;
     font-size: 80px;
     position: absolute;
-    color: var(--light-green);
+    color: var(--primary);
     color: green;
 }
 
@@ -63,7 +63,7 @@
 }
 
 .login-right-section h1{
-    color: var(--light-green);
+    color: var(--primary);
 }
 
 .login-right-section button{
@@ -71,7 +71,7 @@
     padding: 10px;
     width: 100px;
     /* background: var(--dark-black); */
-    background: var(--light-green);
+    background: var(--primary);
     border: none;
     border-radius: 5px;
 }

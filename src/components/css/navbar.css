@@ -1,5 +1,6 @@
 .navbar{
-    background : var(--black);
+    background : var(--secondary);
+
     color:  white;
     display: flex;
     flex-direction: column;
@@ -66,11 +67,11 @@
     /* justify-content: flex-start; */
     /* padding: 5px 0;
     padding-left: 10px; */
-    /* border: 1px solid var(--light-green); */
+    /* border: 1px solid var(--primary); */
 }
 
 .navbar .selected{
-    background-color: var(--light-green);
+    background-color: var(--primary);
 }
 
 .navbar .selected > .nav-icons{
@@ -87,7 +88,7 @@
 .navbar ul li .nav-icons{
     width: 35%;
     object-fit: cover;
-    color: var(--light-green);
+    color: var(--primary);
     /* height: 100%; */
     /* background-color: red; */
 }
@@ -110,7 +111,7 @@
     
 }
 .navbar .fast-order{
-    background: var(--light-green);
+    background: var(--primary);
     color:var(--light-gray);
     border:none;
     border-radius: 75px;

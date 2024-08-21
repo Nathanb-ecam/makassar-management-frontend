@@ -13,10 +13,15 @@
   --light-grey: rgb(233,230,232);
 
   --light-white: #dcdcdc;
-  --light-green: #0a6a34;
-  --light-green: #a59b0d;
-  --light-green: #9a9441;
-  /* --light-green: #d6d133; */
+  --primary: #0a6a34;
+  --primary: #a59b0d;
+  --primary: #9a9441;
+  --light-blue: #30336d;
+  --primary: #03100588;
+  --secondary:#03100588;
+  --primary: #6cacff;
+  --secondary:#202020;
+  /* --primary: #d6d133; */
   /* --light-purple: #730cda; */
   --light-purple: rgb(234,51,247);
 

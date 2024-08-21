@@ -20,17 +20,20 @@ import { getBagsWithIds } from '../api/calls/Bags.tsx';
 import { getAllCustomers, getCustomerById } from '../api/calls/Customer.tsx';
 import { RiDeleteBin6Line } from 'react-icons/ri';
 import BagCard from '../components/bags/BagCard.tsx';
+import {updateBagsForOrderWithId } from '../api/calls/Orders.tsx';
 
 
 const Orders = () => {
   
   const {auth} = useAuth()
   const { orders,  loading, error } = useOrdersContext();
+
+  const [currentOrderHasBeenModified,setCurrentOrderHasBeenModified] = useState(false);
   
   const [rotatedRows, setRotatedRows] = useState<{ [key: number]: boolean }>({});
 
   // const [bags, setBags] = useState<Bag[]>([]); 
-  const [currentBagsWithQuantity, setCurrentcurrentBagsWithQuantity] = useState<Map<string, { bag: Bag; quantity: number }>>(new Map());
+  const [currentBagsWithQuantity, setCurrentBagsWithQuantity] = useState<Map<string, { bag: Bag; quantity: number }>>(new Map());
 
   // const [customer, setCustomer] = useState<Customer>({}); 
   const [customers, setCustomers] = useState<Customer[]>([]); 
@@ -42,14 +45,7 @@ const Orders = () => {
       try{
 
         const customers = await getAllCustomers(auth);
-        // const newCustomersIdMapped = new Map<string, {customer: Customer}>()
-  
-        // customers.forEach((cust) => {
-        //   newCustomersIdMapped.set(cust.id,cust)
-        // });
-        // setCustomers(newCustomersIdMapped)
         setCustomers(customers)
-        // console.log("deb", customers)
       }catch(error){
         console.error("deb",)
       }
@@ -59,8 +55,48 @@ const Orders = () => {
   ,[]);
 
 
+  const removeBagFromOrder = (bag : Bag) => {
+    console.log("received bag", bag);
+    setCurrentBagsWithQuantity((prev)=>{
+        const updatedMap = new Map(prev);
+        updatedMap.delete(bag.id!!);
+        setCurrentOrderHasBeenModified(true)
+        return updatedMap
+      }
+    )
+  }
+
+
+
+  const applyOrderModifications = (orderId) => {
+      // use the currentBagsWithQuantity to update the orders content 
+      
+      const bagsIdsToQuantity = new Map();
+      
+      currentBagsWithQuantity.forEach(({bag,quantity},bagId)=>{
+        bagsIdsToQuantity.set(bagId,quantity.toString())
+        }
+      )
+      const updateStatus = updateBagsForOrderWithId(auth,orderId,bagsIdsToQuantity);
+      console.log("updateStatus",updateStatus)
+  }
+
+  const handleBagQuantityChange = (bag : Bag, newQuantity : number) => {
+      setCurrentBagsWithQuantity((prev)=>{
+        // console.log("bag original quantity", prev)
+        const updatedMap = new Map(prev);
+        updatedMap.set(bag.id!!,{bag, "quantity": newQuantity});
+        setCurrentOrderHasBeenModified(true)
+        // console.log("bag quantity modified", updatedMap)
+        return updatedMap
+      }
+    )
+  }
+
 
   const handleClick = async (index: number,ord : Order) => {
+    setCurrentOrderHasBeenModified(false)
+    
     setRotatedRows(prevState => ({
       // ...prevState,
       [index]: !prevState[index]
@@ -85,7 +121,7 @@ const Orders = () => {
             newCurrentBagsWithQuantity.set(bag.id, { bag, quantity });
           });
 
-          setCurrentcurrentBagsWithQuantity(newCurrentBagsWithQuantity);
+          setCurrentBagsWithQuantity(newCurrentBagsWithQuantity);
         }else{
           console.log("No updated data for bags")
         }
@@ -108,10 +144,10 @@ const Orders = () => {
         {/* {orders && JSON.stringify(orders, null, 2)} */}
         <div className="orders">
           <div className='title-section'>
-            <h1 className="main-title">Mes commandes</h1>
+            <h1 className="main-title">Commandes</h1>
             <button className='create-order-button'>
-              Nouvelle commande 
-              {/* <CiSquarePlus className='order-plus-button'/> */}
+              {/* Nouvelle commande  */}
+              <CiSquarePlus className='order-plus-button'/>
             </button>
           </div>
           { orders && orders.length != 0 ?
@@ -147,30 +183,21 @@ const Orders = () => {
                           <FaAngleLeft className='arrow-button'
                                   onClick={() => handleClick(index,order)}
                                   style={{
+                          
                                     transform: rotatedRows[index] ? 'rotate(90deg)' : 'rotate(270deg)',
                                   
                                   }}
                           />
-                          {/* <IconButton
-                            onClick={() => handleClick(index,order)}
-                            style={{
-                              transform: rotatedRows[index] ? 'rotate(90deg)' : 'rotate(180deg)',
-                              transition: 'transform 0.5s',
-                            }}
-                          >
-                            <ArrowRightIcon />
-                          </IconButton> */}
+  
                         </div>
                       </div>
 
-                      <div className='order-details' style={{
-                        display: rotatedRows[index] ? 'flex' : 'none',
-                        }}>
+                      <div className={`order-details ${rotatedRows[index] ? 'expanded' : 'collapsed'}`}>
                           {customer ? 
                             <div className='customer-infos'>
                               <h4 className='title'>Coordonnées client</h4>
                               <div className='customer-card'>
-                                {/* <h4 className='title'>{customer.name  } ({customer.shippingCountry})</h4> */}
+                                <div className='title'>{customer.name}</div>
                                 <div className='phone'>{customer.phone}</div>
                                 <div className='mail'>{customer.mail}</div>
                                 <div className='shippingAddress'>{customer.shippingAddress}, {customer.shippingPostalCode} {customer.shippingCountry}</div>
@@ -181,16 +208,22 @@ const Orders = () => {
                             : <p>Customer not found</p>
                           }
   
-      
   
 
                           <div className='bag-infos'>
                             {/* {JSON.stringify(order.bags)} */}
-                            <h4 className='title'>Sacs</h4>
+                            <div className='bags-section-title'>
+                              <h4 className='title'>Sacs</h4>
+                              <button 
+                                className={`button-apply-order-changes ${currentOrderHasBeenModified ? 'active' : ''}`}
+                                onClick={() => applyOrderModifications(order.id)}>
+                                    Appliquer les changements
+                              </button>
+                            </div>
                             <div className='bags-list'>   
                               {currentBagsWithQuantity && currentBagsWithQuantity.size!=0 && Array.from(currentBagsWithQuantity.values()).map(({bag,quantity},index)=>(
                                                 
-                                  <BagCard key={index} bag={bag} quantity={quantity}   />
+                                  <BagCard key={index} bag={bag} initialQuantity={quantity} deleteBag={removeBagFromOrder} updateBagQuantity={handleBagQuantityChange} />
                               ))}
                             </div>
                           </div>
