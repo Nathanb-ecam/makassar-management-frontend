@@ -1,0 +1,35 @@
+.add-bag-section{
+    width: 160px;
+    height: 180px;
+
+    border: 1px solid var(--primary);
+    border: none;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border-radius: 15px;
+    /* margin-left: 10px; */
+    margin-top: 20px;
+    overflow: hidden;
+
+}
+
+.add-bag-section .add-bag-title{
+    width: 100%;
+    text-align: center;
+    background: white;
+    color: var(--primary);
+    /* text-transform: uppercase; */
+    font-weight: bold;
+    
+}
+
+
+.add-bag-section .plus-button{
+    width: 100%;
+    height: 100%;
+    background: white;
+    /* color: var(--primary); */
+    color: var(--primary);
+    /* font-size: 200px; */
+}

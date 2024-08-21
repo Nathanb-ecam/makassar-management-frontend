@@ -183,7 +183,9 @@
     margin-top: 20px;
 }
 
-
+.customer-infos .customer-card, .bag-item-card{
+    margin-left: 20px;
+}
 
 .customer-infos h4{
     color: var(--primary);
@@ -197,18 +199,24 @@
 
 .bag-infos .title{
     color: var(--primary);
+    margin-left: 20px;
 }
 
 .bags-section-title{
     display: flex;
     justify-content: space-between;
+    
 }
 
 .order-details .bag-infos .bags-list{
     display: flex;
     width: 100%;
     
+    
+    
 }
+
+
 
 
 .button-apply-order-changes{

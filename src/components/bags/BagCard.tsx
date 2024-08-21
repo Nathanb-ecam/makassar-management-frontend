@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { Bag } from '../../models/entities';
 
-import './bagcard.css'
+import './css/bagcard.css'
 
 import { RiDeleteBin6Line } from 'react-icons/ri';
 import { FaAngleRight,FaAngleLeft } from "react-icons/fa6";
@@ -45,7 +45,7 @@ const BagCard = ({bag, initialQuantity, deleteBag, updateBagQuantity}) => {
 
   return (
     <div key={bag.id} className='bag-item-card'>
-        <div className="title">{bag.marketingName}</div>
+        <div className="bag-card-title">{bag.marketingName}</div>
         { bag.imageUrls ?
             <div className='bags-carousel'>
                 <button className='prev-image' onClick={handlePrevImage}><FaAngleLeft /></button>

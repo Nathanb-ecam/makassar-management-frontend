@@ -1,8 +1,10 @@
 import React from 'react'
 import axios from '../axios'
 import { Bag } from '../../models/entities'
+import Orders from '../../pages/Orders';
+import { processHttpError } from '../../utils/httpErros';
 
-export const fetchOrders = async (auth) => {
+export const getOrders = async (auth) => {
     
     try{
         const response = await axios.get('/orders',{
@@ -12,27 +14,18 @@ export const fetchOrders = async (auth) => {
         // setOrders(response.data)
         console.log("Fetched orders: ",JSON.stringify(response?.data))
         if(Array.isArray(response.data)){
-            return response.data
+            return {"ordersArray":response.data}
         }else{
-            return []
+            return {"ordersArray":[] , "err":"Response is not an array"}
         }
     }catch(err){
-        if(!err?.response){
-            console.error("Orders : No server response")
-        }else if (err?.response.status === 400){
-            console.error("Orders : Missing Username or password")
-        }
-        else if (err?.response.status === 401){
-            console.error("Orders : Unauthorized")
-        }else{
-            console.error("Login failed")
-        }
-        return []
+        var errMsg = processHttpError('getOrders',err);
+        return {"ordersArray" : [], "err": errMsg }
     }
 }
 
 
-export const updateBagsForOrderWithId = async (auth,orderId,bagIdsToQuantity: Map<string,string>) => {
+export const updateBagsForOrderWithId = async (auth,orderId,bagIdsToQuantity: Map<string,string>) : Promise<boolean> => {
     try{
         const plainBagsIdsToQuantity = Object.fromEntries(bagIdsToQuantity);
         console.log("DEBUG",plainBagsIdsToQuantity);
@@ -44,21 +37,56 @@ export const updateBagsForOrderWithId = async (auth,orderId,bagIdsToQuantity: Ma
         },
         
         )
-        
-        console.log(`Update bags for order: `,JSON.stringify(response?.data))
+        if (response.status == 200) return true  
+        else false 
+        // console.log(`Update bags for order: `,JSON.stringify(response?.data))
         
     }catch(err){
-        if(!err?.response){
-            console.error("Orders update bags : No server response")
-        }else if (err?.response.status === 400){
-            console.error("Orders update bags : Missing Username or password")
-        }
-        else if (err?.response.status === 401){
-            console.error("Orders update bags : Unauthorized")
-        }else{
-            console.error("Login failed")
-        }
-        return []
+        var errMsg = processHttpError('updateBagsForOrderWithId',err);
+        return false
     }
+    return false
 
+}
+
+
+
+export const getOrderById = async (auth,orderId) => {
+    
+    try{
+        const response = await axios.get(`/orders/${orderId}`,{
+            headers: {'Content-type':'application/json','Authorization': `Bearer ${auth.accessToken}`},
+            withCredentials:true }
+        )
+        // setOrders(response.data)
+        console.log("Fetched orders: ",JSON.stringify(response?.data))
+        return {"order":response.data}
+        
+    }catch(err){
+        var errMsg = processHttpError('getOrderById',err)
+        return {"ordersArray" : [], "err" : errMsg }
+    }
+}
+
+
+export const addBagToOrder = async (auth,orderId,bagId, quantity)=>{
+    try{
+        const response = await axios.get(`/orders/${orderId}/addBag/${bagId}/${quantity}`,{
+            headers: {'Content-type':'application/json','Authorization': `Bearer ${auth.accessToken}`},
+            withCredentials:true }
+        )
+        // setOrders(response.data)
+        // console.log("Fetched orders: ",JSON.stringify(response?.data))
+        if(response?.status === 200){
+            console.log("Successfully added bag to order: ")
+            return true
+        }else{
+            return false
+        }
+        
+    }catch(err){
+        var errMsg = processHttpError('getOrderById',err)
+        console.log(errMsg)
+        return false
+    }
 }

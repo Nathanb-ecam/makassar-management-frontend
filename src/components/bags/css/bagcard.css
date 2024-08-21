@@ -14,7 +14,7 @@
     /* border: 1px solid var(--primary); */
 }
 
-.order-details .bag-infos .bag-item-card .title{
+.order-details .bag-infos .bag-item-card .bag-card-title{
     /* border: 1px solid var(--primary); */
     border-radius: 15px 15px 0 0;
     background: var(--primary);

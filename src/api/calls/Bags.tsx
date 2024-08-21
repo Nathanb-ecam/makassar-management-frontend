@@ -1,5 +1,6 @@
 import React from 'react'
 import axios from '../axios'
+import { processHttpError } from '../../utils/httpErros'
 
 export const getBagsWithIds = async (auth,ids) => {
     
@@ -16,22 +17,34 @@ export const getBagsWithIds = async (auth,ids) => {
         // setBags(response.data)
         console.log("Fetched bags: ",JSON.stringify(response?.data))
         if(Array.isArray(response.data)){
-            return response.data
+            return {"bags":response.data}
         }else{
-            return []
+            return {"err":"Bags is not an array"}
         }
     }catch(err){
-        if(!err?.response){
-            console.error("Bags : No server response")
-        }else if (err?.response.status === 400){
-            console.error("Bags : Missing Username or password")
-        }
-        else if (err?.response.status === 401){
-            console.error("Bags : Unauthorized")
+        var msg = processHttpError("getBagsWithIds",err);
+        return {"err" : msg}
+    }
+}
+
+export const getBags = async (auth) => {
+    try{
+        const response = await axios.get('/bags',
+        {
+            headers: {'Content-type':'application/json','Authorization': `Bearer ${auth.accessToken}`},
+            withCredentials:true 
+        },
+        )
+        
+        console.log("Fetched bags: ",JSON.stringify(response?.data))
+        if(Array.isArray(response.data)){
+            return {"bags":response.data}
         }else{
-            console.error("Login failed")
+            return {"err":"Bags is not an array"}
         }
-        return []
+    }catch(err){
+        var msg = processHttpError("getBagsWithIds",err);
+        return {"err" : msg}
     }
 }
 

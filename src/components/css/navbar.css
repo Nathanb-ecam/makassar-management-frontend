@@ -101,8 +101,8 @@
     margin: 5px 0;
     text-align: start;
     background: inherit;
-    color:var(--light-grey);
-    opacity: .3;
+    color:var(--black);
+    opacity: .7;
     
 }
 
@@ -112,11 +112,13 @@
 }
 .navbar .fast-order{
     background: var(--primary);
-    color:var(--light-gray);
+    color:rgba(255, 255, 255, 0.92);
     border:none;
-    border-radius: 75px;
+    border-radius: 15px;
     padding:10px;
     margin:5px;
+    font-weight: bold;
+    
 }
 
 

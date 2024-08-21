@@ -5,12 +5,13 @@
 }
 
 :root {
-  --black: rgb(0,0,0);
+  --black: rgb(61,61,61);
   --dark-black: #161718;
   --light-black: #525355;
   --light-gray: #b7c0c7;
   /* --light-gray: #b7c0c7; */
   --light-grey: rgb(233,230,232);
+  --dark-grey: rgb(61,61,61);
 
   --light-white: #dcdcdc;
   --primary: #0a6a34;
@@ -21,6 +22,7 @@
   --secondary:#03100588;
   --primary: #6cacff;
   --secondary:#202020;
+  --secondary: rgb(233,230,232);
   /* --primary: #d6d133; */
   /* --light-purple: #730cda; */
   --light-purple: rgb(234,51,247);

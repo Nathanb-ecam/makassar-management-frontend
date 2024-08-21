@@ -21,12 +21,13 @@ import { getAllCustomers, getCustomerById } from '../api/calls/Customer.tsx';
 import { RiDeleteBin6Line } from 'react-icons/ri';
 import BagCard from '../components/bags/BagCard.tsx';
 import {updateBagsForOrderWithId } from '../api/calls/Orders.tsx';
+import AddBagCard from '../components/bags/AddBagCard.tsx';
 
 
 const Orders = () => {
   
   const {auth} = useAuth()
-  const { orders,  loading, error } = useOrdersContext();
+  const { orders,  loading, error , fetchOrderById} = useOrdersContext();
 
   const [currentOrderHasBeenModified,setCurrentOrderHasBeenModified] = useState(false);
   
@@ -68,18 +69,24 @@ const Orders = () => {
 
 
 
-  const applyOrderModifications = (orderId) => {
+  const applyOrderModifications = async (orderId) => {
       // use the currentBagsWithQuantity to update the orders content 
       
       const bagsIdsToQuantity = new Map();
-      
+        
       currentBagsWithQuantity.forEach(({bag,quantity},bagId)=>{
         bagsIdsToQuantity.set(bagId,quantity.toString())
         }
       )
-      const updateStatus = updateBagsForOrderWithId(auth,orderId,bagsIdsToQuantity);
-      console.log("updateStatus",updateStatus)
+      const updateStatus = await updateBagsForOrderWithId(auth,orderId,bagsIdsToQuantity);
+      refreshOrders(orderId);
+      console.log(`succesfully update bags for order ${orderId} ? `,updateStatus)
+  }  
+
+  const refreshOrders = (orderId) => {
+    fetchOrderById(auth,orderId)
   }
+
 
   const handleBagQuantityChange = (bag : Bag, newQuantity : number) => {
       setCurrentBagsWithQuantity((prev)=>{
@@ -96,6 +103,7 @@ const Orders = () => {
 
   const handleClick = async (index: number,ord : Order) => {
     setCurrentOrderHasBeenModified(false)
+    setCurrentBagsWithQuantity(new Map())
     
     setRotatedRows(prevState => ({
       // ...prevState,
@@ -125,6 +133,8 @@ const Orders = () => {
         }else{
           console.log("No updated data for bags")
         }
+      }else{
+        setCurrentBagsWithQuantity(new Map())
       }
 
     }
@@ -221,6 +231,8 @@ const Orders = () => {
                               </button>
                             </div>
                             <div className='bags-list'>   
+                              <AddBagCard orderId={order.id}/>
+   
                               {currentBagsWithQuantity && currentBagsWithQuantity.size!=0 && Array.from(currentBagsWithQuantity.values()).map(({bag,quantity},index)=>(
                                                 
                                   <BagCard key={index} bag={bag} initialQuantity={quantity} deleteBag={removeBagFromOrder} updateBagQuantity={handleBagQuantityChange} />
