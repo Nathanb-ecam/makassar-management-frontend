@@ -30,6 +30,16 @@
     
 }
 
+.order-plus-button{
+    font-size: 35px;
+    color: var(--light-green);
+
+}
+
+.card-bottom-text .delete-icon{
+    color:red;
+}
+
 .orders-list{
     width: 100%;
     display: flex;
@@ -153,12 +163,6 @@
     margin-top: 20px;
 }
 
-.order-details .bag-image{
-    object-fit: cover;
-    width: 120px;
-    height: 100px;
-}
-
 
 
 .customer-infos h4{
@@ -180,42 +184,6 @@
     width: 100%;
     
 }
-
-.order-details .bag-infos .bag-item-card{
-    border-radius: 15px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    width: 220px;
-    height: 200px;
-    
-    box-shadow:  var(--box-shadow) 8px 10px 24px;
-}
-
-.order-details .bag-infos .bag-item-card:hover{
-    /* border: 1px solid var(--light-green); */
-}
-
-.order-details .bag-infos .bag-item-card .title{
-    /* border: 1px solid var(--light-green); */
-    border-radius: 15px 15px 0 0;
-    background: var(--light-green);
-    color: var(--light-grey);
-    width: 100%;
-    text-align: center;
-    text-overflow: ellipsis;
-    overflow: hidden;
-    white-space: nowrap;
-    padding: 5px;
-}
-
-.card-bottom-text{
-    width: 100%;
-    padding: 0 10px;
-    display: flex;
-    justify-content: space-between;
-}
-
 
 
 

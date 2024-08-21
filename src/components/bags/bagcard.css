@@ -1,0 +1,98 @@
+
+.bag-infos .bag-item-card{
+    border-radius: 15px;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    align-items: center;
+    width: 220px;
+    height: 250px;
+    box-shadow:  var(--box-shadow) 8px 10px 24px;
+}
+
+.order-details .bag-infos .bag-item-card:hover{
+    /* border: 1px solid var(--light-green); */
+}
+
+.order-details .bag-infos .bag-item-card .title{
+    /* border: 1px solid var(--light-green); */
+    border-radius: 15px 15px 0 0;
+    background: var(--light-green);
+    color: var(--light-grey);
+    width: 100%;
+    text-align: center;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    padding: 5px;
+}
+
+
+
+.bag-item-card .bags-carousel{
+    display: flex;
+    width: 100%;
+    justify-content: center;
+    height: 140px;
+    
+    /* overflow: hidden; */
+}
+
+.bag-item-card .bags-carousel .prev-image,.bag-item-card .bags-carousel .next-image{
+    width: 20%;
+    background: inherit;
+    border: none;
+}
+
+.bag-item-card .bags-carousel .sliders{
+    /* overflow: hidden; */
+    width: 100%;
+
+    /* height: 100%; */
+    display: flex;
+    overflow: scroll;
+}
+
+.bag-item-card .bags-carousel .slider{
+    width: 0%;
+    height: 100%;
+    transition: width .4s ease-in-out;
+    position: relative;
+
+}
+
+.bag-item-card .bags-carousel .sliders .active{
+    display: flex;
+    width: 100%;
+}
+
+.bag-item-card .bags-carousel .sliders .active > .image-index{
+    display: block;
+    opacity: 1;
+}
+
+.bag-item-card .bags-carousel .slider .image-index{
+    position: absolute;
+    opacity: 0;
+    display: none;
+    transition: opacity 3s ease-in-out;
+    top:10px;
+    left:10px;
+}
+
+.bag-item-card .bags-carousel .bag-image{
+    
+    object-fit: cover;
+    width: 100%;
+    height: 100%;
+    
+}
+
+.card-bottom-text{
+    width: 100%;
+    padding: 0 10px;
+    display: flex;
+    justify-content: space-between;
+    position: absolute;
+    bottom: 10px;
+}

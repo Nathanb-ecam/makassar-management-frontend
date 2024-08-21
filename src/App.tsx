@@ -3,20 +3,20 @@ import { Route, Routes, useLocation, Navigate, useNavigate } from 'react-router-
 
 import './App.css'
 
-import MainNavbar from './components/MainNavbar.tsx'
+import MainNavbar from './components/main/MainNavbar.tsx'
 import Orders from './pages/Orders.tsx';
 import Clients from './pages/Clients.tsx';
 import Materials from './pages/Materials.tsx';
 import Bags from './pages/Bags.tsx';
 import Dashboard from './pages/Dashboard.tsx';
 
-import ProtectedRoutes from './components/ProtectedRoutes.tsx';
+import ProtectedRoutes from './components/main/ProtectedRoutes.tsx';
 import Login from './pages/Login.tsx';
 
 
 import './pages/css/login.css'
 import { AuthProvider, useAuth } from './hooks/useAuth.tsx';
-import Layout from './components/Layout.tsx';
+import Layout from './components/main/Layout.tsx';
 import Missing from './pages/Missing.tsx';
 import { OrdersProvider } from './hooks/useOrders.tsx';
 

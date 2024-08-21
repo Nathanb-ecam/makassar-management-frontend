@@ -3,7 +3,7 @@ import { Navbar,Container,Nav, NavDropdown } from 'react-bootstrap';
 import { Link, useNavigate } from 'react-router-dom';
 
 
-import './css/navbar.css'
+import '../css/navbar.css'
 
 
 import { IoColorPalette } from "react-icons/io5";
