@@ -1,26 +1,37 @@
 import React, { useEffect, useState } from 'react'
 import { Bag } from '../../models/entities';
-import { getBags } from '../../api/calls/Bags';
+import { getBags } from '../../api/calls/Bag';
 import { useAuth } from '../../hooks/useAuth';
 
-import './css/bagselector-popup.css'
 
 import { IoMdClose } from "react-icons/io";
-import { addBagToOrder } from '../../api/calls/Orders';
+import { addBagToOrder } from '../../api/calls/Order';
+import { BsHandbag } from 'react-icons/bs';
+
+
+
+
+
+import '../css/bagselector-popup.css'
+import BagCard from './BagCard.tsx';
+import InfoButtonPopup from '../main/InfoButtonPopup.tsx';
+
 
 interface Props {
     close : ()=> void;
     // addBagToOrder: (bag:Bag | undefined)=> void;
-    orderId: string;
+    // orderId: string;
+    // addBagToCurrentBags: (bag:Bag,quantity: number)=> void;
+    addBagsToCurrentBags: (bags : Map<string,{bag: Bag, quantity: number}>) => void;
 }
 
-const BagSelectorPopup = ({ close,orderId }: Props) => {
+const BagSelectorPopup = ({ close, addBagsToCurrentBags }: Props) => {
 
     const {auth} = useAuth();
     const[bags,setBags] = useState<Bag[]>([]);
-    const [selectedBag,setSelectedBag] = useState<Bag>();
-    const [selectedQuantity,setSelectedQuantity] = useState("1");
-    const [selectedBagIndex,setSelectedBagIndex] = useState(0);
+
+    const [selectedBags,setSelectedBags] = useState<Map<string,{bag:Bag, quantity : number}>>(new Map());
+    
     
     const [error,setError] = useState('');
 
@@ -35,30 +46,42 @@ const BagSelectorPopup = ({ close,orderId }: Props) => {
     },[])
 
 
-    const handleSelectedBag = (index:number,bag:Bag)=>{
-        setSelectedBag(bag);
-        setSelectedBagIndex(index);
+
+
+    const handleBagQuantityChange  = (bag : Bag, quantity : number)=>{
+        setSelectedBags(prev=>{
+            if(!prev) return prev
+            if(bag.id === undefined) return 
+            
+            const updatedBags = new Map(prev);
+
+            updatedBags.set(bag.id, {bag,quantity})
+            return updatedBags
+        })
     }
 
 
-    const handleAddBagToOrder = async (bag:Bag | undefined,quantity:string)=>{
+    const saveBagsSelection = () =>{
+        addBagsToCurrentBags(selectedBags)
         close()
-        if(bag === undefined) return
-        try{
-            const bagAmount = parseInt(quantity,10);
-            // need to create a addBag to order route in the backend
-            const succesfullyAddedBagToOrder = await addBagToOrder(auth,orderId,bag.id,bagAmount);
-            console.log("can go to bed",succesfullyAddedBagToOrder)
-
-        }catch(err){console.log(err)}
-
     }
 
   return (
     <div className='bag-popup-container'>
         {/* <div className='popup-relative-layout'> */}
-            <div className="popup-header">
-                <div className="popup-title">Sélection d'un sac</div>
+            <div className="bag-popup-header">
+                <div className='title-wrapper'>
+                    <div className="title">
+                        Ajouter des sacs à la commande 
+                    </div>
+                    <InfoButtonPopup positionClass="middle-pop" sizeClass='medium-pop' customStyle={{top:'25px'}}>
+                        <div className='info-text'>
+                            1. Choisir le nombre de sacs par modèle<br/>
+                            2. Valider pour ajouter la sélection à la commande actuelle
+                        </div>
+                    </InfoButtonPopup>
+
+                </div>
                 <IoMdClose className='popup-close-btn' onClick={close}/>
                 
             </div>
@@ -67,19 +90,12 @@ const BagSelectorPopup = ({ close,orderId }: Props) => {
             {bags ?
                     bags.map((bag,index)=>(
                         <div 
-                        className={`bag-list-item ${index === selectedBagIndex ? 'active' : ''}`} 
-                        key={index} onClick={()=>handleSelectedBag(index,bag)}
+                        className={`bag-list-item`} 
+                        // key={index} onClick={()=>handleSelectedBag(index,bag)}
                         >
-                            {bag.imageUrls ? 
-                                <div className='bag-image-container'>
-                                    <img className='bag-image' src={`http://localhost:8080/uploads/${bag.imageUrls[0]}`} alt="" />
-                                </div>
-                                : <div className='bag-image'></div>
-                            }
-                            <div className="image-subsection">
-                                <div className="bag-name">{bag.marketingName}</div>
-                                <div className="bag-price">{bag.retailPrice}€</div>
-                            </div>
+                            <BagCard bag={bag} initialQuantity={0} updateBagQuantity={handleBagQuantityChange} bottomVisible={false}>
+
+                            </BagCard>
                         </div>
                         )
                     )
@@ -87,19 +103,24 @@ const BagSelectorPopup = ({ close,orderId }: Props) => {
                     : <p>{error}</p>
                 }
             </div>
-            <div className="bag-select-quantity">
-                <div>Quantité: 
-                    <input 
-                        className='bag-quantity-input' type="number" 
-                        value={selectedQuantity}
-                        onChange={(e)=>setSelectedQuantity(e.target.value)}
-                    />
-                </div>
-            </div>
+            
+   
+            {/* <div className="bag-select-quantity">
+                    <div>Quantité: 
+                        <input 
+                            className='bag-quantity-input' type="number" 
+                            name={}
+                            value={selectedQuantity}
+                            onChange={setSelectedQuantity}
+                        />
+                    </div>
+                </div> */}
+
+
+
             <div className='bottom-section'>
-                <button onClick={()=> handleAddBagToOrder(selectedBag,selectedQuantity)}>Enregistrer</button>
+                <button onClick={saveBagsSelection}>Enregistrer la sélection</button>
             </div>
-        {/* </div> */}
 
         
     </div>
@@ -108,4 +129,6 @@ const BagSelectorPopup = ({ close,orderId }: Props) => {
 }
 
 export default BagSelectorPopup
+
+
 

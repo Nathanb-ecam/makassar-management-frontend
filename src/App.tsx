@@ -19,6 +19,7 @@ import { AuthProvider, useAuth } from './hooks/useAuth.tsx';
 import Layout from './components/main/Layout.tsx';
 import Missing from './pages/Missing.tsx';
 import { OrdersProvider } from './hooks/useOrders.tsx';
+import Customers from './pages/Customers.tsx';
 
 
 
@@ -48,7 +49,7 @@ const App = () => {
               <Route element={< ProtectedRoutes/> }>
                 <Route path='/dashboard' element={ <Dashboard /> } />
                 <Route path='/orders' element={ <Orders/> } />
-                <Route path='/clients' element={<Clients />} />
+                <Route path='/clients' element={<Customers />} />
                 <Route path='/bags' element={<Bags />} />
                 <Route path="/materials" element={<Materials />} />
               </Route>

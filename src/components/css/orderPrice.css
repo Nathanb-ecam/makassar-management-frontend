@@ -1,0 +1,39 @@
+.price-calculations{
+
+}
+
+.actual-price{
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    
+}
+
+
+.decompte{
+
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;    
+    overflow-y: auto;
+    height: 75px;
+
+    
+
+}
+
+.resume{
+    border-top: 1px solid black;
+    width: 100%;
+    
+
+}
+
+
+.discount-container{
+    display: flex;
+}
+.discount-container div:first-child{
+    padding-right: 10px;   
+}

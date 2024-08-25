@@ -3,13 +3,13 @@ import { useAuth } from './useAuth'
 import axios from '../api/axios'
 import { Order } from '../models/entities'
 import { useLocation } from 'react-router-dom';
-import { getOrderById, getOrders } from '../api/calls/Orders';
+import { getOrderById, getOrders } from '../api/calls/Order';
 
 interface OrdersContextType {
     orders: Order[];
     loading: boolean;
     error: string | null;
-    fetchOrderById: (auth,orderId: string) => Promise<void>;
+    refreshOrderById: (auth,orderId: string) => Promise<void>;
 }
 
 
@@ -60,28 +60,33 @@ export const OrdersProvider = ({children}) => {
         }
     
         // if (['/dashboard', '/orders', '/clients', '/bags'].includes(location.pathname)) {
-        // if (['/orders' ].includes(location.pathname)) {
+        if (['/orders' ].includes(location.pathname)) {
             fetchOrders()
-        // }
-    },[auth?.accessToken])
+        }
+    },[auth?.accessToken,location ])
     // },[location.pathname,auth?.accessToken])
     
 
-    const fetchOrderById = async (auth,orderId) => {
+    const refreshOrderById = async (auth,orderId) => {
         const {order, err} = await getOrderById(auth,orderId)
         if (err=== undefined){
-            setOrders(order);
+            setOrders(prevOrders=>{
+                const updatedOrders = prevOrders.map(o => 
+                    o.id === orderId ? order : o
+                )
+                return updatedOrders
+            }
+                
+            );
         }else{
             console.log(err);
-        }
-
-            
+        }       
     }
 
 
 
     return (
-        <OrdersContext.Provider value={{orders,fetchOrderById,loading,error}}>
+        <OrdersContext.Provider value={{orders, refreshOrderById,loading,error}}>
             {children}
         </OrdersContext.Provider>
     )

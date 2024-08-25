@@ -49,4 +49,50 @@ export const getBags = async (auth) => {
 }
 
 
+export const putBag = async (auth,bagId,dataObj) => {
+    
+    try{
+        const response = await axios.put(`/bags/${bagId}`,
+        dataObj,
+        {
+            headers: {'Content-type':'application/json','Authorization': `Bearer ${auth.accessToken}`},
+            withCredentials:true 
+        }
+        )
+        
+        console.log("Modified bag: ",JSON.stringify(response?.data))
+        if(response?.status === 200){
+            return true
+        }
+        return false
+    }catch(err){
+        var errMsg = processHttpError('getOrders',err);
+        return false
+    }
+}
+
+
+
+export const createBagWithImages = async (auth, formData : FormData) => {
+    try{
+        const response = await axios.post(
+            '/bags/withImages',
+            formData,
+            {
+                headers: {'Content-type':'multipart/form-data','Authorization': `Bearer ${auth.accessToken}`},
+                withCredentials:true 
+            }
+        )
+        if(response?.status === 201){
+            console.log(response)
+            return true
+        } 
+        else return false
+
+    }catch(err){
+        var msg = processHttpError("getBagsWithIds",err);
+        console.log(msg)
+        return false
+    }
+}
 

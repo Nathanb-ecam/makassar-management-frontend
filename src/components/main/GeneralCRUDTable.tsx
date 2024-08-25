@@ -1,0 +1,109 @@
+import React, { useState } from 'react'
+
+import '../css/generalCRUDtable.css'
+import { RiDeleteBin6Line } from 'react-icons/ri';
+import { formatTime } from '../../utils/formatTime';
+
+type Header = {
+    key: string;
+    label: string;
+}
+
+export type DataItem = {
+    [key : string]: any;
+}
+
+export interface TableProps{
+    headers : Header[];
+    data : DataItem[];
+    largeColumns: string[];
+}
+
+export interface CRUDHandlers{
+    // onCreateRow: ()=>void;
+    onModifiedRow: (id : string)=>void;
+    onDeleteRow: (id : string)=>void;
+}
+
+interface Props{
+    tableProps : TableProps;
+    handlers: CRUDHandlers;
+}
+
+const GeneralCRUDTable = ({tableProps,handlers} : Props) => {
+
+    const [actualTableData, setActualTableData] = useState();
+
+
+    console.log(tableProps.data)
+
+    tableProps.data.map((dataItem,index)=>{
+        console.log(dataItem)
+    })
+
+    const renderDataItem = (item: any, fieldName : string)=>{
+        
+        if(item === undefined || item === null) return <div>/</div>
+
+        console.log(`type at ${fieldName}`,typeof(item))
+
+        if(fieldName === 'createdAt' || fieldName === 'updatedAt') return formatTime(item)
+        
+        if (typeof(item) === 'object') {
+        
+            return (
+                <div className='object-col'>
+                    {Object.keys(item).map((key,index) => (
+                        <div key={key}>
+                            {item[key]}
+                        </div>
+                    ))}
+                </div>
+            );
+        }
+
+        else if(typeof(item)==='string'){
+            if(item.length === 0) return <div>_</div>
+            else return <div>{item?.toString()}</div>;
+        }
+
+    }
+
+
+  return (
+    <div className='general-crud-table'>
+        <div className='header-row'>
+            {tableProps.headers && tableProps.headers.map(({key,label},index)=>(
+                <div className={`row-field ${tableProps.largeColumns.includes(key) ? 'large' :''}`} key={index}>
+                    {label}
+                </div>
+            ))}
+            <div className="row-field small">
+                
+            </div>
+        </div>
+
+        
+        {tableProps.data && tableProps.data.map((dataItem,rowIndex)=>(
+            <div className='content-row' key={rowIndex}>
+                {tableProps.headers && tableProps.headers.map(({ key }) => (
+                    <div className={`row-item ${tableProps.largeColumns.includes(key) ? 'large':''}`} key={`${rowIndex}-${key}`}>
+                        {
+                            dataItem && dataItem[key] !== undefined ? 
+                                renderDataItem(dataItem[key],key)
+                                : 'N/A'
+
+                        }
+                    </div>
+                ))}
+                <div className="row-item small">
+                    <RiDeleteBin6Line onClick={() => handlers.onDeleteRow(dataItem.id)} />
+                </div>
+            </div> 
+        ))}
+        
+    </div>
+  )
+}
+
+export default GeneralCRUDTable

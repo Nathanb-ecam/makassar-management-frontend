@@ -1,0 +1,91 @@
+.general-crud-table {
+    width: 100%;
+    display: flex;
+    min-width: 820px;
+    flex-direction: column;
+    justify-content: space-evenly;
+    box-shadow: var(--box-shadow) 0px 8px 24px;
+    border-radius: 0 0 10px 10px;
+    overflow: hidden;
+}
+
+.general-crud-table *{
+    /* font-weight: lighter; */
+    /* font-family: var(--font-primary); */
+}
+
+
+.general-crud-table .header-row, .content-row{
+    display: flex;
+    justify-content:space-evenly;
+    width: 100%;
+    text-align: center;
+    overflow: hidden;
+    border-radius:10px 10px 0 0;
+    font-weight: lighter;
+    
+    
+}
+
+.general-crud-table .header-row{
+    background-color: var(--primary);
+    color: white;
+}
+
+.content-row{
+    color: var(--primary);
+    background-color: white;
+}
+
+.content-row:nth-child(even){
+    background: var(--ligth-grey);
+    
+}
+
+
+
+.header-row .row-field:nth-child(1), .content-row .row-item:nth-child(1){
+    min-width: 100px;
+    max-width: 100px;
+}
+
+.header-row .row-field, .content-row .row-item{
+    min-width: 130px;
+    max-width: 130px;
+    overflow:auto;
+    
+}
+
+.header-row .large, .content-row .large{
+    min-width: 150px;
+    max-width: 150px;
+}
+
+.header-row .small, .content-row .small{
+    min-width: 35px;
+    max-width: 35px;
+}
+
+
+.general-crud-table .header-row .row-field{
+    /* width: 200px; */
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+
+
+
+.object-col{ 
+    /* text-align: start; */
+}
+
+.object-col div{
+    width: 100%;
+}
+
+.small{
+    font-size: 1.2rem;
+    color: red;
+}

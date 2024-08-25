@@ -2,6 +2,8 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  /* font-family: "Archivo Black", Arial, Helvetica, sans-serif; */
+  /* font-family: Arial, Helvetica, sans-serif; */
 }
 
 :root {
@@ -10,21 +12,28 @@
   --light-black: #525355;
   --light-gray: #b7c0c7;
   /* --light-gray: #b7c0c7; */
-  --light-grey: rgb(233,230,232);
-  --dark-grey: rgb(61,61,61);
+  --ligth-grey: rgba(218, 224, 243, 0.371);
+  --hover-grey: rgb(226,228,231);
+  
+  
+  
 
-  --light-white: #dcdcdc;
-  --primary: #0a6a34;
-  --primary: #a59b0d;
-  --primary: #9a9441;
-  --light-blue: #30336d;
-  --primary: #03100588;
-  --secondary:#03100588;
+  --white: rgb(255,255,255);
+
   --primary: #6cacff;
   --secondary:#202020;
   --secondary: rgb(233,230,232);
-  /* --primary: #d6d133; */
-  /* --light-purple: #730cda; */
+  
+  
+  --primary: #000000;
+  --secondary:rgb(239,156,56);
+  --secondary:rgb(123, 126, 133);
+
+  
+  --font-primary: 'Archivo Black';
+  --font-secondary: 'Arial';
+  --font-ternary: 'Arial';
+
   --light-purple: rgb(234,51,247);
 
   --box-shadow: rgba(149, 157, 165, 0.2);
@@ -32,7 +41,9 @@
   
 }
 
-
+.title{
+  font-family: var(--font-primary);
+}
 
 .root{
   width: 100%;
@@ -41,7 +52,7 @@
 
 .page{
   /* margin: 1rem; */
-  
+  /* margin:0 auto; */
   padding: 50px;
   /* border: 1px solid red; */
 }

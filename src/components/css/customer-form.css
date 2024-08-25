@@ -1,0 +1,75 @@
+.create-customer-form{
+    /* background: red; */
+    padding: 20px 10px;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    /* flex-wrap: wrap; */
+}
+
+.form-fields-wrapper{
+    
+}
+
+.customer-form-field{
+    margin: 10px 0;
+    display: flex;
+
+}
+
+
+.customer-form-field label{
+    min-width: 100px;
+
+}
+
+.customer-form-field input, .customer-form-field select{
+    width: 200px;
+}
+
+
+
+input[type="submit"]{
+    width: 100px;
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    color: none;
+    background-color:var(--secondary);
+    border:1px solid var(--secondary);
+    border-radius: 5px;
+    /* text-align: end; */
+}
+
+.address-field{
+
+    display: flex;
+    flex-direction: column;
+    margin-top: 35px;
+
+}
+
+.address{
+    display: flex;
+    flex-direction:column;
+    width: 60%;
+    margin: 10px 0;
+}
+
+.address input{
+    margin: 5px;
+    width: 250px;
+}
+
+
+.postal-country{
+    display: flex;
+}
+
+.postal-country input:first-of-type{
+    width: 140px;
+}
+
+.postal-country input:last-of-type{
+    width: 100px;   
+}

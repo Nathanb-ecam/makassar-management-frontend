@@ -1,0 +1,55 @@
+.info-popup{
+    position: relative;
+    font-size: 15px;
+}
+
+.info-popup-content{
+    z-index: 100;
+    position: absolute;
+    width: 245px;
+    /* max-height: 245px; */
+    top: 15px;
+    padding: 0px 15px;
+    border: 2px solid var(--ligth-grey);
+    border-radius: 15px;
+    background: white;
+    overflow: auto;
+}
+
+.info-popup-content .info-text{
+    color: var(--grey);
+    padding: 10px;
+    font-size: .9rem;
+}
+
+.info-popup .small-pop{
+    width: 245px;
+    max-height: 245px;
+}
+
+
+
+.info-popup .medium-pop{
+    width: 345px;
+    max-height: 345px;
+
+}
+.info-popup .large-pop{
+    width: 345px;
+    max-height: 450px;
+}
+
+
+.info-popup .middle-pop{
+    left: 50%;
+    transform: translate(-50%);
+}
+
+.info-popup .left-pop{
+    right: 0;
+}
+
+
+.info-popup .right-pop{
+    left: 0;
+}

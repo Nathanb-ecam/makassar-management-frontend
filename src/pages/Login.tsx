@@ -30,7 +30,10 @@ const LoginForm = () => {
         "/login",
         JSON.stringify(user),
         {
-          headers: {'Content-type':'application/json'},
+          headers: {
+            'Accept':'application/json',
+            'Content-type':'application/json'
+          },
           withCredentials: true
         }
       )
@@ -67,11 +70,10 @@ const LoginForm = () => {
   return (
     <div className='login-page'>
       <div className='login-left-section'>
-        <h1>La ca serait cool d'avoir <br/>qqch à raconter</h1>
         <img src="/src/assets/f.png" alt="logo makassar" />
       </div>
       <div className='login-right-section'>
-        <h1>Rien que ça bosse</h1>
+        <h1>Makassar <br/>management</h1>
         <form onSubmit={handleSubmit} className='login-form'>
           <div className='username-section'>
             <label>Mail</label>

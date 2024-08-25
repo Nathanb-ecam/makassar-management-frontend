@@ -25,6 +25,30 @@ export const getOrders = async (auth) => {
 }
 
 
+export const putOrder = async (auth,orderId,dataObj) => {
+    
+    try{
+        const response = await axios.put(`/orders/${orderId}`,
+        dataObj,
+        {
+            headers: {'Content-type':'application/json','Authorization': `Bearer ${auth.accessToken}`},
+            withCredentials:true 
+        }
+        )
+        // setOrders(response.data)
+        console.log("Modified order: ",JSON.stringify(response?.data))
+        if(response?.status === 200){
+            return true
+        }
+        return false
+    }catch(err){
+        var errMsg = processHttpError('getOrders',err);
+        return false
+    }
+}
+
+
+
 export const updateBagsForOrderWithId = async (auth,orderId,bagIdsToQuantity: Map<string,string>) : Promise<boolean> => {
     try{
         const plainBagsIdsToQuantity = Object.fromEntries(bagIdsToQuantity);
