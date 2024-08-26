@@ -173,7 +173,7 @@ const CustomerForm = ({ onFormSubmit }: Props) => {
 
       </div>
 
-      <input type="submit" value="Créer" />
+      <input className='customer-form-submit' type="submit" value="Créer" />
     </form>
   );
 };

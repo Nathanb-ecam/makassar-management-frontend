@@ -1,0 +1,64 @@
+.create-bag-form{
+    padding: 10px;
+}
+
+.create-bag-form .form-field-wrapper{
+    display: flex;
+    align-items: center;
+}
+
+.create-bag-form .form-field-wrapper label{
+    width: 150px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+
+
+
+.image-form-field-wrapper{
+    margin-top:20px;    
+}
+
+.image-form-field-wrapper label, .image-form-field-wrapper input{
+    padding: 5px 0;
+}
+
+
+
+.custom-file-upload{
+    /* display: block; */
+    background: white;
+    /* border: 1px solid var(--info-green); */
+    border-radius: 5px;
+    text-align: center;
+    width: 150px;
+    /* padding: 30px; */
+    color: var(--info-green);
+
+}
+
+.custom-file-message{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    /* white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis; */
+}
+
+.custom-file-message label{
+    margin: 0 5px;
+}
+
+.bag-form-submit{
+    position: absolute;
+    bottom: 10px;
+    right: 20px;
+    padding: 5px 15px;
+    background: var(--info-green);
+    color: white;
+    border-radius: 5px;
+    border: none;
+}

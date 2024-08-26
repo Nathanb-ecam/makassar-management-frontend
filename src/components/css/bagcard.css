@@ -11,8 +11,16 @@
     
 }
 
-.order-details .bag-infos .bag-item-card:hover{
-    /* border: 1px solid var(--primary); */
+.bagcard-delete-btn{
+    position: absolute;
+    top:   -7px;
+    right: -7px;
+    width:  20px;
+    height: 20px;
+    color: var(--info-red);
+    background: white;
+    border: 1px solid var(--info-red);
+    border-radius: 50%;
 }
 
 .order-details .bag-infos .bag-item-card .bag-card-title{
@@ -41,15 +49,25 @@
     /* overflow: hidden; */
 }
 
-.bag-item-card .bags-carousel .prev-image,.bag-item-card .bags-carousel .next-image{
+.bag-item-card .bags-carousel .prev-image,
+.bag-item-card .bags-carousel .next-image{
     width: 20%;
     background: inherit;
     border: none;
+    /* display: none; */
+    /* display: flex; */
 }
+
+
+.prev-next-arrow-hidden > .prev-image, 
+.prev-next-arrow-hidden > .next-image{
+    display: none;
+}
+
 
 .bag-item-card .bags-carousel .sliders{
     /* overflow: hidden; */
-    width: 100%;
+    width: 60%;
     /* height: 100%; */
     display: flex;
     overflow: scroll;
@@ -70,23 +88,26 @@
 
 .bag-item-card .bags-carousel .sliders .active > .image-index{
     display: block;
-    opacity: 1;
 }
 
 .bag-item-card .bags-carousel .slider .image-index{
     position: absolute;
-    opacity: 0;
+    background: black;
+    color: white;
+    padding: 2px;
     display: none;
     transition: opacity 3s ease-in-out;
     top:10px;
     left:10px;
     font-weight: lighter;
     font-size: small;
+    border: none;
+    border-radius: 5px;
 }
 
 .bag-item-card .bags-carousel .bag-image{
     
-    object-fit: cover;
+    object-fit: contain;
     width: 100%;
     height: 100%;
     

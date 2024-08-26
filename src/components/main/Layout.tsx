@@ -5,8 +5,8 @@ import MainNavbar from './MainNavbar'
 const Layout = () => {
   return (
     <>
-    <MainNavbar/>
-    <Outlet/>
+      <MainNavbar/>
+      <Outlet/>
     </>
   )
 }

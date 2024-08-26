@@ -2,16 +2,18 @@ import React from 'react'
 
 export const processHttpError = (functionName,err) => {
   var errMsg = ""    
-  if(!err?.response){
-        errMsg = `${functionName} : No server response`
-        if (err?.response.status === 400){
-        
+  if(err?.response){
+     
+    if (err?.response.status === 400){    
           errMsg = `${functionName} : Missing Username or password`
-      }  
-      else if (err?.response.status === 401){
-        
+    }  
+    else if (err?.response.status === 401){        
         errMsg = `${functionName} : Unauthorized`
-    }else{
+    }
+    else if (err?.response.status === 500){
+      errMsg =  `${functionName} : Internal server error`
+    }
+    else{
       errMsg = `${functionName} : Login failed`
     }
   }else{

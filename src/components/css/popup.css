@@ -1,8 +1,9 @@
 .popup{
-    position: absolute;
+    position: fixed;
+    z-index: 100;
     left: 50%;
     top: 50%;
-    transform: translate(-50%,-50%);
+    transform: translate(-50%,-70%);
     border: 2px solid var(--ligth-grey);
     border-radius: 15px;
     background: white;
@@ -21,5 +22,6 @@
 }
 
 .popup-content-wrapper{
-    margin: 30px 0;
+    margin: 10px 0 30px 0;
+    padding: 30px;
 }

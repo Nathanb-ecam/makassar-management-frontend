@@ -7,22 +7,27 @@ import { RiDeleteBin6Line } from 'react-icons/ri';
 import { FaAngleRight,FaAngleLeft } from "react-icons/fa6";
 import { BsHandbag } from "react-icons/bs";
 import { BASE_IMAGES_URL } from '../../../constants';
+import { IoMdClose } from 'react-icons/io';
 
 interface Props{
     bag: Bag;
     quantity:number;
-    deleteBag?: (bag: Bag) => void
     updateBagQuantity? : (bag : Bag, newQuantity : number) => void
     bottomVisible: boolean;
+    onBagRemoved: (bag : Bag) => void;
     // cardIndex: number;
     // bottomDiv: React.ReactNode
 }
 
-const BagCard = ({bag, initialQuantity, deleteBag, updateBagQuantity,bottomVisible = false}) => {
+const BagCard = ({bag, initialQuantity, onBagRemoved, updateBagQuantity,bottomVisible = false,deleteButtonVisible = false}) => {
 
+
+    const bagImagesCount = bag.imageUrls?.length ?? 0
 
     const [imageCarouselIndex, setImageCarouselIndex] = useState(0);
     const [bagQuantity, setBagQuantity] = useState("");
+
+    const prevNextArrowVisible = (bagImagesCount > 1)
 
 
     const handlePrevImage = () =>{ 
@@ -48,10 +53,15 @@ const BagCard = ({bag, initialQuantity, deleteBag, updateBagQuantity,bottomVisib
 
   return (
     <div key={bag.id} className='bag-item-card'>
+        { deleteButtonVisible && <IoMdClose className='bagcard-delete-btn' onClick={()=>onBagRemoved(bag)}/>}
         <div className="bag-card-title">{bag.marketingName}</div>
         { bag.imageUrls && bag.imageUrls.length > 0 ?
-            <div className='bags-carousel'>
-                <button className='prev-image' onClick={handlePrevImage}><FaAngleLeft /></button>
+            <div className={`bags-carousel ${prevNextArrowVisible ? '' : 'prev-next-arrow-hidden'}`}>
+                <button className={`prev-image`}
+                onClick={handlePrevImage}
+                >   
+                    <FaAngleLeft />
+                </button>
                 <div className='sliders'>
                     {bag.imageUrls?.map((imgUrl,index)=>(
                     <div className={`slider ${imageCarouselIndex===index ? 'active' : ''}`} key={index} >
@@ -62,7 +72,9 @@ const BagCard = ({bag, initialQuantity, deleteBag, updateBagQuantity,bottomVisib
                 ))}
                 </div>
     
-                <button className='next-image' onClick={handleNextImage}><FaAngleRight /></button>
+                <button className={`next-image`} onClick={handleNextImage}>
+                    <FaAngleRight />
+                </button>
             </div>
             : <BsHandbag className='nobag-image'/>
         }
@@ -84,14 +96,13 @@ const BagCard = ({bag, initialQuantity, deleteBag, updateBagQuantity,bottomVisib
             </div>
     
             
-            {bottomVisible ?
+            {bottomVisible &&
                 <div className="bottom">
                     <div className='sku'>SKU: {bag.sku}</div>
-                    <div className='delete-bag-button' onClick={(e) => deleteBag(bag)}>
+                    <div className='delete-bag-button' onClick={(e) => onBagRemoved(bag)}>
                         <RiDeleteBin6Line className='delete-icon' />                                        
                     </div>
                 </div>
-                : null
             }
             
         </div>

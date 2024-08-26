@@ -9,10 +9,11 @@
     
     margin: 10px;
     width: 400px;
-    min-height: 200px;
+    /* min-height: 200px; */
+    padding: 5px 15px 80px 15px;
     max-height: 450px;
     border-radius: 5px;
-    box-shadow: var(--ligth-grey) 10px 8px 5px;
+    box-shadow: var(--ligth-grey) 10px 8px 5px 5px;
     position: relative;
 }
 
@@ -25,13 +26,16 @@
 
 .bag-header .bag-title{
     font-family: var(--font-primary);
+    font-size: 1.2rem;
     padding: 10px 15px;
+    /* border-bottom: 1px solid var(--primary); */
 }
 
 .bag-header .bag-delete-btn{
     position:absolute;
     right: 0;
     background: var(--ligth-grey);
+    color: var(--primary);
     border-radius: 50%;
 }
 
@@ -67,12 +71,50 @@
 }
 
 .bag-image{
-    height: 140px;
-    width: 140px;
-    object-fit: cover;
+    height: 120px;
+    width: 120px;
+    object-fit: contain;
 }
 
 
+.bag-props{
+    
+} 
+
+
+.bag-prop{
+    display: flex;
+    justify-content: space-between;
+    padding: 0 15px;
+    
+}
+
+.bag-prop .bag-prop-text{
+    
+}
+
+.bag-prop div{
+    min-width: 250px;
+    text-align: end;
+    
+}
+
+.bag-prop .bag-prop-text{
+    width: 100px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    border-bottom: 1px solid var(--light-gray);
+}
+
+.bag-prop-item-wrapper{
+    display: flex;
+    border-bottom: 1px solid var(--light-gray);
+}
+
+.bag-props .bag-mod-visible{
+    display: flex;
+}
 
 
 .apply-bag-modification{
@@ -81,12 +123,12 @@
     /*padding: 10px 0; */
     bottom: 0;
     left: 50%;
-    transform: translateX(-50%);
+    transform: translateX(-50%); 
     /* height: 60px; */
     background: white;
     
     display: none;
-    justify-content: center;
+    justify-content: flex-end;
     align-items: center;
 }
 
@@ -95,10 +137,10 @@
     border-radius: 5px;
     margin: 10px;
     padding: 5px 10px;
+    background: var(--info-green);
+    color: white;
     /* width: 85%; */
 }
 
-.bag-props .bag-mod-visible{
-    display: flex;
-}
+
 

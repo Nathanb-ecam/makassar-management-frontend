@@ -1,9 +1,11 @@
 .bag-popup-container{
-    border: 1px solid var(--primary);
+    border: 1px solid var(--ligth-grey);
     border-radius: 25px;
     z-index: 999;
     position: fixed;
-    width: 800px;
+    min-width: 900px;
+    max-width: 900px;
+    /* min-height: 650px; */
     max-height: 650px;
     
     background: white;
@@ -39,28 +41,36 @@
 
 .bag-selection-list{
     width: 100%;
-    display: flex;
     margin-bottom: 20px;
     /* padding-bottom: 20px; */
-    padding: 20px;
+    /* padding: 20px 20px 60px 20px; */
+    /* display: flex; */
+    display: flex;
     flex-wrap: wrap;
     max-height: 500px;
     overflow: auto;
+    /* background: red; */
 }
 
 
 .bag-list-item{
-    margin: 15px 30px;
-    min-width: 160px;
-    width: 160px;
+    margin: 0px 35px 50px 35px;
+    min-width: 120px;
+    max-width: 120px;
     height: 200px;
     position: relative;
 }
 
 
+.bottom-section{
+    display: flex;
+    justify-content: flex-end;
+}
+
 .bottom-section button{
+    
     padding: 5px 10px;
-    background: var(--primary);
+    background: var(--info-green);
     color:white;
     border: none;
     border-radius: 5px;

@@ -25,11 +25,6 @@ import Customers from './pages/Customers.tsx';
 
 
 const App = () => {
-
-  const location = useLocation();
-  const isLoginPage = location.pathname === '/login';
-
-
   return (
     <>
       {/* {!isLoginPage  && <MainNavbar/>} */}

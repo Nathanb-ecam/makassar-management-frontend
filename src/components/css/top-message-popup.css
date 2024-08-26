@@ -1,0 +1,25 @@
+.top-message-popup{
+    position: fixed;
+    z-index: 200;
+    left: 50%;
+    transform: translate(-50%);
+    top: 20px;
+    border: none;
+    border-radius: 5px;   
+    color: white;
+    display: flex;
+    align-items: center;
+    max-width: 500px;
+    padding: 0 10px;
+    overflow: hidden;
+    height: 50px;    
+}
+
+.top-message-popup div{
+    width: 100%;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+

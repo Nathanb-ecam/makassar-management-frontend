@@ -91,7 +91,8 @@ const BagSelectorPopup = ({ close, addBagsToCurrentBags }: Props) => {
                     bags.map((bag,index)=>(
                         <div 
                         className={`bag-list-item`} 
-                        // key={index} onClick={()=>handleSelectedBag(index,bag)}
+                        key={index} 
+                        // onClick={()=>handleSelectedBag(index,bag)}
                         >
                             <BagCard bag={bag} initialQuantity={0} updateBagQuantity={handleBagQuantityChange} bottomVisible={false}>
 

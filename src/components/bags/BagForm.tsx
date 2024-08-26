@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import { Bag } from '../../models/entities'
 
+import '../css/bagform.css'
+
 interface Props{
     onBagFormSubmit :(formData: FormData) => void;
 }
@@ -14,6 +16,7 @@ const BagForm = ({onBagFormSubmit} : Props) => {
 
     })
     const [images,setImages] = useState<File[]>();
+    const [fileSelection,setFileSelection] = useState<string[]>([]);
 
     const handleInputChange = (e : React.ChangeEvent<HTMLInputElement>) => {
         const {name, value} = e.target
@@ -24,8 +27,13 @@ const BagForm = ({onBagFormSubmit} : Props) => {
     const handleImageChange = (e : React.ChangeEvent<HTMLInputElement>) =>{
         if (e.target.files) {
             // setImages(prev=> prev ? [...prev,...Array.from(e.target.files)] : prev); 
-            setImages(Array.from(e.target.files)); 
-          }
+            const files = Array.from(e.target.files)
+            const fileNames = files.map(file=> file.name)
+            setFileSelection(prev=> prev ? fileNames : prev)
+            setImages(files); 
+        }else{
+            console.log("No files received by selection")
+        }
     }
 
     const handleBagSubmit = (e : React.FormEvent<HTMLFormElement>)=>{
@@ -43,6 +51,7 @@ const BagForm = ({onBagFormSubmit} : Props) => {
         }
 
         onBagFormSubmit(formData)
+        
     }
 
 
@@ -63,7 +72,7 @@ const BagForm = ({onBagFormSubmit} : Props) => {
             <label htmlFor="">Prix:</label>
             <input 
                 required
-                type="text" 
+                type="number" 
                 name='retailPrice'
                 value={bag.retailPrice}
                 onChange={handleInputChange}
@@ -73,26 +82,35 @@ const BagForm = ({onBagFormSubmit} : Props) => {
         <div className='form-field-wrapper'>
             <label htmlFor="">SKU:</label>
             <input 
-                type="text" 
+                type="number" 
                 name='sku'
                 value={bag.sku}
                 onChange={handleInputChange}
             />
         </div>
 
-        <div className='form-field-wrapper'>
-            <label htmlFor="">Images:</label>
+        <div className='image-form-field-wrapper'>
+            <label htmlFor="">Ajouter des images:</label>
             <input 
-                // name='sku'
-                // value={formData.sku}
+                id='fileInput'
+                style={{display:'none'}}
+                className='file-select-input'
                 type="file" 
                 multiple
                 accept=".jpeg, .jpg, .png, image/jpeg, image/jpg, image/png"
                 onChange={handleImageChange}
             />
+            <label htmlFor="fileInput" className='custom-file-upload'>Sélectionner</label>
+            {fileSelection && fileSelection.length > 0 &&
+                <div className='custom-file-message'>
+                    {fileSelection.map((fileName,index)=>(
+                        <label className='filename' key={index}>{fileName}</label>
+                    ))}
+                </div>
+            }
         </div>
 
-        <input type="submit" value="Créer" />
+        <input className='bag-form-submit' type="submit" value="Confirmer" />
 
 
 

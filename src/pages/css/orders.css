@@ -213,7 +213,7 @@
     height: 100%;
     border: 3px solid white;
     
-    background: var(--secondary);
+    background: var(--info-green);
     color: white;
     border-radius: 5px;
     max-width: 300px;

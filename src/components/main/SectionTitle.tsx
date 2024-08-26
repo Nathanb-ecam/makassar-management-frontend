@@ -19,8 +19,9 @@ const SectionTitle = ({title,onCreateButtonClicked,  children} : Props) => {
               <div className="classic-button-wrapper">
                 {children}
               </div>
-              <button className='plus-button-wrapper'>
-                <CiSquarePlus className='plus-button' onClick={onCreateButtonClicked}/>
+              <button className='title-plus-button' onClick={onCreateButtonClicked}>
+                Nouvel élément
+                {/* <CiSquarePlus className='plus-button' /> */}
               </button>
             </div>
     </div>

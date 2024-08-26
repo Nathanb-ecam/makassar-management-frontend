@@ -1,18 +1,17 @@
 
 .section-title{
-    
     border: none;
-    background: inherit;
-    color: var(--primary);
     display: flex;
     justify-content: space-between;
     width: 100%;
+    margin-bottom: 20px;
 }
 
 
 .main-title{
-    color: var(--secondary);
+    color: var(--primary);
     font-weight: bold;
+    font-family: var(--font-primary);
     
 }
 
@@ -24,16 +23,20 @@
 
 
 
-.plus-button-wrapper{
+.title-plus-button{
     border: none;
-    background: inherit;
-    color: var(--primary);
+    border-radius: 5px;
+    padding: 10px 20px;
+    font-size: 1.1rem;
+    color: var(--info-green);
+    background: white;
+    border: 1px solid var(--info-green);
 }
 
 .plus-button{
-    font-size: 45px;
+    /* font-size: 45px;
     color: var(--primary);
-    border: none;
+    border: none; */
 }
 
 .classic-button{

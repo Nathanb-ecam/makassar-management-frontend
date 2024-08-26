@@ -10,23 +10,21 @@
   --black: rgb(61,61,61);
   --dark-black: #161718;
   --light-black: #525355;
-  --light-gray: #b7c0c7;
-  /* --light-gray: #b7c0c7; */
+
+  --info-green: #0cbd32b8;
+  --info-red: #e72e2ece;
+
   --ligth-grey: rgba(218, 224, 243, 0.371);
+  --ligth-gray: rgb(249, 249, 249);
   --hover-grey: rgb(226,228,231);
   
-  
-  
 
-  --white: rgb(255,255,255);
-
-  --primary: #6cacff;
-  --secondary:#202020;
-  --secondary: rgb(233,230,232);
   
   
-  --primary: #000000;
-  --secondary:rgb(239,156,56);
+  
+  --primary: #cc8a17d5;
+  --primary: #292725d5;
+  --secondary:rgb(208, 191, 170);
   --secondary:rgb(123, 126, 133);
 
   
@@ -55,5 +53,10 @@
   /* margin:0 auto; */
   padding: 50px;
   /* border: 1px solid red; */
+}
+
+body{
+  position: relative;
+
 }
 

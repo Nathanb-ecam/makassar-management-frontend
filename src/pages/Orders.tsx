@@ -26,6 +26,8 @@ import { MdInfoOutline } from 'react-icons/md';
 import OrderPrice from '../components/orders/OrderPrice.tsx';
 
 import SectionTitle from '../components/main/SectionTitle.tsx'
+import { useTopMessage } from '../hooks/useTopMessagePopup.tsx';
+import Popup from '../components/main/Popup.tsx';
 
 
 const initialOrderEditableData: OrderEditableData = {
@@ -41,6 +43,9 @@ const Orders = () => {
 
   
   const {auth} = useAuth()
+
+  const {showTopMessage} = useTopMessage()
+
   const { orders,  loading, error , refreshOrderById} = useOrdersContext();
 
   const [currentOrderHasBeenModified,setCurrentOrderHasBeenModified] = useState(false);
@@ -48,9 +53,11 @@ const Orders = () => {
   const [rotatedRows, setRotatedRows] = useState<{ [key: number]: boolean }>({});
 
   
-  const [currentOrderEditableData,setCurrentOrderEditableData] = useState<OrderEditableData | undefined>(initialOrderEditableData);
+  const [currentOrderModifications,setCurrentOrderModifications] = useState<OrderEditableData | undefined>(initialOrderEditableData);
   
   const [customers, setCustomers] = useState<Customer[]>([]); 
+
+  const [createOrderVisible,setCreateOrderVisible] = useState(false)
   
 
   useEffect(()=>{
@@ -68,16 +75,14 @@ const Orders = () => {
   }
   ,[]);
 
-  useEffect(() => {
-    console.log('Updated currentOrderEditableData:', currentOrderEditableData);
-  }, [currentOrderEditableData]);
+
   
 
 
   const removeBagFromOrder = (bag : Bag) => {
     console.log("received bag to remove", bag);
 
-    setCurrentOrderEditableData(prev => {
+    setCurrentOrderModifications(prev => {
       if (!prev) return prev;
       if(bag.id === undefined) return prev
 
@@ -101,13 +106,22 @@ const Orders = () => {
       const bagsIdsToQuantity = new Map();
         
 
-      currentOrderEditableData?.bags.forEach(({bag,quantity},bagId)=>{
+      currentOrderModifications?.bags.forEach(({bag,quantity},bagId)=>{
         bagsIdsToQuantity.set(bagId,quantity.toString())
       })
 
       const updateStatus = await updateBagsForOrderWithId(auth,orderId,bagsIdsToQuantity);
-      refreshOrders(orderId);
-      console.log(`succesfully update bags for order ${orderId} ? `,updateStatus)
+      if(updateStatus){
+        const clientId = orders.find(o => o.id === orderId)?.customerId
+        const client = customers.find(c=> c.id === clientId)
+
+        showTopMessage(`Modification(s) de la commande de '${client?.name}' enregistrée(s) `, {backgroundColor:'var(--info-green)'})
+        refreshOrders(orderId);
+        // console.log(`succesfully update bags for order ${orderId} ? `,updateStatus)
+      }else{
+        showTopMessage(`Erreur lors de la sauvegarde des modifications `, {backgroundColor:'var(--info-red)'})
+
+      }
   }  
 
   const refreshOrders = (orderId) => {
@@ -116,9 +130,8 @@ const Orders = () => {
 
 
   const handleBagQuantityChange = (bag : Bag, newQuantity : number) => {
-
-
-    setCurrentOrderEditableData((prev)=>{
+    if(newQuantity === 0 ) return removeBagFromOrder(bag)
+    setCurrentOrderModifications((prev)=>{
       if(!prev) return prev
       if(bag.id === undefined) return prev
 
@@ -133,38 +146,14 @@ const Orders = () => {
     })
   }
 
-  const addBagToCurrentBags = (bag : Bag, quantity : number) => {
-    if (bag.id === null || bag.id=== undefined) return console.log("bagId is null in 'addBagToCurrentBags'")
-
-      setCurrentOrderEditableData((prev)=>{
-      if (!prev) return prev
-      if(bag.id === undefined) return prev
-
-      const updated = new Map(prev.bags);
-      
-      if(updated.has(bag.id!!)){
-          const existingBagQuantity = updated.get(bag.id)?.quantity ?? 0
-          const newQ = Number(existingBagQuantity) + quantity
-          updated.set(bag.id!!, {bag,quantity:newQ})
-      }else{
-          updated.set(bag.id!!, {bag,quantity})
-      }
-      setCurrentOrderHasBeenModified(true)
-      return {
-        ...prev,
-        bags:updated
-      }
-
-    })
-  }
 
   const addBagSelectionToCurrentBags = (bags: Map<string, {bag: Bag, quantity:number}>)=> {
     console.log('Final selection')
     console.log(bags)
-    setCurrentOrderEditableData(prev=>{
+    setCurrentOrderModifications(prev=>{
       if(!prev) return prev
 
-      const updated = new Map(currentOrderEditableData?.bags)
+      const updated = new Map(currentOrderModifications?.bags)
 
       bags.forEach(({bag,quantity},bagId)=>{
         if(updated.has(bagId)){
@@ -176,6 +165,8 @@ const Orders = () => {
         }
       })
       setCurrentOrderHasBeenModified(true)
+      showTopMessage(`${bags.size} modèle(s) ajouté à la commande `, {backgroundColor:'var(--info-green)'})
+
 
       return {
         ...prev,
@@ -194,7 +185,7 @@ const Orders = () => {
   const handleClick = async (index: number,ord : Order) => {
 
     setCurrentOrderHasBeenModified(false)
-    setCurrentOrderEditableData(prev => prev ? { ...prev, bags: new Map(), status:'' } : prev);
+    setCurrentOrderModifications(prev => prev ? { ...prev, bags: new Map(), status:'' } : prev);
     
 
     setRotatedRows(prevState => ({
@@ -207,14 +198,16 @@ const Orders = () => {
       const currentOrder = orders?.find(o => o.id == ord.id)
       const orderBags = currentOrder?.bags
 
-      console.log("orderbags",orderBags)
+      // console.log("orderbags",orderBags)
       const bagIds = orderBags ? Object.keys(orderBags) : [];
   
       
       if(bagIds.length > 0){
-        console.log("New bags",bagIds)
+        // console.log("New bags",bagIds)
+        // console.log(bagIds)
         const resp = await getBagsWithIds(auth,bagIds)
         console.log(resp)
+        if(!resp) return 
         if(Array.isArray(resp.bags) && resp.bags.length!= 0){
           const newCurrentOrderBagsWithQuantity = new Map<string, { bag: Bag; quantity: number }>();
           console.log("not to bad")
@@ -224,14 +217,14 @@ const Orders = () => {
           });
 
           console.log(newCurrentOrderBagsWithQuantity)
-          setCurrentOrderEditableData(prev => prev ? { ...prev, bags: newCurrentOrderBagsWithQuantity } : prev);
+          setCurrentOrderModifications(prev => prev ? { ...prev, bags: newCurrentOrderBagsWithQuantity } : prev);
           // setCurrentOrderCopy(prev => prev ? { ...prev, bags: newCurrentOrderBagsWithQuantity } : prev);
-          console.log('current', currentOrderEditableData)
+          console.log('current', currentOrderModifications)
         }else{
           console.log("No updated data for bags")
         }
       }else{
-        setCurrentOrderEditableData(prev => prev ? { ...prev, bags: new Map() } : prev);
+        setCurrentOrderModifications(prev => prev ? { ...prev, bags: new Map() } : prev);
         
       }
 
@@ -244,6 +237,9 @@ const Orders = () => {
     const modifiedData = {[key]:newValue};
     console.log(modifiedData);
     const successfullyModifiedOrder = await putOrder(auth,orderId,modifiedData);
+    if(successfullyModifiedOrder) showTopMessage(`Commande modifiée`, {backgroundColor:'var(--info-green)'})
+    else showTopMessage(`Les modifications n'ont pas pu être sauvegardées `, {backgroundColor:'var(--info-red)'})
+
     console.log("successfullyModifiedOrder",successfullyModifiedOrder);
   }
 
@@ -254,18 +250,32 @@ const Orders = () => {
 
  
   const onCreateOrderButtonClicked = () => {
-
+      setCreateOrderVisible(true)
   }
   
+  const onCreateOrderClosed = ()=>{
+    setCreateOrderVisible(false)
+  }
 
 
 
   return (
     <div className="page">
+
         <div className="orders">
           <SectionTitle title='Commandes' onCreateButtonClicked={onCreateOrderButtonClicked}>
 
           </SectionTitle>
+
+          {createOrderVisible && 
+            <Popup 
+              title='Prendre une nouvelle commande' 
+              onPopupClose={onCreateOrderClosed} 
+              >
+                <div>
+                  La je vais créer un formulaire
+                </div>
+            </Popup>}
 
           { orders && orders.length != 0 ?
               
@@ -355,16 +365,22 @@ const Orders = () => {
                             <div className='bags-list'>   
                               {/* <AddBagCard addBagToCurrentBags={addBagToCurrentBags}/> */}
    
-                              {currentOrderEditableData?.bags && currentOrderEditableData?.bags.size!=0 && Array.from(currentOrderEditableData?.bags.values()).map(({bag,quantity},index)=>(
+                              {currentOrderModifications?.bags && currentOrderModifications?.bags.size!=0 && Array.from(currentOrderModifications?.bags.values()).map(({bag,quantity},index)=>(
                                                 
-                                  <BagCard key={index} bag={bag} initialQuantity={quantity} deleteBag={removeBagFromOrder} updateBagQuantity={handleBagQuantityChange} />
+                                  <BagCard 
+                                    key={index} bag={bag} 
+                                    initialQuantity={quantity} 
+                                    onBagRemoved={removeBagFromOrder} 
+                                    updateBagQuantity={handleBagQuantityChange} 
+                                    deleteButtonVisible={true}
+                                    />
                               ))}
                             </div>
                           </div>
 
                           <div className="order-infos">
                             <div className='order-price-section'>
-                                {currentOrderEditableData?.bags && <OrderPrice bags={currentOrderEditableData.bags} order={order} handleOrderDataChange={handleOrderDataChange}/>}                             
+                                {currentOrderModifications?.bags && <OrderPrice bags={currentOrderModifications.bags} order={order} handleOrderDataChange={handleOrderDataChange}/>}                             
                             </div>
 
                             <div className='order-description'>

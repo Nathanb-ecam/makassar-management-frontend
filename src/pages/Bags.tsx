@@ -8,24 +8,28 @@ import BagSelectorPopup from '../components/bags/BagSelectorPopup.tsx';
 import { Bag } from '../models/entities.ts';
 
 import BagForm from '../components/bags/BagForm.tsx'
-import { createBagWithImages, getBags, putBag } from '../api/calls/Bag.tsx';
+import { createBagWithImages, deleteBag, getBags, putBag } from '../api/calls/Bag.tsx';
 import { useAuth } from '../hooks/useAuth.tsx';
 import axios from '../api/axios.ts';
 import GeneralCRUDTable, { TableProps } from '../components/main/GeneralCRUDTable.tsx';
 import { BASE_IMAGES_URL } from '../../constants.tsx';
 import { CiSquarePlus } from 'react-icons/ci';
 import { IoMdClose } from 'react-icons/io';
+import TopMessagePopup from '../components/main/TopMessagePopup.tsx';
+import { useTopMessage } from '../hooks/useTopMessagePopup.tsx';
 
 const Bags = () => {
 
 
   const {auth} = useAuth();
+  const {showTopMessage} = useTopMessage();
 
   const[bags,setBags] = useState<Bag[]>([]);
   
   const[modifiedBags, setModifiedBags] = useState<Map<string,Bag>>(new Map());
   
   const [createBagPopupVisible,setCreateBagPopupVisible] = useState(false);
+
   
 
   const handleCreateButtonClicked = () => {
@@ -36,19 +40,27 @@ const Bags = () => {
     setCreateBagPopupVisible(false)
   }
 
-  const handleNewBag = (bag : Bag, quantity :  number) =>{
-      console.log("New bafg", bag, quantity)
-  }
 
   const onBagFormSubmit = async (formData: FormData)=>{
-      const bagBeenCreated = await createBagWithImages(auth,formData)
-      console.log(bagBeenCreated)
+      const createdBag = await createBagWithImages(auth,formData)
+      console.log("createdBag",createdBag)
+      setCreateBagPopupVisible(false)      
+      if(createdBag){
+        showTopMessage(
+            `Nouveau sac : ${createdBag.marketingName}`, 
+            {backgroundColor:'var(--info-green)'},
+        )
+        setBags(prev=> {
+          if(!prev) return prev
+
+          const updated = Array.from(prev)
+          updated.push(createdBag)
+          return updated
+        
+        })
+      }
       
   }
-
-  useEffect(()=>{
-    console.log("modifiedBags",modifiedBags)
-  },[modifiedBags])
 
 
   useEffect(()=>{
@@ -64,8 +76,9 @@ const Bags = () => {
   },[])
 
 
+
   const handleDivChange = (bagId :string | undefined, key: string, value: string) => {
-    
+    console.log("value",value)
     if (bagId === undefined || bagId === null) return 
     
     setModifiedBags(prev=>{
@@ -86,9 +99,55 @@ const Bags = () => {
     if(bagToApply === undefined) return 
 
     const result = await putBag(auth,bagId,bagToApply)
-    if(result) console.log(`successfully updated bag with id ${bagId}`)
-    else console.log("shit")
+    if(result){
+      const msg = `successfully updated bag with id ${bagId}`
+      console.log(msg)
+      showTopMessage(
+        `Modification enregistrée`, 
+        {backgroundColor:'var(--info-green)'}
+      )
+      setModifiedBags(prev=>{
+        if(!prev) return prev
+        const updated = new Map(prev)
+        updated.delete(bagId)
+        return updated
+      })
+    } 
+    else {
+      console.log("shit")
+      showTopMessage(
+        `Une erreur s'est produite`, 
+        {backgroundColor:'var(--info-red)'},
+      )
+    }
+    
 
+  }
+
+  const removeBag = async (bag :Bag)=>{
+      console.log("bag to remove",bag)
+      
+      if (bag.id === undefined) return 
+
+      const imageUrls = bag?.imageUrls ?? []
+
+      const result = await deleteBag(auth,bag.id,imageUrls)
+      if(result) {
+        setBags(prev=>{
+          if(!prev) return prev
+          
+          const updated  = prev.filter(currBag => currBag.id != bag.id)
+          return updated
+        }) 
+
+        showTopMessage(
+          `Sac supprimé : ${bag.marketingName}`, 
+          {backgroundColor:'var(--info-green)'},
+        )
+
+      }else{
+        console.log('Failed to delete bag')
+      }
   }
 
 
@@ -98,9 +157,15 @@ const Bags = () => {
 
   return (
     <div className='page'>
+
         
         {createBagPopupVisible ?
-          <Popup title='Ajouter un nouveau modèle' onPopupClose={onCreateBagPopupClosed}>
+          <Popup 
+              title='Ajouter un nouveau modèle' 
+              onPopupClose={onCreateBagPopupClosed} 
+              popupVisible={createBagPopupVisible}
+              customCSS={{height:"400px"}}
+              >
               <BagForm onBagFormSubmit={onBagFormSubmit}></BagForm>
           </Popup>
           : null
@@ -116,7 +181,7 @@ const Bags = () => {
               <div className="bag" key={index}>
                   <div className="bag-header">
                     <div className="bag-title">{bag.marketingName}</div>
-                    <IoMdClose className='bag-delete-btn' />
+                    <IoMdClose className='bag-delete-btn' onClick={()=>removeBag(bag)} />
                   </div>
 
 
@@ -135,26 +200,52 @@ const Bags = () => {
 
 
                   <div className="bag-props">                  
-                    
-                    <div className='bag-prop'>
-                      <div 
-                        contentEditable={true}
-                        suppressContentEditableWarning={true} 
-                        onBlur={(e) => handleDivChange(bag.id,"retailPrice", (e.target as HTMLElement).innerText)}
-                        >
-                         {bag.retailPrice} 
+
+
+                  <div className='bag-prop'>
+                      <label htmlFor="marketingName" className='bag-prop-text'>Modèle: </label>
+                      <div className='bag-prop-item-wrapper'>
+                        <div 
+                          id="marketingName"
+                          contentEditable={true}
+                          suppressContentEditableWarning={true} 
+                          onInput={(e) => handleDivChange(bag.id,"marketingName", (e.target as HTMLElement).innerText)}
+                          >
+                          {bag.marketingName} 
+                        </div>
                       </div>
                     </div>
 
                     <div className='bag-prop'>
-                      <div 
-                        contentEditable={true}
-                        suppressContentEditableWarning={true} 
-                        onBlur={(e) => handleDivChange(bag.id,"sku", (e.target as HTMLElement).innerText)}
-                        >
-                         {bag.sku} 
+                      <label htmlFor="retailPrice" className='bag-prop-text'>Prix: </label>
+                      <div className='bag-prop-item-wrapper'>
+                        <div 
+                          id='retailPrice'
+                          contentEditable={true}
+                          suppressContentEditableWarning={true} 
+                          onInput={(e) => handleDivChange(bag.id,"retailPrice", (e.target as HTMLElement).innerText)}
+                          >
+                          {bag.retailPrice} 
+                        </div>
+                        <label>€</label>
                       </div>
                     </div>
+
+                    <div className='bag-prop'>
+                      <label htmlFor="sku" className='bag-prop-text'>SKU: </label>
+                      <div className='bag-prop-item-wrapper'>
+                        <div 
+                          id="sku"
+                          contentEditable={true}
+                          suppressContentEditableWarning={true} 
+                          onInput={(e) => handleDivChange(bag.id,"sku", (e.target as HTMLElement).innerText)}
+                          >
+                          {bag.sku} 
+                        </div>
+                      </div>
+                    </div>
+
+
                     
                     
                     {/* <div className='bag-prop'>
@@ -166,10 +257,10 @@ const Bags = () => {
                     </div> */}
 
                     <div 
-                    onClick={()=>applyBagModifications(bag.id)}      
+                       
                     className={`apply-bag-modification ${Array.from(modifiedBags.keys()).includes(bag.id) ? 'bag-mod-visible':''}`}
                     >  
-                      <button>
+                      <button onClick={()=>applyBagModifications(bag.id)}   >
                         Appliquer les modifications
                       </button>
                     </div>
