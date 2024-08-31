@@ -44,10 +44,10 @@ const MainNavbar = () => {
     {/* <div className="navbar "  style={{display:visibleNavbar? 'block':'none', transition:'translate 1s'}}>     */}
     <div className={`navbar ${visibleNavbar ? 'visible':'hidden'}`}>    
       <ul>
-        <li className={`nav-li-item ${selectedItem === "dashboard" ? "selected" : "" }`} onClick={(e)=>navigateTo("/dashboard","dashboard")}>
+        {/* <li className={`nav-li-item ${selectedItem === "dashboard" ? "selected" : "" }`} onClick={(e)=>navigateTo("/dashboard","dashboard")}>
           <FaHouse className='nav-icons'/>
           <button className="nav-button" >Dashboard</button>
-        </li>
+        </li> */}
         <li className={`nav-li-item ${selectedItem === "orders" ? "selected" : "" }`} onClick={(e)=>navigateTo("/orders","orders")}>
           <FaRegPenToSquare className='nav-icons' />
           <button className="nav-button" >Commandes</button>
@@ -61,15 +61,13 @@ const MainNavbar = () => {
           <button className="nav-button" >Sacs</button>
         </li>
         
-        <li className={`nav-li-item ${selectedItem === "materials" ? "selected" : "" }`} onClick={(e)=>navigateTo("/materials","materials")}>
+        {/* <li className={`nav-li-item ${selectedItem === "materials" ? "selected" : "" }`} onClick={(e)=>navigateTo("/materials","materials")}>
           <div></div>
-          {/* <button className="nav-button" >Matières</button> */}
         </li>
         <li className={`nav-li-item ${selectedItem === "material-colors" ? "selected" : "" }`}  onClick={(e)=>navigateTo("/materials#colors","material-colors")}>
           <IoColorPalette className='nav-icons' />
           <button className="nav-sub-button" >Couleurs</button>
-        </li>
-        {/* <li><button className="nav-sub-button" onClick={(e)=>navigateTo("/materials#types")}>Types</button></li> */}
+        </li> */}
       </ul>
       <button className='fast-order'>Commande rapide</button>
     </div>

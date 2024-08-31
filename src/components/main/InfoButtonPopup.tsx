@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useRef,forwardRef, useEffect, useImperativeHandle, useState } from 'react'
 import { MdInfoOutline } from 'react-icons/md'
 
 import '../css/info-button-popup.css'
@@ -6,15 +6,22 @@ import '../css/info-button-popup.css'
 interface Props{
     positionClass?: string;  
     sizeClass?: string;
-    children? : React.ReactNode
-    customStyle?: React.CSSProperties
+    children? : React.ReactNode;
+    customStyle?: React.CSSProperties;
 }
 
-const InfoButtonPopup = ({
+const InfoButtonPopup = forwardRef(({
     positionClass='middle-pop',
     sizeClass='medium-pop',
     customStyle={}, 
-    children} : Props) => {
+    children} : Props,
+    ref) => {
+
+    useImperativeHandle(ref, () => ({
+        hideInfoPopup() {
+            setPopupVisible(false); 
+        }
+    }));
   
     const [popupVisible, setPopupVisible] = useState(false)
   
@@ -22,7 +29,7 @@ const InfoButtonPopup = ({
         if(popupVisible) setPopupVisible(false)
         else setPopupVisible(true)
    }
-  
+
     return (
     <div className='info-popup'>
         
@@ -36,6 +43,6 @@ const InfoButtonPopup = ({
             }
     </div>
   )
-}
+})
 
 export default InfoButtonPopup

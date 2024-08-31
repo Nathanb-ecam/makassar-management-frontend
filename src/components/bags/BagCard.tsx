@@ -14,7 +14,7 @@ interface Props{
     quantity:number;
     updateBagQuantity? : (bag : Bag, newQuantity : number) => void
     bottomVisible: boolean;
-    onBagRemoved: (bag : Bag) => void;
+    onBagRemoved?: (bag : Bag) => void;
     // cardIndex: number;
     // bottomDiv: React.ReactNode
 }
@@ -57,7 +57,7 @@ const BagCard = ({bag, initialQuantity, onBagRemoved, updateBagQuantity,bottomVi
         <div className="bag-card-title">{bag.marketingName}</div>
         { bag.imageUrls && bag.imageUrls.length > 0 ?
             <div className={`bags-carousel ${prevNextArrowVisible ? '' : 'prev-next-arrow-hidden'}`}>
-                <button className={`prev-image`}
+                <button type="button" className={`prev-image`}
                 onClick={handlePrevImage}
                 >   
                     <FaAngleLeft />
@@ -72,7 +72,7 @@ const BagCard = ({bag, initialQuantity, onBagRemoved, updateBagQuantity,bottomVi
                 ))}
                 </div>
     
-                <button className={`next-image`} onClick={handleNextImage}>
+                <button type="button"  className={`next-image`} onClick={handleNextImage}>
                     <FaAngleRight />
                 </button>
             </div>

@@ -1,0 +1,66 @@
+.create-order{
+    width: 100%;
+    /* background: blue; */
+    margin-top: 30px;
+}
+
+.create-order-field{
+    display: flex;
+    margin: 5px 0;
+}
+
+
+.create-order-field label{
+    width: 250px;
+}
+
+
+
+.create-order-field .planned-date-pickers{
+    display: flex;
+    flex-direction: column;
+}
+
+
+.create-order .bag-selection{
+    /* background: red; */
+    /* width: 80%; */
+    display: flex;
+
+}
+
+.create-order-field textarea{
+    width: 350px;
+}
+
+
+
+.create-order .bag-selection .bag-selector-container{
+    width: 70%;
+}
+
+.bag-selection-price{
+    padding: 10px;
+    width: 30%;
+    margin-top: 35px;
+}
+
+.bag-selection-item{
+    display: flex;
+    justify-content: space-between;
+}
+
+.confirm-order-create{
+    background: white;    
+    display: flex;
+    justify-content: end;
+    padding: 0 10px 20px 0;
+}
+
+.confirm-order-create button{
+    padding: 5px 10px;
+    background: var(--info-green);
+    color: white;
+    border: none;
+    border-radius : 5px;
+}

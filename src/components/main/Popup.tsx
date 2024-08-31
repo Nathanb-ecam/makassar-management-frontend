@@ -19,6 +19,7 @@ const Popup = ({title,onPopupClose, popupVisible = true, customCSS, children}:Pr
           <div className="popup" style={customCSS}>
             <div className="popup-header">
                 <div className="pop-title">{title}</div>
+                
                 <IoMdClose className='popup-close-btn' onClick={onPopupClose}/>
                 
             </div>

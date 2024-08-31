@@ -1,18 +1,16 @@
-.bag-popup-container{
-    border: 1px solid var(--ligth-grey);
-    border-radius: 25px;
+.bag-selector-container{
+    /* 
+    box-shadow: var(--ligth-grey) 10px 8px 5px 5px;
+    border-radius: 25px; */
     z-index: 999;
-    position: fixed;
-    min-width: 900px;
-    max-width: 900px;
-    /* min-height: 650px; */
-    max-height: 650px;
+    /* min-width: 900px;
+    max-width: 900px; */
+    /* border: none; */
+    width: 100%;
+    /* max-height: 150px; */
+    /* position: relative; */
     
-    background: white;
-    top: 50%;
-    left: 50%;
-    transform: translateX(-50%) translateY(-50%);
-    padding: 20px;
+    /* padding: 20px;  */
 }
 
 
@@ -42,14 +40,11 @@
 .bag-selection-list{
     width: 100%;
     margin-bottom: 20px;
-    /* padding-bottom: 20px; */
-    /* padding: 20px 20px 60px 20px; */
-    /* display: flex; */
     display: flex;
     flex-wrap: wrap;
-    max-height: 500px;
+    max-height: 300px;
     overflow: auto;
-    /* background: red; */
+    position: relative;
 }
 
 
@@ -58,17 +53,21 @@
     min-width: 120px;
     max-width: 120px;
     height: 200px;
-    position: relative;
+    
 }
 
 
 .bottom-section{
     display: flex;
     justify-content: flex-end;
+    /* position: fixed;
+    padding: 0 20px 10px 0;
+    bottom: 0;
+    right: 0; */
 }
 
 .bottom-section button{
-    
+
     padding: 5px 10px;
     background: var(--info-green);
     color:white;

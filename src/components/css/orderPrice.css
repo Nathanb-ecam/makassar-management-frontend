@@ -26,14 +26,36 @@
 .resume{
     border-top: 1px solid black;
     width: 100%;
-    
-
 }
 
-
-.discount-container{
+.discount-container, .delivery-costs-container{
     display: flex;
 }
-.discount-container div:first-child{
+.discount-container div:first-child,
+.delivery-costs-container div:first-child{
     padding-right: 10px;   
+}
+
+
+.confirm-price{
+    display: none;
+    position: absolute;
+    bottom: -5px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+    padding: 0 10px;
+}
+
+.confirm-price button {
+    width: 100%;
+    background: var(--info-green);
+    color: white;
+    padding: 5px 10px;
+    border: none;
+    border-radius:5px;
+}
+
+.confirm-price-visible{
+    display: initial;
 }

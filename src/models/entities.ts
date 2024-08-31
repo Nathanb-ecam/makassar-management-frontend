@@ -16,25 +16,87 @@ export interface User {
 export interface Order {
     id: string;
     customerId?: string | null;
+    orderNumber?: string | null;
+    createdLocation?: string | null;
     status?: string | null;
     description?: string | null;
     comments?: string | null;
-    totalPrice?: string | null;
-    deliveryCost?: string | null;
-    discount?: string | null;
+    price: Price | null;
     bags?: Map<string, string> | null;  // "productId" to quantity
+    // plannedDate?: {best:string,worst:string} | null;
     plannedDate?: string | null;
     createdAt?: string | null;
     updatedAt?: string | null; 
 }
 
+export interface Price{
+    finalPrice: string | undefined | null;
+    alreadyPaid: string | undefined | null;
+    deliveryCost: string | undefined | null;
+    discount: string | undefined | null;
+}
+
+export interface BagWithQuantity{
+    bag: Bag;
+    quantity: number;
+}
+
+
+export interface OrderFullyDetailed{
+    id: string | null;
+    customer: Customer;
+    orderNumber: string | null;
+    createdLocation: string | null;
+    status: string | null;
+    description: string | null;
+    comments: string | null;
+    price: Price | null;
+    // bags: Map<Bag,String> | null;
+    bags: Map<string,BagWithQuantity> | null;
+    plannedDate: string | null;
+    createdAt: string | null;
+    updatedAt: string | null;
+}
+
+
+
+export interface OrderDto{
+    customerId?: string | null;
+    orderNumber?: string | null;
+    createdLocation?: string | null;
+    status?: string | null;
+    description?: string | null;
+    comments?: string | null;
+    price: Price | null;
+    bags?: Map<string, string> | null;  // "productId" to quantity
+    // plannedDate?: {best:string,worst:string} | null;
+    plannedDate?: string | null;
+    
+}
+
+export interface OrderOverview{
+    id: string | null;
+    customerName: string | null;
+    orderNumber: string | null;
+    status :  string | null,
+    price: Price | null,
+    // plannedDate: PlannedDate | null,
+    plannedDate: string | null,
+    createdAt: string | null,
+    updatedAt: string | null,
+}
+
+
+
 export interface OrderEditableData{
-    totalPrice : string;
-    deliveryCost : string;
-    status : string;
-    description : string;
-    plannedDate : string;
-    bags: Map<string,{bag:Bag,quantity:number}>;
+    price: Price | null | undefined;
+    createdLocation: string | null;
+    comments: string | null;
+    status : string | null;
+    description : string | null;
+    // plannedDate : {best:string,worst:string} | null;
+    plannedDate?: string | null;
+    bags: Map<string,BagWithQuantity> | null;
 }
 
 
@@ -76,4 +138,9 @@ export interface Customer{
     shippingAddress?: Address | null;
     type?: string | null;
     
+}
+
+export interface PlannedDate{
+    worst:string | null;
+    best:string | null;
 }

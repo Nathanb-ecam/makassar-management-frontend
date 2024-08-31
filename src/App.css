@@ -11,8 +11,14 @@
   --dark-black: #161718;
   --light-black: #525355;
 
+   /* TOP */
   --info-green: #0cbd32b8;
+  --info-orange: #db993bb8;
   --info-red: #e72e2ece;
+
+  --info-green: #0cbd32;
+  --info-orange: #db983b;
+  --info-red: #e72e2e;
 
   --ligth-grey: rgba(218, 224, 243, 0.371);
   --ligth-gray: rgb(249, 249, 249);
@@ -53,10 +59,7 @@
   /* margin:0 auto; */
   padding: 50px;
   /* border: 1px solid red; */
-}
-
-body{
   position: relative;
-
 }
+
 

@@ -1,6 +1,6 @@
 import React from 'react'
 import axios from '../axios'
-import { Bag } from '../../models/entities'
+import { Bag, OrderFullyDetailed } from '../../models/entities'
 import Orders from '../../pages/Orders';
 import { processHttpError } from '../../utils/httpErros';
 
@@ -12,7 +12,71 @@ export const getOrders = async (auth) => {
             withCredentials:true }
         )
         // setOrders(response.data)
-        console.log("Fetched orders: ",JSON.stringify(response?.data))
+        // console.log("Fetched orders: ",JSON.stringify(response?.data))
+        if(Array.isArray(response.data)){
+            return {"ordersArray":response.data}
+        }else{
+            return {"ordersArray":[] , "err":"Response is not an array"}
+        }
+    }catch(err){
+        var errMsg = processHttpError('getOrders',err);
+        return {"ordersArray" : [], "err": errMsg }
+    }
+}
+
+
+export const createOrder = async (auth,orderDto) => {
+    
+    try{
+        const response = await axios.post('/orders',
+        orderDto,
+        {
+            headers: {'Content-type':'application/json','Authorization': `Bearer ${auth.accessToken}`},
+            withCredentials:true 
+        },
+        )
+
+        if(response?.status === 201){
+            return {"id":response.data.orderId}
+        }else{
+            return {"err":response.status.toString()}
+        }
+
+    }catch(err){
+        var errMsg = processHttpError('getOrders',err);
+        return {"err": errMsg }
+    }
+}
+
+export const deleteOrderById = async (auth,id) => {
+    
+    try{
+        const response = await axios.delete(`/orders/${id}`,{
+            headers: {'Content-type':'application/json','Authorization': `Bearer ${auth.accessToken}`},
+            withCredentials:true }
+        )
+
+    if(response?.status === 200){
+        return {"id":response.data.orderId}
+    }else{
+        return {"err":response.status.toString()}
+    }
+
+    }catch(err){
+        var errMsg = processHttpError('getOrders',err);
+        return {"err": errMsg }
+    }
+}
+
+
+export const getOverviewsOfOrders = async(auth) => {
+    try{
+        const response = await axios.get('/orders-overviews',{
+            headers: {'Content-type':'application/json','Authorization': `Bearer ${auth.accessToken}`},
+            withCredentials:true }
+        )
+        // setOrders(response.data)
+        // console.log("Fetched orders: ",JSON.stringify(response?.data))
         if(Array.isArray(response.data)){
             return {"ordersArray":response.data}
         }else{
@@ -83,12 +147,45 @@ export const getOrderById = async (auth,orderId) => {
             withCredentials:true }
         )
         // setOrders(response.data)
-        console.log("Fetched orders: ",JSON.stringify(response?.data))
+        console.log("Fetched order: ",JSON.stringify(response?.data))
         return {"order":response.data}
         
     }catch(err){
         var errMsg = processHttpError('getOrderById',err)
-        return {"ordersArray" : [], "err" : errMsg }
+        return {"err" : errMsg }
+    }
+}
+
+export const getOrderByIdWithCustomerDetailed = async (auth,orderId) => {
+    
+    try{
+        const response = await axios.get(`/orders/${orderId}/customer-detailed`,{
+            headers: {'Content-type':'application/json','Authorization': `Bearer ${auth.accessToken}`},
+            withCredentials:true }
+        )
+        console.log("Fetched order: ",JSON.stringify(response?.data))
+        return {"order":response.data}
+        
+    }catch(err){
+        var errMsg = processHttpError('getOrderByIdWithCustomerDetailed',err)
+        return {"err" : errMsg }
+    }
+}
+
+export const getOrderFullyDetailedById = async (auth,orderId) => {
+    try{
+        const response = await axios.get<OrderFullyDetailed>(`/orders/${orderId}/fully-detailed`,
+        {
+            headers: {'Content-type':'application/json','Authorization': `Bearer ${auth.accessToken}`},
+            withCredentials:true 
+        }
+        )
+        // console.log("Fetched order: ",JSON.stringify(response?.data))
+        return {"order":response.data}
+        
+    }catch(err){
+        var errMsg = processHttpError('getOrderFullyDetailedById',err)
+        return {"err" : errMsg }
     }
 }
 

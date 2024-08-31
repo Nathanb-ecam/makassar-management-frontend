@@ -1,5 +1,5 @@
 
-.bag-infos .bag-item-card{
+.bag-item-card{
     border-radius: 15px;
     display: flex;
     flex-direction: column;
@@ -23,7 +23,7 @@
     border-radius: 50%;
 }
 
-.order-details .bag-infos .bag-item-card .bag-card-title{
+.bag-item-card .bag-card-title{
     /* border: 1px solid var(--primary); */
     font-family: var(--font-secondary);
     /* font-weight: bold; */

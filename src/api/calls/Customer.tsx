@@ -13,7 +13,7 @@ export const getCustomerById = async (auth,customerId) => {
         },
         )
         // setCustomer(response.data)
-        console.log("Fetched customer: ",JSON.stringify(response?.data))
+        // console.log("Fetched customer: ",JSON.stringify(response?.data))
         return response.data
         
     }catch(err){
@@ -31,6 +31,25 @@ export const getCustomerById = async (auth,customerId) => {
     }
 }
 
+export const modifyCustomerWithid = async (auth,customerId,customer) => {
+    
+    try{
+        const response = await axios.put(`/customers/${customerId}`,
+        customer,
+        {
+            headers: {'Content-type':'application/json','Authorization': `Bearer ${auth.accessToken}`},
+            withCredentials:true 
+        },
+        )
+    
+        return {"id":response.data.id}
+        
+    }catch(err){
+        var errMsg = processHttpError("modifyCustomerWithid",err)
+        return {"err" : errMsg}
+    }
+}
+
 
 export const  getAllCustomers = async (auth) => {
     
@@ -42,7 +61,7 @@ export const  getAllCustomers = async (auth) => {
         },
         )
         // setCustomer(response.data)
-        console.log("Fetched customers: ",JSON.stringify(response?.data))
+        // console.log("Fetched customers: ",JSON.stringify(response?.data))
         return response.data
         
     }catch(err){
@@ -73,15 +92,15 @@ export const createCustomer = async (auth,customer)=>{
     
         if(response?.status === 201){
             console.log("Successfully created customer: ")
-            return true
+            return {"id":response.data.id}
         }else{
-            return false
+            return {"err":response.statusText}
         }
         
     }catch(err){
         var errMsg = processHttpError('createCustomer',err)
         console.log(errMsg)
-        return false
+        return {"err":errMsg}
     }
 }
 
@@ -99,16 +118,8 @@ export const deleteCustomerWithId = async (auth,id) => {
         
         
     }catch(err){
-        if(!err?.response){
-            console.error("Customers deleteCustomerWithId : No server response")
-        }else if (err?.response.status === 400){
-            console.error("Customers deleteCustomerWithId : Missing Username or password")
-        }
-        else if (err?.response.status === 401){
-            console.error("Customers deleteCustomerWithId : Unauthorized")
-        }else{
-            console.error("Login failed")
-        }
-        return false
+        var errMsg = processHttpError('createCustomer',err)
+        console.log(errMsg)
+        return {"err":errMsg}
     }
 }

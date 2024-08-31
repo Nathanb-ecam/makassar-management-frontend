@@ -34,10 +34,11 @@
     position: absolute;
     bottom: 0;
     right: 0;
-    color: none;
-    background-color:var(--secondary);
-    border:1px solid var(--secondary);
+    background-color:var(--info-green);
+    color: white;
+    border:none;
     border-radius: 5px;
+    padding: 5px 10px;
     /* text-align: end; */
 }
 

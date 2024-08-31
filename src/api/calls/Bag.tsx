@@ -38,7 +38,7 @@ export const getBags = async (auth) => {
         },
         )
         
-        console.log("Fetched bags: ",JSON.stringify(response?.data))
+        // console.log("Fetched bags: ",JSON.stringify(response?.data))
         if(Array.isArray(response.data)){
             return {"bags":response.data}
         }else{

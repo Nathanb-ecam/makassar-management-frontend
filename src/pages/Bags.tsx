@@ -4,7 +4,7 @@ import SectionTitle from '../components/main/SectionTitle.tsx'
 
 import './css/bags.css'
 import Popup from '../components/main/Popup.tsx';
-import BagSelectorPopup from '../components/bags/BagSelectorPopup.tsx';
+import BagSelectorPopup from '../components/bags/BagSelector.tsx';
 import { Bag } from '../models/entities.ts';
 
 import BagForm from '../components/bags/BagForm.tsx'

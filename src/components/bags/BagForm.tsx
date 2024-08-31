@@ -46,9 +46,9 @@ const BagForm = ({onBagFormSubmit} : Props) => {
             formData.append("image",image)
             // console.log(image)
         })
-        for (let [key, value] of formData.entries()) {
-            console.log(`${key}:`, value);
-        }
+        // for (let [key, value] of formData.entries()) {
+        //     console.log(`${key}:`, value);
+        // }
 
         onBagFormSubmit(formData)
         
