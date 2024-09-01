@@ -29,6 +29,7 @@ const CreateOrder = ({handleOrderCreated} : Props) => {
 
     const [bagSelectionVisible,setBagSelectionVisible] = useState(false)
     const [estimatedPrice,setEstimatedPrice] = useState(0)
+    const [totalPrice,setTotalPrice] = useState('')
     const [currentOrder,setCurrentOrder] = useState<OrderDto>({
         status: 'Ouverte',
         customerId:'',
@@ -46,9 +47,9 @@ const CreateOrder = ({handleOrderCreated} : Props) => {
     })
     
 
-    // useEffect(()=>{
-    //     console.log(currentOrder)
-    // },[currentOrder])
+    useEffect(()=>{
+        console.log(currentOrder)
+    },[currentOrder])
 
 
     useEffect(()=>{
@@ -66,10 +67,17 @@ const CreateOrder = ({handleOrderCreated} : Props) => {
       }
       ,[]);
 
+    useEffect(()=>{
 
+        const result = ((estimatedPrice * (1 - Number(currentOrder.price?.discount)))+ Number(currentOrder.price?.deliveryCost)).toFixed(2)
+        
+        setTotalPrice(result)
+        handleDivChange('price.finalPrice',result)
+    },[estimatedPrice,currentOrder.price?.deliveryCost,currentOrder.price?.discount])
 
     const handleDivChange = (itemKey :string, val :string) =>{
         const keys = itemKey.split('.')
+    
         if(keys.length === 1 ){
             setCurrentOrder(prev => prev ? {...prev,[keys[0]]:val} : prev)                                    
             
@@ -90,12 +98,17 @@ const CreateOrder = ({handleOrderCreated} : Props) => {
 
     const handleElementChange = (e : React.ChangeEvent<HTMLSelectElement | HTMLInputElement | HTMLTextAreaElement>) =>{
         const{name,value} = e.target
-        
-        setCurrentOrder(prev=>{
-            if(!prev) return prev 
+    
+        var val : any = null
+        if(name==='price.discount') val = (Number(value) / 100).toFixed(2)        
+        else val = value
 
-            return {...prev, [name]: value}
-        })
+        const keys = name.split('.')
+        if(keys.length ===1) setCurrentOrder(prev=> prev ? {...prev, [name]: val} : prev)
+        else if(keys.length ===2) setCurrentOrder(prev=> prev ? {...prev, [keys[0]]: {...prev[keys[0]],[keys[1]]: val}} : prev)
+        else console.log("case not handled in 'handleElementChange'")
+
+
     }
 
     const setBagsOfCurrentOrder = (bags: Map<string, { bag: Bag; quantity: number; }>) => {
@@ -113,17 +126,16 @@ const CreateOrder = ({handleOrderCreated} : Props) => {
             })
             return {...prev, bags: updated}
         })
-        // setEstimatedPrice(prev => prev ? selectionPrice : prev)
 
         if(bagSelectorRef.current) {
             const estimated = bagSelectorRef.current.getSelectionPrice()
             setEstimatedPrice(Number(estimated))
-            handleDivChange('price.finalPrice',estimated)
+            
         }
 
     }
 
-    const hanldeCreateOrder = (e : React.FormEvent<HTMLFormElement>) => {
+    const hanldeCreateOrder = (e : React.FormEvent<HTMLFormElement>) => {        
         e.preventDefault()
         if(currentOrder?.bags?.size === 0){
             showTopMessage('Une commande doit contenir au moins 1 sac',{backgroundColor:'var(--info-orange)'})
@@ -171,38 +183,37 @@ const CreateOrder = ({handleOrderCreated} : Props) => {
                     
 
                     <div className='create-order-field'>
-                        <label htmlFor="">Fourchette de livraison:</label>
-                        <div 
-                            // className='planned-date-pickers'
+                        <label htmlFor="planned-date">Date prévue:</label>
+                        <input 
                             className='planned-date'
-                            contentEditable={true}
-                            suppressContentEditableWarning={true}
-                            onChange={(e)=>handleDivChange("plannedDate",(e.target as HTMLElement).innerText)}
-                        >
-                            Ex: Fin mars
+                            id='planned-date'
+                            name='plannedDate'
+                            onChange={handleElementChange}                
+                            placeholder="Ex: Fin mars"
+                            type='text'             
+                        />
 
-                        </div>
+                        
                     </div>
 
                     <div className='create-order-field'>
                         <label htmlFor="">Description:</label>
                         <textarea 
-                        name="description"
-                        id=""
-                        onChange={handleElementChange}
-                        ></textarea>
+                            name="description"
+                            id=""
+                            onChange={handleElementChange}
+                        >
+
+                        </textarea>
                     </div>
 
                     <div className='create-order-field'>
                         <label htmlFor="">Commentaire:</label>
                         <textarea                     
-                        name="comments"
-                        onChange={handleElementChange} 
-                        id=""
-                        
+                            name="comments"
+                            onChange={handleElementChange} 
+                            id=""                        
                         >
-
-
                         </textarea>
                     </div>
 
@@ -217,8 +228,8 @@ const CreateOrder = ({handleOrderCreated} : Props) => {
                         ref={bagSelectorRef}
                         addBagsToCurrentBags={setBagsOfCurrentOrder}
                         customBagSelectionWrapperCSS= {{}}
-                        customButtonSectionStyle={{justifyContent:'start'}}
-                        customSaveButtonStyle={{background:'white',color:'var(--info-green)', border:'1px solid var(--info-green)'}}
+                        customButtonSectionStyle={{justifyContent:'center'}}
+                        customSaveButtonStyle={{background:'white',color:'var(--info-green)'}}
                         >
 
                         </BagSelector>
@@ -227,41 +238,42 @@ const CreateOrder = ({handleOrderCreated} : Props) => {
                             <div className="bag-selection-item base-price">
                                 <label htmlFor="">Prix de base:(€)</label>
                                 <div>
-                                    {estimatedPrice}
-                                </div>
+                                    {estimatedPrice.toString()}
+                                </div>                             
                             </div>
                             <div className="bag-selection-item discount">
                                 <label htmlFor="">Réduction:(%)</label>
-                                <div
-                                contentEditable={true}
-                                suppressContentEditableWarning={true}
-                                onBlur={(e)=>{
-                                    const q = (Number((e.target as HTMLElement).innerText) / 100).toFixed(2)
-                                    handleDivChange("price.discount",q.toString())
-                                }
-                                }
-                                >
-                                    Ex: 30
-                                </div>
+                                <input               
+                                    className='price-discount'
+                                    name='price.discount'
+                                    onChange={handleElementChange}   
+                                    type='number'             
+                                    placeholder="Ex: 12"
+                                />
                             </div>
                             <div className="bag-selection-item deliveryCosts">
                                 <label htmlFor="">Coût de livraison(€):</label>
-                                <div
-                                contentEditable={true}
-                                suppressContentEditableWarning={true}
-                                onBlur={(e)=>handleDivChange("price.deliveryCost",(e.target as HTMLElement).innerText)}
-                                >
-                                    Ex: 120
+                                <input               
+                                    className='price-deliveryCost'
+                                    name='price.deliveryCost'
+                                    type='number'             
+                                    onChange={handleElementChange}                
+                                    placeholder="Ex: 35"
+                                />
+                            </div>
+                            <div className='bag-selection-item create-order-total-price'>
+                                <label htmlFor="">Prix total:</label>
+                                <div>
+                                        {   
+                                            totalPrice
+                                        }
                                 </div>
                             </div>
                         </div>
                     </div>
 
 
-                    <div
-                    className='confirm-order-create'
-                    // onClick={(e)=> handleOrderCreated(currentOrder)}
-                    >
+                    <div className='confirm-order-create'>
                         <button type='submit'>
                             Créer la commande
                         </button>

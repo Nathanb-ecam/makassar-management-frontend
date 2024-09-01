@@ -100,14 +100,14 @@ export const putOrder = async (auth,orderId,dataObj) => {
         }
         )
         // setOrders(response.data)
-        console.log("Modified order: ",JSON.stringify(response?.data))
+        // console.log("Modified order: ",JSON.stringify(response?.data))
         if(response?.status === 200){
-            return true
+            return {"id": response.data.id}
         }
-        return false
+        return {"err" : response?.status}
     }catch(err){
         var errMsg = processHttpError('getOrders',err);
-        return false
+        return {"err":err,"errMsg":errMsg}
     }
 }
 
@@ -147,12 +147,30 @@ export const getOrderById = async (auth,orderId) => {
             withCredentials:true }
         )
         // setOrders(response.data)
-        console.log("Fetched order: ",JSON.stringify(response?.data))
+        // console.log("Fetched order: ",JSON.stringify(response?.data))
         return {"order":response.data}
         
     }catch(err){
         var errMsg = processHttpError('getOrderById',err)
         return {"err" : errMsg }
+    }
+}
+
+export const getOrderOverviewById = async (auth,orderId) => {
+    
+    try{
+        const response = await axios.get(`/orders-overviews/${orderId}`,{
+            headers: {'Content-type':'application/json','Authorization': `Bearer ${auth.accessToken}`},
+            withCredentials:true }
+        )
+        // setOrders(response.data)
+        console.log("getOrderOverviewById order: ",JSON.stringify(response?.data))
+        if(response?.status === 200)return {"order":response.data.order}
+        return {"err":response?.status}
+        
+    }catch(err){
+        var errMsg = processHttpError('getOrderById',err)
+        return {"err":err,"errMsg" : errMsg }
     }
 }
 
@@ -163,7 +181,7 @@ export const getOrderByIdWithCustomerDetailed = async (auth,orderId) => {
             headers: {'Content-type':'application/json','Authorization': `Bearer ${auth.accessToken}`},
             withCredentials:true }
         )
-        console.log("Fetched order: ",JSON.stringify(response?.data))
+        // console.log("Fetched order: ",JSON.stringify(response?.data))
         return {"order":response.data}
         
     }catch(err){

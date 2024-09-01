@@ -1,6 +1,6 @@
 .top-message-popup{
     position: fixed;
-    z-index: 200;
+    z-index: 500;
     left: 50%;
     transform: translate(-50%);
     top: 20px;

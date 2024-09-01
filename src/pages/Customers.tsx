@@ -8,11 +8,15 @@ import Popup from '../components/main/Popup';
 import { Customer } from '../models/entities';
 import CustomerForm from '../components/customers/CustomerForm.tsx';
 import { useTopMessage } from '../hooks/useTopMessagePopup.tsx';
+import { getTimeStamp } from '../utils/formatTime.tsx';
+import useRefreshToken from '../hooks/useRefreshToken.tsx';
 
 
 const Customers = () => {
   
   const {auth} = useAuth();
+
+  const refresh = useRefreshToken()
 
   const {showTopMessage} = useTopMessage()
 
@@ -97,7 +101,8 @@ const Customers = () => {
     setCreateCustomerPopupVisible(false)
   }
 
-  const onModifiedRow = (customerId: string, key : string, value : any)=>{
+  const onModifiedRow = async (customerId: string, key : string, value : any)=>{
+
 
     const customers = tableProps.data
     console.log("customerId,key,value")
@@ -129,16 +134,16 @@ const Customers = () => {
     if(originalFieldValue === value) return 
   
   
-    const {id, err} = modifyCustomerWithid(auth,customerId,modifiedData)
-    
-
+    const {id, err, errMsg} = await modifyCustomerWithid(auth,customerId,modifiedData)
+  
+    console.log(modifiedData)
     if(!err){
       showTopMessage("Client modifié", {backgroundColor:'var(--info-green)'})
 
       setTableProps(prev => {
         const customerIndex = prev.data.findIndex(d => d.id === id);
 
-        if (customerIndex === -1) return prev; // No customer found
+        if (customerIndex === -1) return prev; 
   
         
         const updatedCustomer = {
@@ -160,6 +165,12 @@ const Customers = () => {
 
       })
     }else{
+      console.log("modifyCutomer: ", errMsg)
+      if(err?.response.status === 401){
+        console.log("refresh")
+        await refresh()
+      }
+      console.log("Sent payload: ", modifiedData)
       showTopMessage("Erreur lors de la modification du client", {backgroundColor:'var(--info-red)'})
     }
   }
@@ -200,7 +211,7 @@ const Customers = () => {
           </Popup>
         : null
         }
-        <SectionTitle title='Customers' onCreateButtonClicked={onCreateCustomerButtonClicked}>
+        <SectionTitle title='Clients' onCreateButtonClicked={onCreateCustomerButtonClicked}>
     
         </SectionTitle>
 

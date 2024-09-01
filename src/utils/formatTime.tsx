@@ -23,3 +23,28 @@ export const formatTime = (timestamp) => {
     return `${day}/${month}/${year}`;
   };
 
+
+
+  export const getTimeStamp = (formattedDate) => {
+    if (!formattedDate) return null;
+  
+    if (/^\d{2}:\d{2}$/.test(formattedDate)) {
+      const [hours, minutes] = formattedDate.split(':');
+      const today = new Date();
+      today.setHours(hours);
+      today.setMinutes(minutes);
+      today.setSeconds(0);
+      today.setMilliseconds(0);
+      return today.getTime();
+    }
+  
+    
+    if (/^\d{2}\/\d{2}\/\d{4}$/.test(formattedDate)) {
+      const [day, month, year] = formattedDate.split('/').map(Number);
+      const date = new Date(year, month - 1, day);
+      date.setHours(0, 0, 0, 0);
+      return date.getTime(); 
+    }
+  
+    return null;
+  };

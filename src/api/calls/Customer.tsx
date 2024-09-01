@@ -2,6 +2,9 @@ import React from 'react'
 import axios from '../axios'
 import { Customer } from '../../models/entities'
 import { processHttpError } from '../../utils/httpErros'
+import { useAuth } from '../../hooks/useAuth'
+import useRefreshToken from '../../hooks/useRefreshToken'
+
 
 export const getCustomerById = async (auth,customerId) => {
     
@@ -46,7 +49,8 @@ export const modifyCustomerWithid = async (auth,customerId,customer) => {
         
     }catch(err){
         var errMsg = processHttpError("modifyCustomerWithid",err)
-        return {"err" : errMsg}
+        // if(err?.response.status === 401) refresh()
+        return {"err":err,"errMsg" : errMsg}
     }
 }
 

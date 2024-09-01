@@ -29,9 +29,14 @@
 
 }
 
-.create-order-field textarea{
+.create-order-field textarea,
+.create-order-field input,
+.create-order-field select
+{
     width: 350px;
 }
+
+
 
 
 
@@ -48,13 +53,28 @@
 .bag-selection-item{
     display: flex;
     justify-content: space-between;
+    align-items: center;
+    margin: 5px 0;
+}
+
+.bag-selection-item input{
+    width: 70px;
+    text-align: center;
+}
+
+.base-price input{
+    border: none;
+    
 }
 
 .confirm-order-create{
-    background: white;    
+
     display: flex;
     justify-content: end;
-    padding: 0 10px 20px 0;
+
+    /* position: absolute; */
+    bottom: 10px;
+    right: 20px;
 }
 
 .confirm-order-create button{
@@ -63,4 +83,17 @@
     color: white;
     border: none;
     border-radius : 5px;
+}
+
+.create-order-total-price{
+    font-weight: bold;
+}
+
+
+@media (max-width:900px){
+    .confirm-order-create{
+        background: red;
+        bottom: 10px;
+        right: 20px;
+    }
 }

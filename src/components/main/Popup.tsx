@@ -1,4 +1,4 @@
-import React, { CSSProperties } from 'react'
+import React, { CSSProperties, useEffect, useRef } from 'react'
 import { IoMdClose } from 'react-icons/io';
 
 
@@ -13,9 +13,13 @@ interface Props{
 }
 
 const Popup = ({title,onPopupClose, popupVisible = true, customCSS, children}:Props) => {
+  
+  
   return (
     <>
     {popupVisible && (
+        <>
+        <div className="popup-overlay"></div>
           <div className="popup" style={customCSS}>
             <div className="popup-header">
                 <div className="pop-title">{title}</div>
@@ -27,6 +31,7 @@ const Popup = ({title,onPopupClose, popupVisible = true, customCSS, children}:Pr
                 {children}
             </div>
          </div>
+        </>
     )}
     </>
 

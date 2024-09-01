@@ -65,7 +65,7 @@ const Orders = () => {
 
   const {showTopMessage} = useTopMessage()
 
-  const { ordersOverviews,  loading, error , refreshOrders,removeOrderFromOrdersState,modifyOrderFromOrdersState,refreshOrderById} = useOrdersContext();
+  const { ordersOverviews,  loading, error , refreshOrdersOverviews,removeOrderFromOrdersState,modifyOrderFromOrdersState,refreshOrderOverviewById} = useOrdersContext();
 
   const [currentOrderHasBeenModified,setCurrentOrderHasBeenModified] = useState(false);
   
@@ -73,7 +73,7 @@ const Orders = () => {
 
   
   // const [currentOrderModifications,setCurrentOrderModifications] = useState<OrderEditableData | undefined>(initialOrderEditableData);
-  const [currentOrderModifications,setCurrentOrderModifications] = useState({});
+  // const [currentOrderModifications,setCurrentOrderModifications] = useState({});
   
 
   const [currentOrder, setCurrentOrder] = useState<OrderFullyDetailed>({
@@ -146,12 +146,24 @@ const Orders = () => {
       }
 
       console.log("modifiedOrder",modifiedOrder)
-      const updateStatus = await putOrder(auth,orderOverview.id,modifiedOrder);
-      if(updateStatus){
+      const {err, errMsg} = await putOrder(auth,orderOverview.id,modifiedOrder);
+      if(!err){
         showTopMessage(`Modification(s) de la commande de '${orderOverview.customerName}' enregistrée(s) `, {backgroundColor:'var(--info-green)'})
         setCurrentOrderHasBeenModified(false)
-        // modifyOrderFromOrdersState(modifiedOrder)
-        refreshOrderById(auth,orderOverview.id!!)
+        refreshOrderOverviewById(auth,id!!)    
+        setCurrentOrder(prev => {
+          if (!prev) return prev;
+                    
+          return {
+              ...rest,
+              price,              
+              customer,
+              id,
+              createdAt,
+              updatedAt,
+          };
+      });    
+
         
       }else{
         showTopMessage(`Erreur lors de la sauvegarde des modifications `, {backgroundColor:'var(--info-red)'})  
@@ -234,7 +246,7 @@ const Orders = () => {
   const handleClick = async (index: number,ord : OrderOverview) => {
 
     setCurrentOrderHasBeenModified(false)
-    setCurrentOrderModifications({});
+    // setCurrentOrderModifications({});
     
 
     setRotatedRows(prevState => ({
@@ -258,15 +270,13 @@ const Orders = () => {
           setCurrentOrder(prev => {
             if (!prev) return prev;
         
-            // Convert the object to a Map if necessary
             const bagsAsMap = order.bags instanceof Map
                 ? order.bags
                 : new Map<string, { bag: Bag; quantity: number }>(
                     Object.entries(order.bags!!).map(([key, value]) => [key, value as BagWithQuantity])
                 );
         
-            // Use the updated `bagsAsMap` from the `result.order`
-            console.log("WORKS FINE ?")
+            
             return {
                 ...order,
                 bags: bagsAsMap
@@ -321,7 +331,7 @@ const Orders = () => {
       
      if(!err){
       showTopMessage(`La commande a bien été crée`,{backgroundColor:'var(--info-green)'})
-      refreshOrders(auth)
+      refreshOrdersOverviews(auth)
       setCreateOrderVisible(false)
       
      }
@@ -377,13 +387,11 @@ const Orders = () => {
                   <div className='orders-header-row'>
                     <div className='small-col'>N°</div>
                     <div className='medium-col'>Client</div>
-                    <div className='small-col'>Création</div>
-                    <div className='small-col'>Modification</div>
+                    <div className='medium-col'>Création</div>
+                    <div className='medium-col'>Modification</div>
                     <div className='medium-col'>Status</div>
                     <div className='medium-col'>Date prévue</div>
                     <div className='small-col'>Prix</div>
-                    {/* <div>Description</div> */}
-
                     <div className='small-col'>Détails</div>
                     <div className='small-col'>Actions</div>
 
@@ -399,8 +407,8 @@ const Orders = () => {
                       <div className='customer-base-info'>       
                         <div className='small-col'>{orderOverview.orderNumber }</div>
                         <div className='medium-col'>{orderOverview.customerName }</div>
-                        <div className='small-col'>{formatTime(orderOverview.createdAt)}</div>
-                        <div className='small-col'>{formatTime(orderOverview.updatedAt)}</div>
+                        <div className='medium-col'>{formatTime(orderOverview.createdAt)}</div>
+                        <div className='medium-col'>{formatTime(orderOverview.updatedAt)}</div>
                         <div 
                             className='order-status medium-col' 
                             contentEditable={true}
@@ -418,10 +426,7 @@ const Orders = () => {
                           {orderOverview.plannedDate ? orderOverview.plannedDate : ""}
                         </div>
                         <div
-                          className='order-price small-col'
-                          // contentEditable={true}
-                          // suppressContentEditableWarning={true} 
-                          // onBlur={(e) => handleOrderChangeInRowItems(orderOverview.id,"price.finalPrice", (e.target as HTMLElement).innerText)}
+                          className='order-price small-col'                          
                         >
                           {Number(orderOverview.price?.finalPrice).toFixed(2)}
                         </div>
@@ -456,22 +461,7 @@ const Orders = () => {
                                 <div>Adresse de livraison:</div>
                                 <div className='shippingAddress'>{currentOrder.customer.shippingAddress?.address}, {currentOrder.customer.shippingAddress?.postalCode} {currentOrder.customer.shippingAddress?.country}</div>
                                 <div>Délai prévu:</div>
-                                <div>{currentOrder.plannedDate}</div>
-                                {/* <div>
-                                    <input 
-                                    type="datetime-local" 
-                                    name="plannedDate.best" id="best-delay"
-                                    placeholder={currentOrder.plannedDate}  
-                                    onChange={(e)=>handleChangeInOrderDetails(e)}
-                                    />
-
-                                    <input 
-                                        type="datetime-local" 
-                                        name="plannedDate.worst" id="worst-delay"
-                                        placeholder={order?.plannedDate?.worst} 
-                                        onChange={(e)=>handleChangeInOrderDetails(e)}
-                                    />
-                                </div> */}
+                                <div>{currentOrder.plannedDate}</div>        
                                 <div>Siège social:</div>
                                 <div className='professionalAddress'>{currentOrder.customer.professionalAddress?.address}, {currentOrder.customer.professionalAddress?.postalCode} {currentOrder.customer.professionalAddress?.country}</div>
                                 
@@ -497,7 +487,6 @@ const Orders = () => {
                             </div>
                             <div className='bags-list'>   
    
-                                {/* {currentOrder?.bags instanceof Map && Array.from(currentOrder.bags.values()).map((bagWithQuantity, index) => ( */}
                                 {currentOrder?.bags instanceof Map && Array.from(currentOrder.bags.values()).map((bagWithQuantity, index) => (
                                     <BagCard 
                                       key={index} 

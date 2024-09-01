@@ -21,10 +21,14 @@
     margin-top:20px;    
 }
 
-.image-form-field-wrapper label, .image-form-field-wrapper input{
+.image-form-field-wrapper label, 
+.image-form-field-wrapper input{
     padding: 5px 0;
 }
 
+.image-form-field-wrapper label:hover{
+    font-weight: bold;
+}
 
 
 .custom-file-upload{
@@ -62,3 +66,4 @@
     border-radius: 5px;
     border: none;
 }
+

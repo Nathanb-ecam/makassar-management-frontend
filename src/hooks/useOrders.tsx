@@ -3,14 +3,14 @@ import { useAuth } from './useAuth'
 import axios from '../api/axios'
 import { Order, OrderOverview } from '../models/entities'
 import { useLocation } from 'react-router-dom';
-import { getOrderById, getOrders, getOverviewsOfOrders } from '../api/calls/Order';
+import { getOrderById, getOrderOverviewById, getOrders, getOverviewsOfOrders } from '../api/calls/Order';
 
 interface OrdersContextType {
     ordersOverviews: OrderOverview[];
     loading: boolean;
     error: string | null;
-    refreshOrders: (auth) => Promise<void>;
-    refreshOrderById: (auth,orderId: string) => Promise<void>;
+    refreshOrdersOverviews: (auth) => Promise<void>;
+    refreshOrderOverviewById: (auth,orderId: string) => Promise<void>;
     removeOrderFromOrdersState: (orderId: string) =>void;
     modifyOrderFromOrdersState: (order: OrderOverview) =>void;
 }
@@ -66,8 +66,8 @@ export const OrdersProvider = ({children}) => {
     // },[location.pathname,auth?.accessToken])
     
 
-    const refreshOrderById = async (auth,orderId) => {
-        const {order, err} = await getOrderById(auth,orderId)
+    const refreshOrderOverviewById = async (auth,orderId) => {
+        const {order, err} = await getOrderOverviewById(auth,orderId)
         if (err=== undefined){
             setOrdersOverviews(prevOrders=>{
                 const updatedOrders = prevOrders.map(o => 
@@ -82,7 +82,7 @@ export const OrdersProvider = ({children}) => {
         }       
     }
 
-    const refreshOrders = async (auth) => {
+    const refreshOrdersOverviews = async (auth) => {
         const {ordersArray, err} = await getOverviewsOfOrders(auth)
         if (err=== undefined){
             setOrdersOverviews(ordersArray);
@@ -114,7 +114,14 @@ export const OrdersProvider = ({children}) => {
 
 
     return (
-        <OrdersContext.Provider value={{ordersOverviews,refreshOrders,removeOrderFromOrdersState,modifyOrderFromOrdersState, refreshOrderById,loading,error}}>
+        <OrdersContext.Provider value={{
+            ordersOverviews,
+            refreshOrdersOverviews,
+            removeOrderFromOrdersState,
+            modifyOrderFromOrdersState, 
+            refreshOrderOverviewById,
+            loading,error}}
+            >
             {children}
         </OrdersContext.Provider>
     )
