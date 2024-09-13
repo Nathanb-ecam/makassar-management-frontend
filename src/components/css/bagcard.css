@@ -5,10 +5,10 @@
     flex-direction: column;
     position: relative;
     align-items: center;
-    width: 180px;
+    width: 175px;
     height: 220px;
     box-shadow:  var(--box-shadow) 8px 10px 24px;
-    
+
 }
 
 .bagcard-delete-btn{
@@ -23,20 +23,38 @@
     border-radius: 50%;
 }
 
-.bag-item-card .bag-card-title{
-    /* border: 1px solid var(--primary); */
-    font-family: var(--font-secondary);
-    /* font-weight: bold; */
-    border-radius: 15px 15px 0 0;
+.bag-item-card .bag-card-title-wrapper{    
+    display: none;
+    border-radius: 15px 15px 0 0 ;
     background: var(--primary);
-    color: white;
     width: 100%;
-    text-align: center;
-    text-overflow: ellipsis;
-    overflow: hidden;
-    white-space: nowrap;
-    padding: 5px;
+    overflow: hidden;    
+    padding: 5px 0;
+    overflow: auto;
+    scrollbar-width: none;    
 }
+
+.bag-item-card .bag-card-title{    
+    white-space: nowrap;
+    font-style:oblique;
+    padding: 0 .5rem;
+    color: rgba(255, 255, 255, 0.84);
+    font-weight:bold;
+  }
+
+  .bag-item-card:hover .bag-card-title {
+    animation: scroll-left 2s linear infinite;
+  }
+
+  @keyframes scroll-left {
+    0% {
+      transform: translateX(0%); 
+    }    
+    100% {
+      transform: translateX(-100%);
+    }
+  }
+
 
 
 

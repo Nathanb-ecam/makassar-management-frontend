@@ -7,7 +7,7 @@ import '../css/navbar.css'
 
 
 import { IoColorPalette } from "react-icons/io5";
-import { FaHouse,FaRegPenToSquare,FaBagShopping,FaPerson } from 'react-icons/fa6';
+import { FaHouse,FaRegPenToSquare,FaBagShopping,FaPerson, FaAngleLeft } from 'react-icons/fa6';
 
 
 
@@ -26,7 +26,7 @@ const MainNavbar = () => {
   }
 
   const toggleNavbarVisibility = () =>{
-    console.log("clicked",visibleNavbar)
+    // console.log("clicked",visibleNavbar)
     setVisibleNavbar(prev=>!prev)
     
     
@@ -35,14 +35,11 @@ const MainNavbar = () => {
   return (
     <>
        
-     
-    <button className="button-logo" onClick={toggleNavbarVisibility} >
-      <img className='button-logo-img' src="/src/assets/logo.png" alt="logo makassar" />
-    </button>
-
+  
   
     {/* <div className="navbar "  style={{display:visibleNavbar? 'block':'none', transition:'translate 1s'}}>     */}
     <div className={`navbar ${visibleNavbar ? 'visible':'hidden'}`}>    
+      
       <ul>
         {/* <li className={`nav-li-item ${selectedItem === "dashboard" ? "selected" : "" }`} onClick={(e)=>navigateTo("/dashboard","dashboard")}>
           <FaHouse className='nav-icons'/>
@@ -70,6 +67,15 @@ const MainNavbar = () => {
         </li> */}
       </ul>
       <button className='fast-order'>Commande rapide</button>
+    
+   
+        <FaAngleLeft
+        className={`arrow-logo`}    
+        onClick={toggleNavbarVisibility} 
+        >
+
+        </FaAngleLeft>
+
     </div>
        
        

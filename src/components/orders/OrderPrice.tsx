@@ -7,10 +7,6 @@ import '../css/orderPrice.css'
 import InfoButtonPopup from '../main/InfoButtonPopup';
 
 
-interface InfoButtonPopupRef {
-    hideInfoPopup: () => void;
-}
-
 
 interface Props{
     bags : Map<string,{bag:Bag, quantity:number}> | null | undefined;
@@ -20,19 +16,9 @@ interface Props{
 }
 
 
-const OrderPrice = React.forwardRef(({bags,order,handleOrderPriceChange} : Props,ref) => {
+const OrderPrice = React.forwardRef(({bags,order, handleOrderPriceChange} : Props,ref) => {
     
-
-    useImperativeHandle(ref,()=>({
-        getCurrentPrice(){
-            return modifiedData
-        }
-        
-    }))
-
     if(order == null || order === undefined) return 
-
-    const childInfoPopupRef = useRef<InfoButtonPopupRef | null>(null);
 
     const initialDiscount = order?.price?.discount ?? "0"
     const initialDeliveryCosts = order?.price?.deliveryCost ??  "0"
@@ -42,6 +28,13 @@ const OrderPrice = React.forwardRef(({bags,order,handleOrderPriceChange} : Props
     const [priceCalculationsVisible,setPriceCalculationsVisible] = useState(false);
 
     const [currentPriceHasBeenModified, setCurrentPriceHasBeenModified] = useState(false)
+
+
+    useImperativeHandle(ref,()=>({
+        getCurrentPrice(){
+            return modifiedData
+        },        
+    }))
 
 
     const [modifiedData,setModifiedData] = useState<Price>({
@@ -67,9 +60,7 @@ const OrderPrice = React.forwardRef(({bags,order,handleOrderPriceChange} : Props
         
     },[bags,order,modifiedData.discount,modifiedData.deliveryCost])
 
-    const getCurrentPrice = () =>{
-        return modifiedData
-    }
+
 
     const calculateDisplayedPrice = (discount : number, deliveryCost : number)=>{
         if (bags === null || bags === undefined) return 
@@ -93,32 +84,22 @@ const OrderPrice = React.forwardRef(({bags,order,handleOrderPriceChange} : Props
 
     }
 
-    useEffect(() => {
-        if (priceCalculationsVisible) {
-            document.body.classList.add('blurred');
-        } else {
-            document.body.classList.remove('blurred');
-        }
-
-    
-        return () => document.body.classList.remove('blurred');
-    }, [priceCalculationsVisible]);
 
 
     return (
         <>
-            <div className='actual-price'>
-                <div className="actual-price-text">Prix actuel:€</div>
+            <div className='actual-price-wrapper'>
+                <div className="actual-price-text">Prix actuel: </div>
                 <div 
-                    className="editable-price"
+                    className="actual-price"
                     >
                     {Number(order?.price?.finalPrice).toFixed(2)}
                 </div>
+                
 
                 
                 <InfoButtonPopup 
-                positionClass="left-pop" sizeClass='small-pop' customStyle={{maxWidth:'220px',right:'-25px',minHeight:'310px'}}
-                ref={childInfoPopupRef}
+                positionClass="left-pop" sizeClass='small-pop' customStyle={{maxWidth:'220px',right:'-25px',top:'25px'}}
                 >
                     <div className='price-calculations'>
                         <div className="decompte">
@@ -127,7 +108,7 @@ const OrderPrice = React.forwardRef(({bags,order,handleOrderPriceChange} : Props
                             ))}
                         </div>
                         <div className="resume">
-                            <div className='total-price'>Total sacs: €{bagsTotalPrice}</div>
+                            <div className='total-price'>{bagsTotalPrice}€</div>
                             <div className='discount-container'>
                                 <div className='discount-text'>
                                 Réduction:

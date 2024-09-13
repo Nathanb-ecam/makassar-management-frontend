@@ -1,18 +1,16 @@
 .general-crud-wrapper{
     overflow: auto;
-    width: 100%;
 }
 
 .general-crud-table {
     display: flex;
-    min-width: 1450px;
-    /* max-width: 1250px; */
-    /* width: 100%; */
+
+    min-width: 100%;
+    width: max-content;
     flex-direction: column;
-    /* justify-content: space-evenly; */
     box-shadow: var(--box-shadow) 0px 8px 24px;
     border-radius: 0 0 10px 10px;
-    /* overflow:auto; */
+    overflow: auto;
 
 
 }
@@ -22,15 +20,14 @@
 .general-crud-table .header-row, .content-row{
     display: flex;
     justify-content:space-evenly;
-    width: 100%;
     text-align: center;
-    border-radius:10px 10px 0 0;
     font-weight: lighter;        
 }
 
 .general-crud-table .header-row{
-    background-color: var(--primary);
+    background: var(--primary);
     color: white;
+    border-radius:10px 10px 0 0;
 }
 
 .content-row{
@@ -46,7 +43,7 @@
     font-weight: 300; 
 }
 
-.content-row:nth-child(even){
+.content-row:nth-of-type(2n){
     background: var(--ligth-grey);
     
 }
@@ -54,27 +51,55 @@
 
 
 .header-row .large, .content-row .large{
+    min-width: 300px;
+    max-width: 300px;
+
+}
+
+.header-row .medium, .content-row .medium{
     min-width: 150px;
     max-width: 150px;
+}
+
+.header-row .small, .content-row .small{
+    min-width: 80px;
+    max-width: 80px;
+
 }
 
 
 
 .general-crud-table .header-row .row-field{
-    /* width: 150px; */
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
 }
 
 
+.content-row .row-field{
+    word-wrap:break-word;
+}
+
 .row-field,
 .row-item{
     width: 100%;
+    /* background: red; */
+}
+
+.row-field{
+    white-space: wrap;
+    overflow: auto;
+    max-height: 60px;
+    scrollbar-width: none;
 }
 
 .object-col div{
     width: 100%;
+}
+
+
+.empty-field{
+    color: var(--light-gray);
 }
 
 .actions-col{
@@ -84,13 +109,3 @@
     color: red;
 }
 
-
-/* @media (max-width: 600px) {
-    .hidden {
-      display: none;
-    }
-    .header-row .large, .content-row .large{
-        min-width: 90px;
-        max-width: 120px;
-    }
-  } */

@@ -4,10 +4,6 @@ import { getBags } from '../../api/calls/Bag.tsx';
 import { useAuth } from '../../hooks/useAuth.tsx';
 
 
-import { IoMdClose } from "react-icons/io";
-import { addBagToOrder } from '../../api/calls/Order.tsx';
-import { BsHandbag } from 'react-icons/bs';
-
 
 
 
@@ -87,39 +83,43 @@ const BagSelector = React.forwardRef(({ addBagsToCurrentBags,customBagSelectionW
     }
 
   return (
-    <div className='bag-selector-container' style={customBagSelectionWrapperCSS}>
-            <div className='bag-selector-name'>
-                Sélection des sacs:
-            </div>
+    <>
+        {bags instanceof Array && bags.length >= 1 &&
+        <div className='bag-selector-container' style={customBagSelectionWrapperCSS}>
+                {/* <div className='bag-selector-name'>
+                    Sélection des sacs:
+                </div> */}
 
-            <div className="bag-selection-list">
-            
-            {bags ?
-                    bags.map((bag,index)=>(
-                        <div 
-                        className={`bag-list-item`} 
-                        key={index} 
-                        // onClick={()=>handleSelectedBag(index,bag)}
-                        >
-                            <BagCard bag={bag} initialQuantity={0} updateBagQuantity={handleBagQuantityChange} bottomVisible={false}>
+                <div className="bag-selection-list">
+                
+                {bags ?
+                        bags.map((bag,index)=>(
+                            // <div 
+                            // className={`bag-list-item`} 
+                            // key={index} 
+                            // // onClick={()=>handleSelectedBag(index,bag)}
+                            // >
+                                <BagCard key={index} bag={bag} initialQuantity={0} updateBagQuantity={handleBagQuantityChange} bottomVisible={false}>
 
-                            </BagCard>
-                        </div>
+                                </BagCard>
+                            // </div>
+                            )
                         )
-                    )
-                    
-                    : <p>{error}</p>
-                }
-            </div>
+                        
+                        : <p>{error}</p>
+                    }
+                </div>
+                
+
+
+                <div className='bottom-section' style={customButtonSectionStyle} >
+                    <button type="button" style={customSaveButtonStyle} onClick={saveBagsSelection}>Enregistrer la sélection</button>
+                </div>
+
             
-
-
-            <div className='bottom-section' style={customButtonSectionStyle} >
-                <button type="button" style={customSaveButtonStyle} onClick={saveBagsSelection}>Enregistrer la sélection</button>
-            </div>
-
-        
-    </div>
+        </div>
+        }
+    </>
 
   )
 })

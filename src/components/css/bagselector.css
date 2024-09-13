@@ -1,36 +1,11 @@
-.bag-selector-container{
-    /* 
-    box-shadow: var(--ligth-grey) 10px 8px 5px 5px;
-    border-radius: 25px; */
+.bag-selector-container{        
     z-index: 999;
-    /* min-width: 900px;
-    max-width: 900px; */
-    /* border: none; */
-    width: 100%;
-    margin-bottom: 35px;
-    /* max-height: 150px; */
-    /* position: relative; */
-    
-    /* padding: 20px;  */
-    /* position: relative; */
-}
-
-
-.bag-popup-container .bag-popup-header{
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    width: 100%;
-    color: var(--primary);
-    font-size:1.4rem;
-    margin-bottom: 20px;
+    /* width: 100%; */
+    /* margin-bottom: 35px; */
+    /* width: max-content; */
 
 }
 
-.bag-popup-container .bag-popup-header .title-wrapper{
-    display: flex;
-    align-items: center;
-}
 
 
 
@@ -40,29 +15,19 @@
 }
 
 .bag-selection-list{
-    width: 100%;
-    margin-bottom: 20px;
-    /* padding: 0 10px 0px 0px; */
+    /* width: 100%; */
     display: flex;
+    align-items: center;
     flex-wrap: wrap;
+    /* gap: 15px; */
     max-height: 300px;
     /* max-width: 600px; */
     overflow: auto;
     position: relative;
+    /* background-color: red; */
 }
 
 
-.bag-list-item{
-    
-    margin: 0px 35px 50px 35px;
-    min-width: 120px;
-    max-width: 120px;
-    height: 200px;
-}
-
-.bag-list-item:first-child{
-    /* margin-left: 0; */
-}
 
 
 .bottom-section{

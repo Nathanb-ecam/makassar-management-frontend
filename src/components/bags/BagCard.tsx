@@ -54,7 +54,11 @@ const BagCard = ({bag, initialQuantity, onBagRemoved, updateBagQuantity,bottomVi
   return (
     <div key={bag.id} className='bag-item-card'>
         { deleteButtonVisible && <IoMdClose className='bagcard-delete-btn' onClick={()=>onBagRemoved(bag)}/>}
-        <div className="bag-card-title">{bag.marketingName}</div>
+        <div className="bag-card-title-wrapper">
+            <div className="bag-card-title">
+                {bag.marketingName}
+            </div>
+        </div>
         { bag.imageUrls && bag.imageUrls.length > 0 ?
             <div className={`bags-carousel ${prevNextArrowVisible ? '' : 'prev-next-arrow-hidden'}`}>
                 <button type="button" className={`prev-image`}

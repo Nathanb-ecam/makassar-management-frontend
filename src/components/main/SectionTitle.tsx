@@ -6,11 +6,12 @@ import '../css/sectionTitle.css'
 
 interface Props{
   title : string;
+  newElementButtonText : string;
   onCreateButtonClicked : () => void;
   children?: React.ReactNode
 }
 
-const SectionTitle = ({title,onCreateButtonClicked,  children} : Props) => {
+const SectionTitle = ({title,newElementButtonText, onCreateButtonClicked,  children} : Props) => {
   return (
     <div className='section-title'>
             <h1 className="main-title">{title}</h1>
@@ -20,7 +21,7 @@ const SectionTitle = ({title,onCreateButtonClicked,  children} : Props) => {
                 {children}
               </div>
               <button className='title-plus-button' onClick={onCreateButtonClicked}>
-                Nouvel élément
+                {newElementButtonText}
                 {/* <CiSquarePlus className='plus-button' /> */}
               </button>
             </div>

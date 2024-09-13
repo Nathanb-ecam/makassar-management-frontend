@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React, { ChangeEvent, useEffect, useState } from 'react';
 import { CiSquarePlus } from 'react-icons/ci';
 import SectionTitle from '../components/main/SectionTitle';
-import GeneralCRUDTable, { CRUDHandlers, DataItem, TableProps } from '../components/main/GeneralCRUDTable';
+import GeneralCRUDTable, { CRUDHandlers, DataItem, HeaderSizeClass, TableProps } from '../components/main/GeneralCRUDTable';
 import { createCustomer, deleteCustomerWithId, getAllCustomers, modifyCustomerWithid } from '../api/calls/Customer';
 import { useAuth } from '../hooks/useAuth';
 import Popup from '../components/main/Popup';
@@ -22,26 +22,22 @@ const Customers = () => {
 
   const headers = [
     // {key : 'id', label:'Id'},
-    {key : 'name', label:'Nom'},
-    {key : 'phone', label:'Téléphone'}, 
-    {key : 'mail', label:'Mail'},
-    {key : 'tva', label:'Tva'},
-    {key : 'professionalAddress', label:'Adr. profesionnelle'},
-    {key : 'shippingAddress', label:'Adr. de livraison'},
-    {key : 'type', label:'Type'},
-    {key : 'createdAt', label:'Création'},
-    {key : 'updatedAt', label:'Der. modification'},
+    {key : 'name', label:'Nom', size: HeaderSizeClass.MEDIUM},
+    {key : 'phone', label:'Téléphone',size: HeaderSizeClass.MEDIUM}, 
+    {key : 'mail', label:'Mail', size: HeaderSizeClass.LARGE},
+    {key : 'tva', label:'Tva', size: HeaderSizeClass.SMALL},
+    // {key : 'professionalAddress', label:'Adr. profesionnelle'},
+    {key : 'shippingAddress', label:'Adr. de livraison', size: HeaderSizeClass.LARGE},
+    // {key : 'type', label:'Type'},
+    {key : 'createdAt', label:'Crée le', size: HeaderSizeClass.SMALL},
+    {key : 'updatedAt', label:'Modifiée le', size: HeaderSizeClass.SMALL},
   ]
 
-  const largeColumns = ['professionalAddress','shippingAddress','createdAt','updatedAt']
-  const importantColumns = ['name','phone','mail','tva','shippingAddress','type']
   
   // const [customers, setCustomers] = useState<Customer[]>([]);
   const [tableProps, setTableProps] = useState<TableProps>({
     headers,
     data: [],
-    largeColumns,
-    importantColumns
   });
 
 
@@ -77,10 +73,10 @@ const Customers = () => {
 
   const handleCreateCustomer = async (e : React.FormEvent<HTMLFormElement> , customer : Customer)=>{
     e.preventDefault()
-    console.log("received customer", customer)
+    // console.log("received customer", customer)
     const {id, err} = await createCustomer(auth,customer);
     if(err) {
-      console.log(err)
+      // console.log(err)
       return
     }
     const customerWithid = {
@@ -90,23 +86,25 @@ const Customers = () => {
   
     setTableProps(prev=>{
       if(!prev) return prev
-      const updatedData = prev.data
+      const updatedData = Array.isArray(prev.data) ? [...prev.data] : [];
+
       updatedData.push(customerWithid)
+      
 
       return {
         ...prev,
         data: updatedData
       }
     })
+    showTopMessage(`Nouveau client ajouté`,{backgroundColor:'var(--info-green)'})
     setCreateCustomerPopupVisible(false)
   }
 
   const onModifiedRow = async (customerId: string, key : string, value : any)=>{
 
-
     const customers = tableProps.data
-    console.log("customerId,key,value")
-    console.log(customerId,key,value)
+    // console.log("customerId,key,value")
+    // console.log(customerId,key,value)
 
     const keys = key.split('.')
     var originalFieldValue : any= null
@@ -119,8 +117,8 @@ const Customers = () => {
     }else if(keys.length === 2){      
       const customer =  customers.find(c=>c.id === customerId)
       const oldProperties = customer?.[keys[0]]
-      console.log("oldProperties")
-      console.log(oldProperties)
+      // console.log("oldProperties")
+      // console.log(oldProperties)
       originalFieldValue = customer?.[keys[0]]?.[keys[1]]
       modifiedData = {        
         [keys[0]] : {
@@ -131,12 +129,13 @@ const Customers = () => {
     }
     
     
-    if(originalFieldValue === value) return 
+    if(originalFieldValue === value || value === "/") return 
+    
   
   
     const {id, err, errMsg} = await modifyCustomerWithid(auth,customerId,modifiedData)
   
-    console.log(modifiedData)
+    // console.log(modifiedData)
     if(!err){
       showTopMessage("Client modifié", {backgroundColor:'var(--info-green)'})
 
@@ -165,19 +164,19 @@ const Customers = () => {
 
       })
     }else{
-      console.log("modifyCutomer: ", errMsg)
+      // console.log("modifyCutomer: ", errMsg)
       if(err?.response.status === 401){
         console.log("refresh")
-        await refresh()
+        // await refresh()
       }
-      console.log("Sent payload: ", modifiedData)
+      // console.log("Sent payload: ", modifiedData)
       showTopMessage("Erreur lors de la modification du client", {backgroundColor:'var(--info-red)'})
     }
   }
 
 
   const onDeleteRow = async (id : string)=>{
-    console.log(`Customer to delete : ${id}`)
+    // console.log(`Customer to delete : ${id}`)
 
     const customerDeleted = await deleteCustomerWithId(auth,id) 
     
@@ -191,6 +190,7 @@ const Customers = () => {
           data: filteredData
         }
       }) 
+      showTopMessage(`Client supprimé `,{backgroundColor:'var(--info-green)'})
     }
   
   }
@@ -206,12 +206,15 @@ const Customers = () => {
   return (
     <div className="page">
         {createCustomerPopupVisible ? 
-          <Popup title='Créer un nouveau client' onPopupClose={onPopupClose} >
+          <Popup title='Créer un nouveau client' onPopupClose={onPopupClose} customCSS={{minWidth:'35%'}} >
             <CustomerForm onFormSubmit={handleCreateCustomer} />
           </Popup>
         : null
         }
-        <SectionTitle title='Clients' onCreateButtonClicked={onCreateCustomerButtonClicked}>
+        <SectionTitle 
+          title='Clients' 
+          newElementButtonText='Nouveau client'
+          onCreateButtonClicked={onCreateCustomerButtonClicked}>
     
         </SectionTitle>
 

@@ -3,35 +3,27 @@ import { useState,useEffect } from 'react';
 import {Bag, BagWithQuantity, Customer, Order, OrderDto, OrderEditableData, OrderFullyDetailed, OrderOverview, Price} from '../models/entities.ts'
 
 
-import {Table} from 'react-bootstrap'
-import axios  from '../api/axios.ts';
 import { useAuth } from '../hooks/useAuth.tsx';
 import { formatTime } from '../utils/formatTime.tsx';
 
 
-import ArrowRightIcon from '@mui/icons-material/ArrowRight';
 import { FaAngleLeft, FaRegFilePdf } from "react-icons/fa6";
-import { IconButton } from '@mui/material';
-import { CiSquarePlus } from "react-icons/ci";
+
 
 import "./css/orders.css"
 import { useOrdersContext } from '../hooks/useOrders.tsx';
-import { getBagsWithIds } from '../api/calls/Bag.tsx';
-import { getAllCustomers, getCustomerById } from '../api/calls/Customer.tsx';
 
 import BagCard from '../components/bags/BagCard.tsx';
-import {createOrder, deleteOrderById, getOrderById, getOrderByIdWithCustomerDetailed, getOrderFullyDetailedById, putOrder, updateBagsForOrderWithId } from '../api/calls/Order.tsx';
+import {createOrder, deleteOrderById, getOrderFullyDetailedById, putOrder} from '../api/calls/Order.tsx';
 import AddBagCard from '../components/bags/AddBagCard.tsx';
-import { MdInfoOutline } from 'react-icons/md';
 
 import SectionTitle from '../components/main/SectionTitle.tsx'
 import { useTopMessage } from '../hooks/useTopMessagePopup.tsx';
 import Popup from '../components/main/Popup.tsx';
 import OrderPrice from '../components/orders/OrderPrice.tsx';
 import CreateOrder from '../components/orders/CreateOrder.tsx';
-import { Prev } from 'react-bootstrap/esm/PageItem';
-import { escape } from 'glob';
 import { RiDeleteBin6Line } from 'react-icons/ri';
+import { handleFieldChange, processFieldChange } from '../utils/stateChange.tsx';
 
 
 const initialOrderEditableData: OrderEditableData = {
@@ -44,6 +36,21 @@ const initialOrderEditableData: OrderEditableData = {
   bags: new Map<string, { bag: Bag, quantity: number }>(), 
 };
 
+const currentOrderInitialisation = {
+  id: null,
+  customer: {} as Customer, 
+  orderNumber: null,
+  createdLocation: null,
+  status: null,
+  description: null,
+  comments: null,
+  price: null,
+  bags: new Map<string, BagWithQuantity>(), 
+  plannedDate: null,
+  createdAt: null,
+  updatedAt: null,
+}
+
 
 interface ChildPopupRef{
   hidePopup : () => void;
@@ -55,6 +62,7 @@ interface ChildOrderPriceRef{
 
 
 
+
 const Orders = () => {
 
   
@@ -62,6 +70,10 @@ const Orders = () => {
 
   const bagSelectorChildPopup = useRef<ChildPopupRef | null>(null);
   const orderPriceRef = useRef<ChildOrderPriceRef | null>(null);
+
+  
+  const descriptionRef = useRef<string | null>(null);
+  const commentsRef = useRef<string | null>(null);
 
   const {showTopMessage} = useTopMessage()
 
@@ -76,31 +88,22 @@ const Orders = () => {
   // const [currentOrderModifications,setCurrentOrderModifications] = useState({});
   
 
-  const [currentOrder, setCurrentOrder] = useState<OrderFullyDetailed>({
-    id: null,
-    customer: {} as Customer, 
-    orderNumber: null,
-    createdLocation: null,
-    status: null,
-    description: null,
-    comments: null,
-    price: null,
-    bags: new Map<string, BagWithQuantity>(), 
-    plannedDate: null,
-    createdAt: null,
-    updatedAt: null,
-  });
+  const [currentOrder, setCurrentOrder] = useState<OrderFullyDetailed>(currentOrderInitialisation);
   
 
   const [createOrderVisible,setCreateOrderVisible] = useState(false)
+
+  
   
 
-
+  useEffect(()=>{
+    // console.log(currentOrder)
+  },[currentOrder])
 
   
 
   const removeBagFromOrder = (bag : Bag) => {
-    console.log("received bag to remove", bag);
+    // console.log("received bag to remove", bag);
 
     setCurrentOrder(prev => {
       if (!prev) return prev;
@@ -122,10 +125,10 @@ const Orders = () => {
 
   const applyOrderModifications = async (orderOverview :  OrderOverview) => {
       const cur = currentOrder
-      console.log("applyModifications Input : ")      
+      // console.log("applyModifications Input : ")      
       console.log(cur)      
       const price = recomputeOrderPrice()
-      console.log("recomputed price", price)
+      // console.log("recomputed price", price)
 
       const bagIdToQmap = new Map<string,string>() 
       if(currentOrder?.bags){
@@ -145,7 +148,7 @@ const Orders = () => {
         bags:Object.fromEntries(bagIdToQmap)
       }
 
-      console.log("modifiedOrder",modifiedOrder)
+      // console.log("modifiedOrder",modifiedOrder)
       const {err, errMsg} = await putOrder(auth,orderOverview.id,modifiedOrder);
       if(!err){
         showTopMessage(`Modification(s) de la commande de '${orderOverview.customerName}' enregistrée(s) `, {backgroundColor:'var(--info-green)'})
@@ -175,12 +178,12 @@ const Orders = () => {
     if(orderId === null) return 
 
     const {id, err} = await deleteOrderById(auth,orderId)
-    console.log(id)
+    // console.log(id)
     if(!err){
       showTopMessage(`Commande supprimée`, {backgroundColor:'var(--info-green)'})
       removeOrderFromOrdersState(orderId)
     }else{
-      console.log("deleteOrderWithId",err)
+      // console.log("deleteOrderWithId",err)
     }
 
   }
@@ -213,8 +216,8 @@ const Orders = () => {
 
 
   const addBagSelectionToCurrentBags = (bags: Map<string, BagWithQuantity>)=> {
-    console.log('Final selection')
-    console.log(bags)
+    // console.log('Final selection')
+    // console.log(bags)
     setCurrentOrder(prev=>{
       if(!prev) return prev
 
@@ -243,10 +246,11 @@ const Orders = () => {
   }
 
 
-  const handleClick = async (index: number,ord : OrderOverview) => {
+  const toggleOrderExpanded = async (index: number,ord : OrderOverview) => {
 
     setCurrentOrderHasBeenModified(false)
     // setCurrentOrderModifications({});
+    setCurrentOrder(currentOrderInitialisation)
     
 
     setRotatedRows(prevState => ({
@@ -255,9 +259,7 @@ const Orders = () => {
     }));
 
 
-    if (!rotatedRows[index]){
-      // TODO : get the full order to be displayed in the dropdown section
-      
+    if (!rotatedRows[index]){      
       const result = await getOrderFullyDetailedById(auth,ord.id)
       
       
@@ -292,24 +294,21 @@ const Orders = () => {
   };
 
 
-  const handleOrderChangeInRowItems = async (orderId,key : string,newValue : any) => {
-    const keys = key.split('.')
-    var modifiedData: any = null
-    if(keys.length === 1){
-      modifiedData = {[key]:newValue};  
-    }else if(keys.length === 2){
-      modifiedData = {[keys[0]]:{[keys[1]]:newValue}};  
-    }else{
-      console.log("not handled")
-    }
+  const handleOrderChangeInRowItems = async (orderId,key : string,value : any) => {
 
+    var {data,keys, err} = processFieldChange(key,value)
     // const modifiedData = {[key]:newValue};
-    console.log(modifiedData);
-    const successfullyModifiedOrder = await putOrder(auth,orderId,modifiedData);
+    if(err){
+      showTopMessage(`Les modifications n'ont pas pu être sauvegardées `, {backgroundColor:'var(--info-red)'})
+      return
+    } 
+
+    // console.log(data);
+    const successfullyModifiedOrder = await putOrder(auth,orderId,data);
     if(successfullyModifiedOrder) showTopMessage(`Commande modifiée`, {backgroundColor:'var(--info-green)'})
     else showTopMessage(`Les modifications n'ont pas pu être sauvegardées `, {backgroundColor:'var(--info-red)'})
 
-    console.log("successfullyModifiedOrder",successfullyModifiedOrder);
+    // console.log("successfullyModifiedOrder",successfullyModifiedOrder);
   }
 
   const handleOrderPriceChange = ()=>{
@@ -353,6 +352,17 @@ const Orders = () => {
     setCreateOrderVisible(false)
   }
 
+  const focusDiv = (divName : string) => {
+    var ref : any = null
+    if(divName === "description") ref  = descriptionRef
+    else if (divName === "comments") ref = commentsRef
+
+    if (ref.current) {
+      ref.current.focus();
+    }
+  };
+
+
 
 
 
@@ -366,7 +376,7 @@ const Orders = () => {
               customCSS={{
                 // minHeight:'60%',
                 
-                maxHeight:'90%'
+                maxHeight:'90vh'
               }}
               >
                 <CreateOrder handleOrderCreated={handleNewOrderCreated}>
@@ -376,7 +386,10 @@ const Orders = () => {
 
 
         <div className="orders">
-          <SectionTitle title='Commandes' onCreateButtonClicked={onCreateOrderButtonClicked}>
+          <SectionTitle 
+              title='Commandes' 
+              newElementButtonText='Nouvelle commande'
+              onCreateButtonClicked={onCreateOrderButtonClicked}>
 
           </SectionTitle>
 
@@ -433,7 +446,7 @@ const Orders = () => {
   
                         <div 
                         className='small-col'
-                        onClick={() => handleClick(index,orderOverview)}
+                        onClick={() => toggleOrderExpanded(index,orderOverview)}
                         >
                             <FaAngleLeft className='arrow-button'
                                   style={{
@@ -452,18 +465,28 @@ const Orders = () => {
                       <div className={`order-details ${rotatedRows[index] ? 'expanded' : 'collapsed'}`}>
                           {currentOrder?.customer ? 
                             <div className='customer-infos'>
-                              <div className='title'>Coordonnées client</div>
+                              <div className='title'>Client</div>
                               <div className='customer-card'>
-                                <div className='title'>{currentOrder.customer.name}</div>
-                                <div className='phone'>{currentOrder.customer.phone}</div>
-                                <div className='mail'>{currentOrder.customer.mail}</div>
-                                <div className='tva'>{currentOrder.customer.tva}</div>
-                                <div>Adresse de livraison:</div>
-                                <div className='shippingAddress'>{currentOrder.customer.shippingAddress?.address}, {currentOrder.customer.shippingAddress?.postalCode} {currentOrder.customer.shippingAddress?.country}</div>
-                                <div>Délai prévu:</div>
-                                <div>{currentOrder.plannedDate}</div>        
-                                <div>Siège social:</div>
-                                <div className='professionalAddress'>{currentOrder.customer.professionalAddress?.address}, {currentOrder.customer.professionalAddress?.postalCode} {currentOrder.customer.professionalAddress?.country}</div>
+                                <div className='card-title'>{currentOrder.customer.name}</div>
+                                {currentOrder.customer.phone && currentOrder.customer.phone?.length>0 && <div className='phone'>{currentOrder.customer.phone}</div>}
+                                {currentOrder.customer.mail && currentOrder.customer.mail?.length>0 &&<div className='mail'>{currentOrder.customer.mail}</div>}
+                                {currentOrder.customer.tva && currentOrder.customer.tva?.length>0 && <div className='tva'>Tva: {currentOrder.customer.tva}</div>}
+                                {currentOrder.customer.shippingAddress &&                             
+                                  <>
+                                    <div>Adresse de livraison:</div>
+                                    <div className='shippingAddress'>{currentOrder.customer.shippingAddress}</div>
+                                  </>
+                                }
+                                {currentOrder.customer.professionalAddress &&
+                                  <>
+                                    <div>Adresse pro:</div>
+                                    <div className='professionalAddress'>{currentOrder.customer.professionalAddress ?? "Non renseignée"}</div>
+                                  </>
+                                }
+                                {currentOrder.plannedDate ? 
+                                <div>Délai prévu:{currentOrder.plannedDate}</div>
+                                : null
+                                }
                                 
                                 
                               </div>
@@ -476,7 +499,7 @@ const Orders = () => {
                           <div className='bag-infos'>
                             <div className='bags-section-title'>
                               <div className="left-title">
-                                <div className='title'>Sacs</div>
+                                <div className='title'>Produits</div>
                                 <AddBagCard addBagsSelectionToCurrentBags={addBagSelectionToCurrentBags} ref={bagSelectorChildPopup}/>
                               </div>
                               <button  
@@ -499,18 +522,63 @@ const Orders = () => {
                                   ))
                                 }
 
-
+                                
                             </div>
                           </div>
 
                           <div className="order-infos">
                             <div className='order-price-section'>
-                                {currentOrder?.bags && <OrderPrice ref={orderPriceRef} bags={currentOrder.bags} order={currentOrder} handleOrderPriceChange={handleOrderPriceChange}/>}                             
+                                {currentOrder?.bags && <OrderPrice 
+                                                            ref={orderPriceRef} 
+                                                            bags={currentOrder.bags} 
+                                                            order={currentOrder} 
+                                                            handleOrderPriceChange={handleOrderPriceChange}/>}                             
                             </div>
 
+                            
+                            
                             <div className='order-description'>
-                              {currentOrder?.description ? <div> Description: <br/>{currentOrder?.description}</div> : null}
+                              <label onClick={()=> focusDiv("description")}>Description:</label>
+                              <div 
+                              className='description-text'
+                              contentEditable={true}
+                              suppressContentEditableWarning={true}
+                              ref={descriptionRef}
+                              onBlur={(e)=> handleFieldChange(
+                                              currentOrder,
+                                              setCurrentOrder, 
+                                              currentOrder.id!!,
+                                              "description", 
+                                              (e.target as HTMLElement).innerText,
+                                              setCurrentOrderHasBeenModified
+                                            )}
+                              >
+                                {currentOrder?.description}
+                              </div>
                             </div>
+                            
+                            
+                            <div className='order-comments'>
+                              <label onClick={()=> focusDiv("comments")}>Commentaires:</label>
+                              <div 
+                              className='comments-text'
+                              contentEditable={true}
+                              suppressContentEditableWarning={true}
+                              ref={commentsRef}
+                              onBlur={(e)=> handleFieldChange(
+                                currentOrder,
+                                setCurrentOrder, 
+                                currentOrder.id!!,
+                                "comments", 
+                                (e.target as HTMLElement).innerText,
+                                setCurrentOrderHasBeenModified
+                              )}                                  
+                              >
+                                {currentOrder?.comments}
+                              </div>
+                            </div>
+                            
+
                           </div>
 
                       </div>

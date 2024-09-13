@@ -28,6 +28,7 @@
     object-fit: cover;
     /* width: 300px; */
     height: 100%;
+    width: 100%;
 
     
 }
@@ -59,7 +60,7 @@
 
 .login-right-section h1{
     color: var(--primary);
-    margin-bottom: 3cap;
+    margin-bottom: 2rcap;
     
 }
 
@@ -86,4 +87,31 @@
 }
 
 
+
+@media (width<=700px){
+    .login-left-section{
+        width: 100%;
+        /* transform: translate(15px); */
+    }   
+    .login-right-section{
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform : translate(-50%,-50%);
+        background: white;
+        width: 60vw;
+        min-width: 300px;
+        height: 50%;
+        /* min-height: 600px; */
+        border-radius: 25px;
+    }   
+
+    .login-right-section h1{
+        /* font-size: .9rem; */
+    }
+
+    .login-right-section .login-form *{
+        font-size: .5rem;
+    }
+}
 

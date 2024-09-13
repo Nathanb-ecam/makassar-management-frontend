@@ -80,7 +80,7 @@ export const getOverviewsOfOrders = async(auth) => {
         if(Array.isArray(response.data)){
             return {"ordersArray":response.data}
         }else{
-            return {"ordersArray":[] , "err":"Response is not an array"}
+            return {"ordersArray":[] }
         }
     }catch(err){
         var errMsg = processHttpError('getOrders',err);

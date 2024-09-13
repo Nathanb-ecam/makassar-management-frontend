@@ -134,8 +134,10 @@ export interface Customer{
     mail?: string | null;
     phone?: string | null;
     tva?: string | null;
-    professionalAddress?: Address | null;
-    shippingAddress?: Address | null;
+    professionalAddress?: string | null;
+    shippingAddress?: string | null;
+    // professionalAddress?: Address | null;
+    // shippingAddress?: Address | null;
     type?: string | null;
     
 }

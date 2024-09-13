@@ -2,6 +2,9 @@
     width: 100%;
     /* background: blue; */
     margin-top: 30px;
+    /* font-family: var(--font-primary); */
+
+    
 }
 
 .create-order-field{
@@ -92,7 +95,7 @@
 
 @media (max-width:900px){
     .confirm-order-create{
-        background: red;
+        /* background: red; */
         bottom: 10px;
         right: 20px;
     }

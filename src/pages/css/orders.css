@@ -111,11 +111,13 @@
 .order-details{
     display: none;
     min-width: 820px;
+    height: 55vh;
     padding:10px;
     flex-direction: row;
     border:2px solid var(--primary);
-    transition: max-height 1s ease-in-out;
-    overflow: auto;
+    transition: all .4s ease-in-out;
+    overflow: hidden;
+    background:var(--light-grey);
 }
 
 .customer-row .expanded {
@@ -134,34 +136,34 @@
 
 .order-details .customer-infos, .order-details .bag-infos ,.order-details .order-infos{
     padding: 10px;
+    height: 100%;
 }
 
-.order-details .customer-infos, .order-details .order-infos{
-    min-width: 250px; 
-    max-width: 250px; 
-    overflow: auto;
+.order-details .customer-infos, .order-details .order-infos{    
+    width: 23%;     
+}
+
+.order-details .bag-infos{
+    /* overflow: scroll; */
 }
 
 
-.order-details .customer-infos .customer-card{
-    /* width: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    justify-content: flex-start; */
-    /* background-color: cadetblue; */
+.order-details .customer-infos .customer-card > div{
+    word-wrap:break-word;
 }
 
-.customer-card .title{
+.customer-card .card-title{
+    color: var(--primary);
     font-weight: bold;
-    color: black;
-    font-size: .9rem;
+    font-size: 1.2rem;
 }
 
 .customer-card .phone,
 .customer-card .mail,
 .customer-card .tva{
-    font-weight: bold;
+    font-weight: 600;
+    /* font-size: 1.2rem; */
+
 }
 
 .customer-card .tva{
@@ -189,6 +191,7 @@
 
 
 .bag-infos{
+    position: relative;
     width: 100%;
     /* background-color: blue; */
 }
@@ -199,7 +202,10 @@
 }
 
 .bags-section-title{
-    /* background: red; */
+    background: white;
+    position: absolute;
+    z-index: 10;
+    top: 0;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -226,6 +232,11 @@
 .order-details .bag-infos .bags-list{
     display: flex;
     flex-wrap: wrap;
+    height: 90%;
+    margin: 25px 0;
+    width: 100%;
+    overflow: scroll;
+
     /* max-width: 60%; */
 }
 
@@ -256,10 +267,14 @@
 
 
 
-.order-details .order-infos div{
+.order-price-section{
     margin:10px 0;
-    /* background-color: red; */
+}
 
+.description-text,
+.comments-text{
+    max-height: 250px;
+    overflow: auto;
 }
 
 .order-infos .order-price{

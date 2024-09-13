@@ -5,7 +5,6 @@ import './App.css'
 
 import MainNavbar from './components/main/MainNavbar.tsx'
 import Orders from './pages/Orders.tsx';
-import Clients from './pages/Clients.tsx';
 import Materials from './pages/Materials.tsx';
 import Bags from './pages/Bags.tsx';
 import Dashboard from './pages/Dashboard.tsx';

@@ -162,7 +162,7 @@ const CreateOrder = ({handleOrderCreated} : Props) => {
                             required                
                         >
                             <option value="">Choisir un client</option>
-                            {customers.map((customer,index)=>(
+                            {customers instanceof Array && customers.map((customer,index)=>(
                                 <option key={index} value={customer.id}>{customer.name}</option>
                             ))}
                         </select>

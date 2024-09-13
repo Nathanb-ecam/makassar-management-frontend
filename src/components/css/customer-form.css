@@ -29,48 +29,38 @@
 
 
 
+
+.customer-form-field > div{
+    margin: 5px 0;
+}
+
+
+.address-field{
+    /* background: blue; */
+    flex-direction: column;
+}
+
+.address-field label{
+    min-width: 180px;
+}
+
+.address-field input{
+    /* width: 100%; */
+}
+
+
+.submit-btn-wrapper{
+    display: flex;
+    justify-content: end;
+}
+
 .customer-form-submit{
     width: 100px;
-    position: absolute;
-    bottom: 0;
-    right: 0;
+    
+    
     background-color:var(--info-green);
     color: white;
     border:none;
     border-radius: 5px;
     padding: 5px 10px;
-    /* text-align: end; */
-}
-
-.address-field{
-
-    display: flex;
-    flex-direction: column;
-    margin-top: 35px;
-
-}
-
-.address{
-    display: flex;
-    flex-direction:column;
-    width: 60%;
-    margin: 10px 0;
-}
-
-.address input{
-    margin: 5px;
-    width: 250px;
-}
-
-
-.postal-country{
-    display: flex;
-}
-
-.postal-country input:first-of-type{
-    width: 140px;
-}
-
-.postal-country input:last-of-type{
-    width: 100px;   
 }

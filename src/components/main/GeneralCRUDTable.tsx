@@ -3,10 +3,18 @@ import React, { useState } from 'react'
 import '../css/generalCRUDtable.css'
 import { RiDeleteBin6Line } from 'react-icons/ri';
 import { formatTime } from '../../utils/formatTime';
+import { useTopMessage } from '../../hooks/useTopMessagePopup';
 
 type Header = {
     key: string;
     label: string;
+    size: HeaderSizeClass;
+}
+
+export enum HeaderSizeClass{
+    SMALL="small",
+    MEDIUM="medium",
+    LARGE="large",
 }
 
 export type DataItem = {
@@ -16,8 +24,6 @@ export type DataItem = {
 export interface TableProps{
     headers : Header[];
     data : DataItem[];
-    largeColumns: string[];
-    importantColumns: string[];
 }
 
 export interface CRUDHandlers{
@@ -35,6 +41,8 @@ const GeneralCRUDTable = ({tableProps,handlers} : Props) => {
 
     const [actualTableData, setActualTableData] = useState();
 
+    const {showTopMessage} = useTopMessage()
+    
 
     // console.log(tableProps.data)
 
@@ -42,51 +50,25 @@ const GeneralCRUDTable = ({tableProps,handlers} : Props) => {
     //     console.log(dataItem)
     // })
 
-    const renderDataItem = (itemId: string, item: any, fieldName : string)=>{
-        
-        if(item === undefined || item === null){ 
-            return <div
-                    key={`${fieldName}`}
-                    contentEditable={true}
-                    suppressContentEditableWarning={true}                        
-                    onBlur={(e)=>handlers.onModifiedRow(itemId, fieldName, (e.target as HTMLElement).innerText)}
-                    >
-                        /
-                    </div>
-        }
-        // console.log(`type at ${fieldName}`,typeof(item))
+    const renderDataItem = (itemId: string,  fieldName : string, fieldValue: any , itemSizeClass : string)=>{
 
-        if(fieldName === 'createdAt' || fieldName === 'updatedAt') return formatTime(item)
-        
-        if (typeof(item) === 'object') {
-        
-            return (
-                <div className='object-col'>
-                    {Object.keys(item).map((key,index) => (
-                        <div 
-                        key={`${fieldName}.${key}`}
-                        contentEditable={true}
-                        suppressContentEditableWarning={true}                        
-                        onBlur={(e)=>handlers.onModifiedRow(itemId, `${fieldName}.${key}`, (e.target as HTMLElement).innerText)}
-                        >
-                            {item[key]}
-                        </div>
-                    ))}
+        const editable = !(fieldName === 'createdAt' || fieldName === 'updatedAt')
+
+
+        return <div                
+                contentEditable={editable}
+                suppressContentEditableWarning={editable}
+                className={`row-field ${itemSizeClass}`}  
+                // content={`${item === null ? 'remplacable' : null }`}               
+                onBlur={(e)=>editable ? handlers.onModifiedRow(itemId, fieldName, (e.target as HTMLElement).innerText) : null}
+                >
+
+                    {editable ? fieldValue : formatTime(fieldValue)}
+            
                 </div>
-            );
-        }
 
-        else if(typeof(item)==='string'){
-            if(item.length === 0) return <div>Wut</div>
-            else return <div
-                        key={`${fieldName}`}
-                        contentEditable={true}
-                        suppressContentEditableWarning={true}                        
-                        onBlur={(e)=>handlers.onModifiedRow(itemId, fieldName, (e.target as HTMLElement).innerText)}
-                        >
-                    {item?.toString()}
-                </div>;
-        }
+
+
 
     }
 
@@ -96,74 +78,34 @@ const GeneralCRUDTable = ({tableProps,handlers} : Props) => {
     
         <div className='general-crud-table'>
             <div className='header-row'>
-                {tableProps.headers && tableProps.headers.map(({key,label},index)=>(
-                    <div 
-                    className={`row-field 
-                        ${tableProps.largeColumns.includes(key) ? 'large' :''}
-                        ${tableProps.importantColumns.includes(key) ? '' :'hidden'}
-                        `
-                    } 
-                    key={index}>
-                        {label}
-                    </div>
-                ))}
+                {tableProps.headers && tableProps.headers.map(({key,label,size},index)=>{
+ 
+                    return <div key={index} className={`row-item ${size}`}>
+                                {label}
+                           </div>
+                })}
                 <div className="row-field actions-col">
                     
                 </div>
             </div>
 
             
-            {tableProps.data && tableProps.data.map((dataItem,rowIndex)=>(
+            {tableProps.data instanceof Array && tableProps.data.map((dataItem,rowIndex)=>(
                 <div className='content-row' key={rowIndex}>
-                    {tableProps.headers && tableProps.headers.map(({ key }) => {
-                         if(typeof dataItem[key] && typeof dataItem[key] === 'object'){
-                            return <div                                                     
-                            className={`row-item 
-                                ${tableProps.largeColumns.includes(key) ? 'large':''}
-                                ${tableProps.importantColumns.includes(key) ? '':'hidden'}
-                                `
-                            } 
-                            key={`${rowIndex}-${key}`}>
-                                {
-                                    dataItem && dataItem[key] !== undefined ? 
-                                        renderDataItem(dataItem.id,dataItem[key],key)
-                                        : 'N/A'
+                    {tableProps.headers && tableProps.headers.map(({ key, label, size }) => (
 
-                                }
-                            </div>
-                         }else{
-                            if(key==='createdAt' || key==='updatedAt'){
-                                return <div                                                         
-                                        key={`${rowIndex}-${key}`}                                
-                                        className={`row-item 
-                                            ${tableProps.largeColumns.includes(key) ? 'large':''}
-                                            ${tableProps.importantColumns.includes(key) ? '':'hidden'}
-                                            `
-                                         } 
-                                        >
-                                            
-                                                {dataItem && dataItem[key] !== undefined ? renderDataItem(dataItem.id,dataItem[key],key): 'N/A'}
-                                        </div>
-                            }
-
-                            return <div                         
-                                    contentEditable={true}
-                                    suppressContentEditableWarning={true}                        
-                                    key={`${rowIndex}-${key}`}
-                                    onBlur={(e)=>handlers.onModifiedRow(dataItem.id, key, (e.target as HTMLElement).innerText)}
-                                    className={`row-item 
-                                        ${tableProps.largeColumns.includes(key) ? 'large':''}
-                                        ${tableProps.importantColumns.includes(key) ? '':'hidden'}
-                                        `
-                                    } 
-                                    >
-                                        {dataItem && dataItem[key] !== undefined ? renderDataItem(dataItem.id,dataItem[key],key): 'N/A'}
-                                    </div>
-                         }
-
+                            <React.Fragment key={`row-${rowIndex}-${key}`}>
+                                {dataItem && dataItem[key] !== undefined ? 
+                                                                            renderDataItem(
+                                                                                dataItem.id,
+                                                                                key,
+                                                                                dataItem[key],
+                                                                                size
+                                                                                )
+                                                                            : <div className={`row-field ${size}`}></div>}
+                            </React.Fragment>                                        
                         
-                        
-                    })}
+                    ))}
                     <div className="row-item actions-col">
                         <RiDeleteBin6Line onClick={() => handlers.onDeleteRow(dataItem.id)} />
                     </div>

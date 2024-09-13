@@ -70,7 +70,7 @@ const LoginForm = () => {
   return (
     <div className='login-page'>
       <div className='login-left-section'>
-        <img src="/src/assets/f.png" alt="logo makassar" />
+        <img src="/assets/f.png" alt="logo makassar" />
       </div>
       <div className='login-right-section'>
         <h1>Makassar <br/>management</h1>

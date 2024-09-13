@@ -19,6 +19,7 @@
 
 .image-form-field-wrapper{
     margin-top:20px;    
+    max-width: 80%;
 }
 
 .image-form-field-wrapper label, 
@@ -26,7 +27,7 @@
     padding: 5px 0;
 }
 
-.image-form-field-wrapper label:hover{
+.image-form-field-wrapper .custom-file-upload:hover{
     font-weight: bold;
 }
 
@@ -67,3 +68,8 @@
     border: none;
 }
 
+@media (max-width: 600px){
+    .create-bag-form{
+        font-size: .7rem;
+    }
+}

@@ -58,10 +58,11 @@ const BagForm = ({onBagFormSubmit} : Props) => {
     return (
     <form onSubmit={handleBagSubmit} className='create-bag-form'>
         <div className='form-field-wrapper'>
-            <label htmlFor="">Nom du sac:</label>
+            <label htmlFor="marketingName">Nom du sac:</label>
             <input 
                 required
                 type="text" 
+                id='marketingName'
                 name='marketingName'
                 value={bag.marketingName}
                 onChange={handleInputChange}
@@ -69,10 +70,11 @@ const BagForm = ({onBagFormSubmit} : Props) => {
         </div>
 
         <div className='form-field-wrapper'>
-            <label htmlFor="">Prix:</label>
+            <label htmlFor="retailPrice">Prix:</label>
             <input 
                 required
                 type="number" 
+                id='retailPrice'
                 name='retailPrice'
                 value={bag.retailPrice}
                 onChange={handleInputChange}
@@ -80,9 +82,10 @@ const BagForm = ({onBagFormSubmit} : Props) => {
         </div>
 
         <div className='form-field-wrapper'>
-            <label htmlFor="">SKU:</label>
+            <label htmlFor="sku">SKU:</label>
             <input 
                 type="number" 
+                id='sku'
                 name='sku'
                 value={bag.sku}
                 onChange={handleInputChange}

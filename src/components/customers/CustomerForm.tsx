@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import '../css/customer-form.css';
 
 import {Customer} from '../../models/entities'
@@ -14,34 +14,45 @@ const CustomerForm = ({ onFormSubmit }: Props) => {
     mail: '',
     phone: '',
     tva: '',
-    professionalAddress: {address:'',country:'',postalCode:''},
-    shippingAddress: {address:'',country:'',postalCode:''},
+    professionalAddress:'',
+    shippingAddress: '',
+    // professionalAddress: {address:'',country:'',postalCode:''},
+    // shippingAddress: {address:'',country:'',postalCode:''},
     type: '',
   });
+
+  // useEffect(()=>{
+  //   console.log(customerFormData)
+  // },[customerFormData])
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     
-    if (name.startsWith('shippingAddress.') || name.startsWith('professionalAddress.')) {
-      console.log("1")
-      setCustomerFormData((prev)=>{
-        const [parentKey,childKey] = name.split('.')
-        console.log(parentKey,childKey)
-        return {
-          ...prev,
-          [parentKey] : {
-            ...prev[parentKey],
-            [childKey] : value
-          },
+    // if (name.startsWith('shippingAddress.') || name.startsWith('professionalAddress.')) {
+    //   console.log("1")
+    //   setCustomerFormData((prev)=>{
+    //     const [parentKey,childKey] = name.split('.')
+    //     console.log(parentKey,childKey)
+    //     return {
+    //       ...prev,
+    //       [parentKey] : {
+    //         ...prev[parentKey],
+    //         [childKey] : value
+    //       },
 
-        }
-      })
-    }else{
-      setCustomerFormData((prev) => ({
-        ...prev,
-        [name]: value,
-      }));
-    }
+    //     }
+    //   })
+    // }else{
+    //   setCustomerFormData((prev) => ({
+    //     ...prev,
+    //     [name]: value,
+    //   }));
+    // }
+
+    setCustomerFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
   };
 
 
@@ -107,73 +118,38 @@ const CustomerForm = ({ onFormSubmit }: Props) => {
         </div>
 
         <div className="customer-form-field address-field">
-          <label>Adresse pro:</label>
-          <div className="address">
-            <div className='postal-country'>
+            <div className="address-pro">
+              <label>Adresse pro:</label>
               <input
-                placeholder=' Pays'
+                placeholder='Ex: Av de la bourgogne 23, 1640 Rhode'
                 type="text"
-                id="professionalAddress.country"
-                name="professionalAddress.country"
-                value={customerFormData.professionalAddress?.country}
-                onChange={handleInputChange}
-              />
-              <input
-                placeholder='Code postal'
-                type="text"
-                id="professionalAddress.postalCode"
-                name="professionalAddress.postalCode"
-                value={customerFormData.professionalAddress?.postalCode}
+                id="professionalAddress"
+                name="professionalAddress"
+                value={customerFormData.professionalAddress}
                 onChange={handleInputChange}
               />
             </div>
-            <input
-              placeholder=' Ex: Av de la bourgogne 23'
-              type="text"
-              id="professionalAddress.address"
-              name="professionalAddress.address"
-              value={customerFormData.professionalAddress?.address}
-              onChange={handleInputChange}
-            />
-          </div>
-        </div>
-        <div className="customer-form-field address-field">
-          <label >Adresse de livraison:</label>
+
+            <div className="address-delivery">
+              <label >Adresse de livraison:</label>        
+              <input
+                placeholder='Ex: Av de la bourgogne 23, 1640 Rhode'
+                type="text"
+                id="shippingAddress"
+                name="shippingAddress"
+                value={customerFormData.shippingAddress}
+                onChange={handleInputChange}
+              />
+            </div>
         
-          <div className="address">
-            <div className='postal-country'>
-              <input
-                placeholder=' Pays'
-                type="text"
-                id="shippingAddress.country"
-                name="shippingAddress.country"
-                value={customerFormData.shippingAddress?.country}
-                onChange={handleInputChange}
-              />
-              <input
-                placeholder=' Code postal'
-                type="text"
-                id="shippingAddress.postalCode"
-                name="shippingAddress.postalCode"
-                value={customerFormData.shippingAddress?.postalCode}
-                onChange={handleInputChange}
-              />
-            </div>
-            <input
-              placeholder=' Ex: Av de la bourgogne 23'
-              type="text"
-              id="shippingAddress.address"
-              name="shippingAddress.address"
-              value={customerFormData.shippingAddress?.address}
-              onChange={handleInputChange}
-            />
-          </div>
+        
         </div>
+    
+        <div className='submit-btn-wrapper'>
 
-
+          <input className='customer-form-submit' type="submit" value="Créer" />
+        </div>
       </div>
-
-      <input className='customer-form-submit' type="submit" value="Créer" />
     </form>
   );
 };

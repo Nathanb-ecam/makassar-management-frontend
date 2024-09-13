@@ -2,30 +2,41 @@
 
 }
 
-.actual-price{
+.actual-price-wrapper{
     font-weight: bold;
     display: flex;
-    align-items: center;
-    justify-content: center;
+    flex-wrap: nowrap;
+    
     
 }
 
+.actual-price::after{
+    content:'€'
+}
+
+
+
 
 .decompte{
-
+    font-weight: 300;
     display: flex;
     flex-direction: column;
     align-items: flex-end;    
     overflow-y: auto;
-    height: 75px;
+    max-height: 75px;
 
     
 
 }
 
 .resume{
-    border-top: 1px solid black;
     width: 100%;
+}
+
+.resume .total-price{
+    font-weight: lighter;
+    border-top: 1px solid var(--ligth-grey);
+    text-align: end;
 }
 
 .discount-container, .delivery-costs-container{
@@ -58,4 +69,9 @@
 
 .confirm-price-visible{
     display: initial;
+}
+
+.discount-container, 
+.delivery-costs-container{
+    font-weight: 100;
 }

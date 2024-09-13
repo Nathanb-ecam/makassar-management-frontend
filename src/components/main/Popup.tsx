@@ -9,10 +9,11 @@ interface Props{
     onPopupClose : ()=> void;
     popupVisible?: boolean;
     customCSS?: CSSProperties;
+    customCSSPopupContent?: CSSProperties;
     children: React.ReactNode
 }
 
-const Popup = ({title,onPopupClose, popupVisible = true, customCSS, children}:Props) => {
+const Popup = ({title,onPopupClose, popupVisible = true, customCSS,customCSSPopupContent, children}:Props) => {
   
   
   return (
@@ -27,7 +28,7 @@ const Popup = ({title,onPopupClose, popupVisible = true, customCSS, children}:Pr
                 <IoMdClose className='popup-close-btn' onClick={onPopupClose}/>
                 
             </div>
-            <div className="popup-content-wrapper">
+            <div className="popup-content-wrapper" style={customCSSPopupContent}>
                 {children}
             </div>
          </div>

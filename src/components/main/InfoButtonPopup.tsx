@@ -17,11 +17,14 @@ const InfoButtonPopup = forwardRef(({
     children} : Props,
     ref) => {
 
-    useImperativeHandle(ref, () => ({
-        hideInfoPopup() {
-            setPopupVisible(false); 
+    useImperativeHandle(ref,()=>({
+        showPopup(){
+            setPopupVisible(true)
+        },
+        hidePopup(){
+            setPopupVisible(false)            
         }
-    }));
+    }))
   
     const [popupVisible, setPopupVisible] = useState(false)
   
