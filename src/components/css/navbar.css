@@ -119,3 +119,14 @@
 }
 
 
+
+
+
+
+@media (max-width:700px){
+    .navbar{
+        /* width: 15vw; */
+        font-size: .6rem;
+    }
+
+}

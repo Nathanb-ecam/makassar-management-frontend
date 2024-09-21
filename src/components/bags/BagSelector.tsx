@@ -79,6 +79,7 @@ const BagSelector = React.forwardRef(({ addBagsToCurrentBags,customBagSelectionW
 
 
     const saveBagsSelection = () =>{
+        // console.log(selectedBags)
         addBagsToCurrentBags(selectedBags)
     }
 

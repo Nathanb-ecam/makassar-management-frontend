@@ -26,7 +26,8 @@ services:
       MONGO_HOST: mongoDB
       MONGO_USER: mongo-makassar
       MONGO_PASSWORD: mongo-makassar-password
-
+    volumes:
+      - ./data/api-uploads:/app/uploads
     depends_on:
       - mongoDB
 

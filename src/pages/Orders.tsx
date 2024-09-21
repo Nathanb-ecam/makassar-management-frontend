@@ -296,17 +296,24 @@ const Orders = () => {
 
   const handleOrderChangeInRowItems = async (orderId,key : string,value : any) => {
 
-    var {data,keys, err} = processFieldChange(key,value)
+    const order = ordersOverviews.find(o => o.id === orderId)
+    var {data,keys, err} = processFieldChange(order as Object,key,value)
     // const modifiedData = {[key]:newValue};
+    // console.log(data,keys,err)
     if(err){
       showTopMessage(`Les modifications n'ont pas pu être sauvegardées `, {backgroundColor:'var(--info-red)'})
       return
     } 
 
     // console.log(data);
-    const successfullyModifiedOrder = await putOrder(auth,orderId,data);
-    if(successfullyModifiedOrder) showTopMessage(`Commande modifiée`, {backgroundColor:'var(--info-green)'})
-    else showTopMessage(`Les modifications n'ont pas pu être sauvegardées `, {backgroundColor:'var(--info-red)'})
+    if(data){
+      const successfullyModifiedOrder = await putOrder(auth,orderId,data);
+      if(successfullyModifiedOrder) showTopMessage(`Commande modifiée`, {backgroundColor:'var(--info-green)'})
+      else showTopMessage(`Les modifications n'ont pas pu être sauvegardées `, {backgroundColor:'var(--info-red)'})
+    }
+    // else{
+    //   console.log("No changes")
+    // }
 
     // console.log("successfullyModifiedOrder",successfullyModifiedOrder);
   }
@@ -340,8 +347,7 @@ const Orders = () => {
       console.log("generating pdf ... ")
   }
 
-  if (loading) return <p>Loading ...</p>
-  if (error) return <p>{error}</p>
+
 
  
   const onCreateOrderButtonClicked = () => {
@@ -364,7 +370,8 @@ const Orders = () => {
 
 
 
-
+  if (loading) return <p>Loading ...</p>
+  if (error) return <p>{error}</p>
 
   return (
     <div className="page">
@@ -473,18 +480,18 @@ const Orders = () => {
                                 {currentOrder.customer.tva && currentOrder.customer.tva?.length>0 && <div className='tva'>Tva: {currentOrder.customer.tva}</div>}
                                 {currentOrder.customer.shippingAddress &&                             
                                   <>
-                                    <div>Adresse de livraison:</div>
+                                    <div className='shippingAddress-text'>Adresse de livraison:</div>
                                     <div className='shippingAddress'>{currentOrder.customer.shippingAddress}</div>
                                   </>
                                 }
                                 {currentOrder.customer.professionalAddress &&
                                   <>
-                                    <div>Adresse pro:</div>
+                                    <div className='professionalAddress-text'>Adresse pro:</div>
                                     <div className='professionalAddress'>{currentOrder.customer.professionalAddress ?? "Non renseignée"}</div>
                                   </>
                                 }
                                 {currentOrder.plannedDate ? 
-                                <div>Délai prévu:{currentOrder.plannedDate}</div>
+                                <div className='plannedDate'>Délai prévu: {currentOrder.plannedDate}</div>
                                 : null
                                 }
                                 
@@ -509,9 +516,9 @@ const Orders = () => {
                               </button>
                             </div>
                             <div className='bags-list'>   
-   
+  
                                 {currentOrder?.bags instanceof Map && Array.from(currentOrder.bags.values()).map((bagWithQuantity, index) => (
-                                    <BagCard 
+                                    <BagCard                                                                           
                                       key={index} 
                                       bag={bagWithQuantity.bag} 
                                       initialQuantity={bagWithQuantity.quantity} 
@@ -520,9 +527,7 @@ const Orders = () => {
                                       deleteButtonVisible={true}
                                     />
                                   ))
-                                }
-
-                                
+                                }                                
                             </div>
                           </div>
 
@@ -547,7 +552,7 @@ const Orders = () => {
                               onBlur={(e)=> handleFieldChange(
                                               currentOrder,
                                               setCurrentOrder, 
-                                              currentOrder.id!!,
+                                              // currentOrder.id!!,
                                               "description", 
                                               (e.target as HTMLElement).innerText,
                                               setCurrentOrderHasBeenModified
@@ -568,7 +573,7 @@ const Orders = () => {
                               onBlur={(e)=> handleFieldChange(
                                 currentOrder,
                                 setCurrentOrder, 
-                                currentOrder.id!!,
+                                // currentOrder.id!!,
                                 "comments", 
                                 (e.target as HTMLElement).innerText,
                                 setCurrentOrderHasBeenModified

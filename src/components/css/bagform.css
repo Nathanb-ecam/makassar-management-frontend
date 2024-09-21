@@ -1,5 +1,9 @@
 .create-bag-form{
     padding: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    /* background: red; */
 }
 
 .create-bag-form .form-field-wrapper{
@@ -8,10 +12,11 @@
 }
 
 .create-bag-form .form-field-wrapper label{
-    width: 150px;
+    /* width: 150px;
     white-space: nowrap;
     overflow: hidden;
-    text-overflow: ellipsis;
+    text-overflow: ellipsis; */
+    margin: 0 .3rem;
 }
 
 
@@ -19,13 +24,22 @@
 
 .image-form-field-wrapper{
     margin-top:20px;    
-    max-width: 80%;
+
 }
 
 .image-form-field-wrapper label, 
 .image-form-field-wrapper input{
     padding: 5px 0;
 }
+
+.image-picker-title-wrapper{
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+
+
 
 .image-form-field-wrapper .custom-file-upload:hover{
     font-weight: bold;
@@ -48,6 +62,7 @@
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
+    
     /* white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis; */
@@ -58,14 +73,15 @@
 }
 
 .bag-form-submit{
-    position: absolute;
-    bottom: 10px;
-    right: 20px;
+    /* position: absolute; */
+    /* bottom: 10px; */
+    /* right: 20px; */
     padding: 5px 15px;
     background: var(--info-green);
     color: white;
     border-radius: 5px;
     border: none;
+    margin-top: 1rem;
 }
 
 @media (max-width: 600px){

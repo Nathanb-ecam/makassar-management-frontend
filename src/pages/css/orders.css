@@ -9,6 +9,7 @@
     min-width: 1050px;
     overflow: hidden;
 
+
 }
 
 .card-bottom-text .delete-icon{
@@ -22,7 +23,7 @@
     justify-content: space-evenly;
     box-shadow: var(--box-shadow) 0px 8px 24px;
     /* z-index: -1000; */
-    
+
 }
 
     
@@ -111,13 +112,16 @@
 .order-details{
     display: none;
     min-width: 820px;
-    height: 55vh;
+    height: max-content;
+    max-height: 55vh;
     padding:10px;
     flex-direction: row;
     border:2px solid var(--primary);
     transition: all .4s ease-in-out;
-    overflow: hidden;
     background:var(--light-grey);
+    /* overflow: auto; */
+
+
 }
 
 .customer-row .expanded {
@@ -134,17 +138,24 @@
     font-size: 1.4rem;
 }
 
-.order-details .customer-infos, .order-details .bag-infos ,.order-details .order-infos{
-    padding: 10px;
-    height: 100%;
+.order-details .customer-infos, 
+.order-details .bag-infos ,
+.order-details .order-infos{
 }
 
 .order-details .customer-infos, .order-details .order-infos{    
     width: 23%;     
 }
 
+.order-details .order-infos{
+    padding: 15px;
+}
 .order-details .bag-infos{
     /* overflow: scroll; */
+
+    /* border: 2px solid blue; */
+
+    
 }
 
 
@@ -170,8 +181,11 @@
     margin-bottom: 15px;    
 }
 
-.customer-card .shippingAddress{
-    margin-bottom: 15px;
+.customer-card .shippingAddress-text,
+.customer-card .professionalAddress-text,
+.customer-card .plannedDate
+{
+    margin-top: 15px;
 }
 
 .customer-infos .order-description, 
@@ -193,7 +207,6 @@
 .bag-infos{
     position: relative;
     width: 100%;
-    /* background-color: blue; */
 }
 
 .bag-infos .title{
@@ -203,10 +216,7 @@
 
 .bags-section-title{
     background: white;
-    position: absolute;
-    z-index: 10;
-    top: 0;
-    display: flex;
+    display: flex;    
     justify-content: space-between;
     align-items: center;
     width: 100%;
@@ -229,15 +239,13 @@
     transform: translateY(-5px);
 } */
 
+
 .order-details .bag-infos .bags-list{
     display: flex;
     flex-wrap: wrap;
     height: 90%;
-    margin: 25px 0;
     width: 100%;
     overflow: scroll;
-
-    /* max-width: 60%; */
 }
 
 

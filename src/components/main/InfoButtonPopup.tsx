@@ -7,12 +7,14 @@ interface Props{
     positionClass?: string;  
     sizeClass?: string;
     children? : React.ReactNode;
+    customButtonStyle?: React.CSSProperties;
     customStyle?: React.CSSProperties;
 }
 
 const InfoButtonPopup = forwardRef(({
     positionClass='middle-pop',
     sizeClass='medium-pop',
+    customButtonStyle={}, 
     customStyle={}, 
     children} : Props,
     ref) => {
@@ -36,7 +38,7 @@ const InfoButtonPopup = forwardRef(({
     return (
     <div className='info-popup'>
         
-        <MdInfoOutline onClick={togglePopupVisibility}/>
+        <MdInfoOutline onClick={togglePopupVisibility} style={customButtonStyle}/>
         
         {popupVisible && 
             <div className={`info-popup-content ${positionClass} ${sizeClass}`} style={customStyle}>

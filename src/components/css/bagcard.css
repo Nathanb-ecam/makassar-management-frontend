@@ -5,66 +5,100 @@
     flex-direction: column;
     position: relative;
     align-items: center;
-    width: 175px;
-    height: 220px;
+    --bagcard-width: 175px;
+    --bagcard-height: 140px;
+    width: var(--bagcard-width);
+    height: var(--bagcard-height);
     box-shadow:  var(--box-shadow) 8px 10px 24px;
+}
 
+.bag-item-card:hover > .bag-card-title-wrapper{
+    /* display: initial; */
+}
+
+
+
+/* .bag-item-card .bag-card-title-wrapper{    
+    display: none;
+    position: absolute;
+    z-index: 10;
+    min-width: 100%;
+
+    border-radius: 15px 15px 0 0 ;
+    background: rgba(0, 0, 0, 0.696);
+    width: 100%;
+    overflow: hidden;    
+    padding: 5px 0;
+    overflow: auto;
+    scrollbar-width: none;  
+}
+
+.bag-item-card .bag-card-title{    
+    white-space: nowrap;
+    font-style:oblique;
+    min-width: 100%;
+    padding: 0 .5rem;
+    color: rgba(255, 255, 255, 0.84);
+    font-weight:bold;
+    transform: translateX(100%);
+
+  }
+
+  .bag-item-card:hover .bag-card-title {
+    animation: scroll-left 3.5s linear infinite;
+  } */
+
+  @keyframes scroll-left {
+    to {
+      transform: translateX(-100%);
+    }
+    /* 0% {
+      transform: translateX(0%); 
+    }    
+    100% {
+      transform: translateX(-100%);
+    } */
+  }
+
+.bag-details-popup-wrapper .marketingName::before{
+    content:'- modèle: ';
+    font-weight: bold;
+}
+.bag-details-popup-wrapper .sku::before{
+    content:'- sku: ';
+    font-weight: bold;
+  }
+
+.bag-details-popup-wrapper,
+.bagcard-delete-btn{
+    position: absolute;
+    
+}
+
+.bag-details-popup-wrapper{
+    color: var(--primary);
+    /* background: white; */
+    left: 0px;
+    top:-9px;
 }
 
 .bagcard-delete-btn{
-    position: absolute;
-    top:   -7px;
-    right: -7px;
-    width:  20px;
-    height: 20px;
+    top:-7px;
+    right: -5px;
+    width:  15px;
+    height: 15px;
     color: var(--info-red);
     background: white;
     border: 1px solid var(--info-red);
     border-radius: 50%;
 }
 
-.bag-item-card .bag-card-title-wrapper{    
-    display: none;
-    border-radius: 15px 15px 0 0 ;
-    background: var(--primary);
-    width: 100%;
-    overflow: hidden;    
-    padding: 5px 0;
-    overflow: auto;
-    scrollbar-width: none;    
-}
-
-.bag-item-card .bag-card-title{    
-    white-space: nowrap;
-    font-style:oblique;
-    padding: 0 .5rem;
-    color: rgba(255, 255, 255, 0.84);
-    font-weight:bold;
-  }
-
-  .bag-item-card:hover .bag-card-title {
-    animation: scroll-left 2s linear infinite;
-  }
-
-  @keyframes scroll-left {
-    0% {
-      transform: translateX(0%); 
-    }    
-    100% {
-      transform: translateX(-100%);
-    }
-  }
-
-
-
-
 .bag-item-card .bags-carousel{
     display: flex;
     width: 100%;
     justify-content: center;
-    height: 140px;
-    
-    /* overflow: hidden; */
+    height: 100px;
+    /* z-index: -1; */
 }
 
 .bag-item-card .bags-carousel .prev-image,
@@ -72,8 +106,6 @@
     width: 20%;
     background: inherit;
     border: none;
-    /* display: none; */
-    /* display: flex; */
 }
 
 
@@ -84,9 +116,7 @@
 
 
 .bag-item-card .bags-carousel .sliders{
-    /* overflow: hidden; */
     width: 60%;
-    /* height: 100%; */
     display: flex;
     overflow: scroll;
 }
@@ -132,10 +162,10 @@
 }
 
 .bag-item-card .nobag-image{
-    margin-top: 30px;
+    /* margin-top: 30px; */
+    /* object-fit: cover; */
     width: 80px;
-    height: 120px;
-    object-fit: cover;
+    height:100px;
 
 }
 
@@ -147,12 +177,9 @@
 
 .card-bottom-text{
     width: 100%;
-    /* padding: 0 10px; */
-    /* display: flex;
-    flex-direction: column; */
-    position: absolute;
-    bottom: 10px;
-    /* background: blue; */
+    height: 20px;
+    /* position: absolute; */
+    /* bottom: 10px; */
     
 }
 

@@ -1,14 +1,19 @@
-export const handleFieldChange = (currentState,setStateFunction,itemId :string, key:string, value:string, setSuccessfull) =>{
-    //first check that the new data is different from the previous one 
+import { OrderOverview } from "../models/entities"
 
-    var originalFieldValue : any = null
+export const handleFieldChange = (initialState,setStateFunction, key:string, value:string, setSuccessfull) =>{
+    //first check that the new data is different from the previous one 
+    // var originalFieldValue : any = null
     
     // process change to obtain the payload to be stored
-    var {data,keys,err} = processFieldChange(key,value)
-    console.log("handleFieldChange")
+    var {data,keys,err} = processFieldChange(initialState,key,value)
+    
+    // if(initialState?.[key] === data?.[key]){
+    //   console.log("No changes performed on this field")
+    //   return 
+    // }
     
     // update state with the payload
-    if(!err){
+    if(!err && keys){
       setStateFunction(prev =>{
         if(!prev) return prev 
 
@@ -28,18 +33,28 @@ export const handleFieldChange = (currentState,setStateFunction,itemId :string, 
     }
   }
 
-  export const processFieldChange= (key:string, value : string) =>{
-    
+  export const processFieldChange= (obj : Object, key:string, value : string) =>{
+      
     const keys = key.split('.')   
     const amountOfKeys = keys.length 
+
     var modifiedData: any = null
+    var originalFieldValue : any = null
+
     if(amountOfKeys === 1){
       modifiedData = {"data":{[key]:value}};  
+      originalFieldValue = obj?.[key]
     }else if(amountOfKeys === 2){
       modifiedData = {"data":{[keys[0]]:{[keys[1]]:value}}};  
+      originalFieldValue = obj?.[keys[0]]?.[keys[1]]
     }else{
       modifiedData = {"err":`case not handled (${amountOfKeys} keys)`}
       // console.log(`case not handled (${amountOfKeys} keys)`)
     }
+
+    if(originalFieldValue === value){
+      return {}
+    }
+
     return {...modifiedData,"keys":keys}
   }

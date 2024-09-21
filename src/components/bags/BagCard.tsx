@@ -8,6 +8,8 @@ import { FaAngleRight,FaAngleLeft } from "react-icons/fa6";
 import { BsHandbag } from "react-icons/bs";
 import { BASE_IMAGES_URL } from '../../../constants';
 import { IoMdClose } from 'react-icons/io';
+import InfoButtonPopup from '../main/InfoButtonPopup';
+import Popup from '../main/Popup';
 
 interface Props{
     bag: Bag;
@@ -28,6 +30,8 @@ const BagCard = ({bag, initialQuantity, onBagRemoved, updateBagQuantity,bottomVi
     const [bagQuantity, setBagQuantity] = useState("");
 
     const prevNextArrowVisible = (bagImagesCount > 1)
+
+    // const [bagDetailsVisible,setBagDetailsVisible] = useState(false)
 
 
     const handlePrevImage = () =>{ 
@@ -52,13 +56,33 @@ const BagCard = ({bag, initialQuantity, onBagRemoved, updateBagQuantity,bottomVi
     }
 
   return (
-    <div key={bag.id} className='bag-item-card'>
-        { deleteButtonVisible && <IoMdClose className='bagcard-delete-btn' onClick={()=>onBagRemoved(bag)}/>}
-        <div className="bag-card-title-wrapper">
-            <div className="bag-card-title">
-                {bag.marketingName}
-            </div>
+    <>
+
+  
+
+    <div 
+        className='bag-item-card'
+        key={bag.id} 
+        // onClick={(e) =>{setBagDetailsVisible(true)}}        
+    >        
+        <div className="bag-details-popup-wrapper">    
+            <InfoButtonPopup 
+                positionClass='right-pop' 
+                customStyle={{
+                    height:'calc(var(--bagcard-height) - 10px)',width:'var(--bagcard-width)',
+                    top:'20px'
+                }}
+                customButtonStyle={{fontSize:'18px'}}
+                >
+                <div className='marketingName'>{bag.marketingName}</div>
+                <div className='sku'>{bag.sku}</div>        
+            </InfoButtonPopup>
         </div>
+        { deleteButtonVisible && <IoMdClose className='bagcard-delete-btn' onClick={()=>onBagRemoved(bag)}/>}
+        {/* <div className="bag-card-title-wrapper">
+            <div className='bag-card-title'>{bag.marketingName}</div>
+        </div> */}
+
         { bag.imageUrls && bag.imageUrls.length > 0 ?
             <div className={`bags-carousel ${prevNextArrowVisible ? '' : 'prev-next-arrow-hidden'}`}>
                 <button type="button" className={`prev-image`}
@@ -69,7 +93,7 @@ const BagCard = ({bag, initialQuantity, onBagRemoved, updateBagQuantity,bottomVi
                 <div className='sliders'>
                     {bag.imageUrls?.map((imgUrl,index)=>(
                     <div className={`slider ${imageCarouselIndex===index ? 'active' : ''}`} key={index} >
-                        <div className='image-index'>{imageCarouselIndex+1}/{bag.imageUrls.length}</div>
+                        {bag.imageUrls.length>1 && <div className='image-index'>{imageCarouselIndex+1}/{bag.imageUrls.length}</div>}
                         <img className='bag-image' src={`${BASE_IMAGES_URL}/${imgUrl}`} alt={`${imgUrl}-${index}`} />
                         {/* <img className='bag-image' src={`${BASE_IMAGES_URL}/${imgUrl}`} alt={`${imgUrl}-${index}`} /> */}
                     </div>
@@ -80,7 +104,9 @@ const BagCard = ({bag, initialQuantity, onBagRemoved, updateBagQuantity,bottomVi
                     <FaAngleRight />
                 </button>
             </div>
-            : <BsHandbag className='nobag-image'/>
+            : <div className="bags-carousel">
+                <BsHandbag className='nobag-image'/>
+            </div>
         }
 
 
@@ -90,7 +116,7 @@ const BagCard = ({bag, initialQuantity, onBagRemoved, updateBagQuantity,bottomVi
                         <input 
                         className='bag-quantity-input'
                         type="number" placeholder={initialQuantity} 
-                        onChange={(e)=> setBagQuantity(e.target.value)} 
+                        onChange={(e)=> {setBagQuantity(e.target.value)}} 
                         value={bagQuantity}
                         onBlur={handleQuantityBlur}
                         />
@@ -103,7 +129,7 @@ const BagCard = ({bag, initialQuantity, onBagRemoved, updateBagQuantity,bottomVi
             {bottomVisible &&
                 <div className="bottom">
                     <div className='sku'>SKU: {bag.sku}</div>
-                    <div className='delete-bag-button' onClick={(e) => onBagRemoved(bag)}>
+                    <div className='delete-bag-button' onClick={(e) => {onBagRemoved(bag)}}>
                         <RiDeleteBin6Line className='delete-icon' />                                        
                     </div>
                 </div>
@@ -113,6 +139,8 @@ const BagCard = ({bag, initialQuantity, onBagRemoved, updateBagQuantity,bottomVi
         
 
   </div>
+    </>
+    
   )
 }
 

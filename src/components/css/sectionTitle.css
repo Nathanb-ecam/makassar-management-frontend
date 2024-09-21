@@ -5,7 +5,7 @@
     justify-content: space-between;
     width: 100%;
     margin-bottom: 20px;
-    background: white;
+
 }
 
 
@@ -64,3 +64,14 @@
 
 
 
+
+
+  @media (max-width:650px){
+    .section-title{
+        justify-content: flex-start;
+    }
+    .main-title,.button-container{
+        margin: 0 1rem;
+
+    }
+  }

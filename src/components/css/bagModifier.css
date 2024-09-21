@@ -1,20 +1,33 @@
+.bag-modifier{
+    overflow: hidden;
+}
+
 .bag-modifier:first-child{
     margin-top: 1.8rem;
 }
 
+.bag-modifier-fields{
+    display: flex;
+    flex-direction: column;
+    align-items:end;
+}
 
 .bag-field{
     display: flex;
+    flex-wrap: wrap;
     justify-content: space-between;
     margin: 5px 0;
 }
 
+.bag-field label,
+.bag-field input{
+    margin: 0 10px;
+}
+
 
 input{
-    /* outline:none; */
-    outline-color: var(--light-gray);
+    outline-color:1px solid var(--light-gray);
     padding: 2px;
-    border:none;
 }
 
 
@@ -32,3 +45,10 @@ input{
     color: white;
 }
 
+
+
+@media (max-width:650px){
+    .bag-modifier{
+        font-size: .4rem;
+    }
+}

@@ -38,7 +38,7 @@ const BagModifier = ({bag, applyBagModifications, onPopupClose} : Props) => {
     return (
     <>
         <Popup 
-            title={`Modification de ${bag.marketingName}`} 
+            title={`${bag.marketingName}`} 
             customCSS={{maxWidth:"40vw"}}
             onPopupClose={onPopupClose}>
             <div className="bag-modifier">

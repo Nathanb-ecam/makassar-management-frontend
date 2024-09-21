@@ -45,6 +45,8 @@
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    max-width: 85%;
+    /* background: red; */
     
 }
 
@@ -54,11 +56,9 @@
 }
 .popup-close-btn{
     margin-left: 5px;
-
-}
-.popup-close-btn{
-    font-size: 30px;
-
+    cursor: pointer;
+    
+    
 }
 
 .popup-content-wrapper{
@@ -76,7 +76,7 @@
         font-size: .8rem;
     }
     .pop-title{
-        white-space: wrap;
+        /* white-space: wrap; */
     }
     .popup-close-btn{
         font-size: 50px;

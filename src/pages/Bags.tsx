@@ -98,27 +98,27 @@ const Bags = () => {
     })
   }
 
-  const applyBagModifications = async (bagId : string, bag : Bag) => {
+  const applyBagModifications = async (bagId : string, bagModifications : Bag) => {
     
 
-    if(bag === undefined) return 
+    if(bagModifications === undefined) return 
 
-    const result = await putBag(auth,bagId,bag)
-    if(result){
-      const msg = `Modification de ${bag.marketingName} enregistrée`
-      console.log(msg)
-      showTopMessage(
-        msg,
-        {backgroundColor:'var(--info-green)'}
-      )
+    const result = await putBag(auth,bagId,bagModifications)
+    if(result){      
       setBags(prev => {
         if (!prev) return prev;
   
         const updatedBags = prev.map(existingBag => {
           if(existingBag.id === bagId){
+            const msg = `Modification de ${existingBag.marketingName} enregistrée`
+            console.log(msg)
+            showTopMessage(
+              msg,
+              {backgroundColor:'var(--info-green)'}
+            )
             return {
               ...existingBag,
-              ...bag,
+              ...bagModifications,
               imageUrls: existingBag.imageUrls
             }
           }else return existingBag
@@ -168,7 +168,7 @@ const Bags = () => {
 
   const showBagPopup = (bag : Bag) =>{
       // const bag = bags.find(b => b.id === bagId)
-      console.log("clicked bag",bag)
+      // console.log("clicked bag",bag)
       setCurrentBagToModify(bag)
       setBagModifierVisible(true)
   }
@@ -193,79 +193,34 @@ const Bags = () => {
             <div className='bags-list'>
               {bags.map((bag,index)=>(
                 <div className="bag" key={index} onClick={() =>showBagPopup(bag)}>
-                    <div className="bag-header">
-                      <div className="bag-title">{bag.marketingName}</div>
-                      <IoMdClose className='bag-delete-btn' onClick={(e)=>{e.stopPropagation(); removeBag(bag);}} />
-                    </div>
+  
 
                     {bag.imageUrls && 
                       <div className="bag-images">
                           <div className='bag-images-wrapper'>
                             {bag.imageUrls.length > 0 
                                   ?
-                                    bag.imageUrls.map((imageUrl,index)=>(
+                                    // bag.imageUrls.map((imageUrl,index)=>(
+                                    //   <div className='bag-image-wrapper' key={index}>
+                                    //     {/* <IoMdClose className='bag-image-close-btn' /> */}
+                                    //     <img className='bag-image' key={index} src={`${BASE_IMAGES_URL}/${imageUrl}`}  alt={`${imageUrl}`}/>
+                                    //   </div>
+                                    // ))
+                                    
                                       <div className='bag-image-wrapper' key={index}>
-                                        <IoMdClose className='bag-image-close-btn' />
-                                        <img className='bag-image' key={index} src={`${BASE_IMAGES_URL}/${imageUrl}`}  alt={`${imageUrl}`}/>
+                                        {/* <IoMdClose className='bag-image-close-btn' /> */}
+                                        <img className='bag-image' key={index} src={`${BASE_IMAGES_URL}/${bag.imageUrls[0]}`}  alt={`${bag.imageUrls[0]}`}/>
                                       </div>
-                                    ))
-                                  : <div className='nobag-wrapper'><BsHandbag className='nobag-image'/></div>
+                                    
+                                  :<BsHandbag className='nobag-image'/>
                             } 
                           </div>
                       </div>
                     }
-
-
-                    {/* <div className="bag-props">                  
-
-                      <div className='bag-prop'>
-                          <label htmlFor="marketingName" className='bag-prop-text'>Modèle: </label>
-                          <div 
-                            id="marketingName"
-                            contentEditable={true}
-                            suppressContentEditableWarning={true} 
-                            onInput={(e) => handleDivChange(bag.id,"marketingName", (e.target as HTMLElement).innerText)}
-                            >
-                            {bag.marketingName} 
-                          </div>
-                      </div>
-
-                        <div className='bag-prop'>
-                          <label htmlFor="retailPrice" className='bag-prop-text'>Prix: </label>
-                          <div 
-                            id='retailPrice'
-                            contentEditable={true}
-                            suppressContentEditableWarning={true} 
-                            onInput={(e) => handleDivChange(bag.id,"retailPrice", (e.target as HTMLElement).innerText)}
-                            >
-                            {bag.retailPrice} 
-                          </div>
-
-                        </div>
-
-                        <div className='bag-prop'>
-                          <label htmlFor="sku" className='bag-prop-text'>SKU: </label>
-                          <div 
-                            id="sku"
-                            contentEditable={true}
-                            suppressContentEditableWarning={true} 
-                            onInput={(e) => handleDivChange(bag.id,"sku", (e.target as HTMLElement).innerText)}
-                            >
-                            {bag.sku} 
-                          </div>
-                        </div>
-
-
-
-                        <div 
-                          
-                        className={`apply-bag-modification ${Array.from(modifiedBags.keys()).includes(bag.id) ? 'bag-mod-visible':''}`}
-                        >  
-                          <button onClick={()=>applyBagModifications(bag.id)}   >
-                            Appliquer les modifications
-                          </button>
-                        </div>
-                    </div> */}
+                    <div className="bag-info">              
+                      <div className="bag-title">{bag.marketingName}</div>
+                      <IoMdClose className='bag-delete-btn' onClick={(e)=>{e.stopPropagation(); removeBag(bag);}} />
+                    </div>
                 
                 </div>
               ))}
@@ -285,7 +240,7 @@ const Bags = () => {
               onPopupClose={onCreateBagPopupClosed} 
               popupVisible={createBagPopupVisible}
               // customCSS={{height:"400px",minWidth:'45%',maxWidth:'45%'}}
-              customCSSPopupContent={{margin:'25px'}}
+              // customCSSPopupContent={{margin:'25px'}}
               >
               <BagForm onBagFormSubmit={onBagFormSubmit}></BagForm>
           </Popup>
@@ -296,7 +251,8 @@ const Bags = () => {
                                   bag={currentBagToModify}  
                                   applyBagModifications={applyBagModifications}
                                   onPopupClose={()=>setBagModifierVisible(false)} 
-                                  />}
+                                  />
+        }
 
 
     </div>

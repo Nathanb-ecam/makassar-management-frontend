@@ -93,17 +93,19 @@ const BagForm = ({onBagFormSubmit} : Props) => {
         </div>
 
         <div className='image-form-field-wrapper'>
-            <label htmlFor="">Ajouter des images:</label>
-            <input 
-                id='fileInput'
-                style={{display:'none'}}
-                className='file-select-input'
-                type="file" 
-                multiple
-                accept=".jpeg, .jpg, .png, image/jpeg, image/jpg, image/png"
-                onChange={handleImageChange}
-            />
-            <label htmlFor="fileInput" className='custom-file-upload'>Sélectionner</label>
+            <div className='image-picker-title-wrapper'>
+                <label htmlFor="">Ajouter des images:</label>
+                <input 
+                    id='fileInput'
+                    style={{display:'none'}}
+                    className='file-select-input'
+                    type="file" 
+                    multiple
+                    accept=".jpeg, .jpg, .png, image/jpeg, image/jpg, image/png"
+                    onChange={handleImageChange}
+                />
+                <label htmlFor="fileInput" className='custom-file-upload'>Sélectionner</label>
+            </div>
             {fileSelection && fileSelection.length > 0 &&
                 <div className='custom-file-message'>
                     {fileSelection.map((fileName,index)=>(
