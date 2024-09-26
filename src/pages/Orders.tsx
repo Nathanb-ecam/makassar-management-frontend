@@ -24,6 +24,8 @@ import OrderPrice from '../components/orders/OrderPrice.tsx';
 import CreateOrder from '../components/orders/CreateOrder.tsx';
 import { RiDeleteBin6Line } from 'react-icons/ri';
 import { handleFieldChange, processFieldChange } from '../utils/stateChange.tsx';
+import { PDFDownloadLink, pdf } from '@react-pdf/renderer';
+import OrderInvoiceTemplate from '../pdf/OrderInvoiceTemplate.tsx';
 
 
 const initialOrderEditableData: OrderEditableData = {
@@ -276,14 +278,13 @@ const Orders = () => {
                 ? order.bags
                 : new Map<string, { bag: Bag; quantity: number }>(
                     Object.entries(order.bags!!).map(([key, value]) => [key, value as BagWithQuantity])
-                );
-        
-            
+            );
+                    
             return {
                 ...order,
                 bags: bagsAsMap
             };
-        });
+          });
         
         }
       
@@ -343,9 +344,24 @@ const Orders = () => {
      }
   }
 
-  const generateOrderInvoice = (orderId : string)=>{
-      console.log("generating pdf ... ")
-  }
+  const generateAndDownloadInvoice = async () => {
+    try {
+      console.log("Generating PDF...");
+      const doc = <OrderInvoiceTemplate detailedOrder={currentOrder} />;
+      const asPdf = pdf(); // Create an instance of the pdf function
+      asPdf.updateContainer(doc); // Pass your document to the pdf instance
+
+      const blob = await asPdf.toBlob(); // Convert the document to a Blob
+      const link = document.createElement('a');
+      link.href = URL.createObjectURL(blob); // Create a URL for the Blob
+      link.download = `${currentOrder.customer.name ?? "client"}-${currentOrder.orderNumber ?? 'XX'}.pdf`; // Set the file name
+      link.click(); // Trigger the download
+      URL.revokeObjectURL(link.href); // Clean up the URL object
+      console.log("PDF generated and downloaded.");
+    } catch (error) {
+      console.error("Error generating PDF: ", error);
+    }
+  };
 
 
 
@@ -430,7 +446,7 @@ const Orders = () => {
                         <div className='medium-col'>{formatTime(orderOverview.createdAt)}</div>
                         <div className='medium-col'>{formatTime(orderOverview.updatedAt)}</div>
                         <div 
-                            className='order-status medium-col' 
+                            className='order-status medium-col editable-div' 
                             contentEditable={true}
                             suppressContentEditableWarning={true} 
                             onBlur={(e) => handleOrderChangeInRowItems(orderOverview.id,"status", (e.target as HTMLElement).innerText)}
@@ -438,7 +454,7 @@ const Orders = () => {
                             {orderOverview.status}
                         </div>
                         <div                        
-                        className='order-status medium-col' 
+                        className='order-status medium-col editable-div' 
                         contentEditable={true}
                         suppressContentEditableWarning={true} 
                         onBlur={(e) => handleOrderChangeInRowItems(orderOverview.id,"plannedDate", (e.target as HTMLElement).innerText)}
@@ -464,8 +480,7 @@ const Orders = () => {
                             /> 
                         </div>
                         <div className='actions-icons small-col'>
-                                <RiDeleteBin6Line onClick={()=>deleteOrderWithId(orderOverview.id!!)}></RiDeleteBin6Line>
-                                <FaRegFilePdf onClick={()=>generateOrderInvoice(orderOverview.id!!)} />
+                                <RiDeleteBin6Line onClick={()=>deleteOrderWithId(orderOverview.id!!)}></RiDeleteBin6Line>                                
                         </div>
                       </div>
 
@@ -540,6 +555,15 @@ const Orders = () => {
                                                             handleOrderPriceChange={handleOrderPriceChange}/>}                             
                             </div>
 
+                            <div className="order-invoice-section">
+                              <label htmlFor="generate-pdf">Générer la facture </label>
+                              {/* <PDFDownloadLink  
+                                fileName={`${currentOrder.customer.name}-${currentOrder.orderNumber ?? ''}`} 
+                                document={<OrderInvoiceTemplate detailedOrder={currentOrder}/>}
+                              > */}
+                                <FaRegFilePdf id="generate-pdf" onClick={generateAndDownloadInvoice} />
+                              {/* </PDFDownloadLink> */}
+                            </div>
                             
                             
                             <div className='order-description'>

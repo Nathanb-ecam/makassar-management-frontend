@@ -1,8 +1,22 @@
-# React + Vite
+# Makasssar management frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+### Features
 
-Currently, two official plugins are available:
+- User authentification
+- JWT protected routes
+- Orders : take orders and get their invoices
+- Clients : CRUD
+- Products : CRUD
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+### App screens
+
+<div>
+    <img src="project-images/login.png" alt="login page" style="height: 550px; width: 700px"/>
+</div>
+<div>
+    <img src="project-images/orders.png" alt="orders page" />
+</div>
+<div style="display: flex; flex-wrap: wrap;">
+    <img src="project-images/new-order.png" alt="new order form"  width="50%" height="50%"/>
+    <img src="project-images/addBagToOrder.png" alt="add product to order"  width="50%" height="50%"/>
+</div>

@@ -1,9 +1,17 @@
 import React from 'react'
 
+export const currentDate = ()=>{
+  const today = new Date();
+  const day = today.getDate().toString().padStart(2, '0');
+  const month = (today.getMonth() + 1).toString().padStart(2, '0'); 
+  const year = today.getFullYear();
+  return `${day}/${month}/${year}`
+}
+
 export const formatTime = (timestamp) => {
     const date = new Date(timestamp);
     const day = date.getDate().toString().padStart(2, '0');
-    const month = (date.getMonth() + 1).toString().padStart(2, '0'); // Months are 0-indexed
+    const month = (date.getMonth() + 1).toString().padStart(2, '0'); 
     const year = date.getFullYear();
     
     const hours = date.getHours().toString().padStart(2, '0');

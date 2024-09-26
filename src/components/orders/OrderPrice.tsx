@@ -90,14 +90,9 @@ const OrderPrice = React.forwardRef(({bags,order, handleOrderPriceChange} : Prop
         <>
             <div className='actual-price-wrapper'>
                 <div className="actual-price-text">Prix actuel: </div>
-                <div 
-                    className="actual-price"
-                    >
-                    {Number(order?.price?.finalPrice).toFixed(2)}
+                <div className="actual-price">
+                    {Number(order?.price?.finalPrice).toFixed(2)}€                
                 </div>
-                
-
-                
                 <InfoButtonPopup 
                 positionClass="left-pop" sizeClass='small-pop' customStyle={{maxWidth:'220px',right:'-25px',top:'25px'}}
                 >
@@ -149,7 +144,7 @@ const OrderPrice = React.forwardRef(({bags,order, handleOrderPriceChange} : Prop
                                     setModifiedData(prev => prev ? {...prev,deliveryCost:deliveryCosts.toString()} : prev) 
                                     handleOrderPriceChange()
 
-                                   
+                                
                                 }}
                                 
                                 >
@@ -162,24 +157,9 @@ const OrderPrice = React.forwardRef(({bags,order, handleOrderPriceChange} : Prop
                             <div className='final-price'>
                                 Prix final : {calculatedPrice.toFixed(2)}€
                             </div>
-                            {/* <div
-                            className={`confirm-price ${currentPriceHasBeenModified ? '' : ''} `}
-                            onClick={()=>{
-                                if(childInfoPopupRef.current) childInfoPopupRef.current.hideInfoPopup()
-                                handleOrderPriceChange(modifiedData)
-                            }
-                            }
-                            >
-                                <button>
-                                    Confirmer
-                                </button>
-                            </div> */}
                         </div>
-                    </div>
-    
-                </InfoButtonPopup>
-
-                
+                    </div>    
+                </InfoButtonPopup>                                
             </div>
 
         </>

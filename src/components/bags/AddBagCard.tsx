@@ -47,7 +47,7 @@ const AddBagCard = React.forwardRef(({addBagsSelectionToCurrentBags} : Props,ref
             </div>
 
             {isPopupOpen && 
-            <Popup title="Ajouter des sacs " onPopupClose={closePopup} customCSS={{}}>
+            <Popup title="Ajouter des produits " onPopupClose={closePopup} customCSS={{}}>
                 <BagSelector 
                     close={closePopup} 
                     addBagsToCurrentBags={addBagsSelectionToCurrentBags}

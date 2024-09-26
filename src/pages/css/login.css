@@ -25,8 +25,7 @@
 
 
 .login-left-section img{
-    object-fit: cover;
-    /* width: 300px; */
+    object-fit: contain;
     height: 100%;
     width: 100%;
 
