@@ -11,7 +11,7 @@
 ### App screens
 
 <div>
-    <img src="project-images/login.png" alt="login page" style="height: 550px; width: 700px"/>
+    <--! <img src="project-images/login.png" alt="login page" style="height: 500px; width: 600px"/> !-->
 </div>
 <div>
     <img src="project-images/orders.png" alt="orders page" />
