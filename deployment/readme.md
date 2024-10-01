@@ -1,6 +1,6 @@
 ### To deploy a new version
 
-1. Ensure variables are correct in the `.env`file:
+1. Check`.env`file:
 
 2. Build locally with:
 
