@@ -6,7 +6,7 @@ import { Bag } from '../../models/entities'
 export const getBagsWithIds = async (auth,ids: string[]) => {
     
     try{
-        const response = await axios.post('/bags/withIds',
+        const response = await axios.post(`/${auth.tenantId}/bags/withIds`,
         {
             stringList:ids
         },
@@ -31,7 +31,7 @@ export const getBagsWithIds = async (auth,ids: string[]) => {
 
 export const getBags = async (auth) => {
     try{
-        const response = await axios.get('/bags',
+        const response = await axios.get(`/${auth.tenantId}/bags`,
         {
             headers: {'Content-type':'application/json','Authorization': `Bearer ${auth.accessToken}`},
             withCredentials:true 
@@ -54,7 +54,7 @@ export const getBags = async (auth) => {
 export const putBag = async (auth,bagId,dataObj) => {
     
     try{
-        const response = await axios.put(`/bags/${bagId}`,
+        const response = await axios.put(`/${auth.tenantId}/bags/${bagId}`,
         dataObj,
         {
             headers: {'Content-type':'application/json','Authorization': `Bearer ${auth.accessToken}`},
@@ -77,7 +77,7 @@ export const putBag = async (auth,bagId,dataObj) => {
 export const deleteBag = async (auth,bagId,imageUrls) => {
     
     try{
-        const response = await axios.delete(`/bags/${bagId}`,{
+        const response = await axios.delete(`/${auth.tenantId}/bags/${bagId}`,{
             headers: {'Content-type':'application/json','Authorization': `Bearer ${auth.accessToken}`},
             data:{stringList:imageUrls},
             withCredentials:true 
@@ -98,9 +98,10 @@ export const deleteBag = async (auth,bagId,imageUrls) => {
 
 
 export const createBagWithImages = async (auth, formData : FormData) : Promise<Bag | null> =>{
+    console.log("createBagWithImages" + auth.tenantId)
     try{
         const response = await axios.post(
-            '/bags/withImages',
+            `/${auth.tenantId}/bags/withImages`,
             formData,
             {
                 headers: {'Content-type':'multipart/form-data','Authorization': `Bearer ${auth.accessToken}`},

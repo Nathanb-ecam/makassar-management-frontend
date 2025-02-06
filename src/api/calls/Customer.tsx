@@ -9,7 +9,7 @@ import useRefreshToken from '../../hooks/useRefreshToken'
 export const getCustomerById = async (auth,customerId) => {
     
     try{
-        const response = await axios.get(`/customers/${customerId}`,
+        const response = await axios.get(`/${auth.tenantId}/customers/${customerId}`,
         {
             headers: {'Content-type':'application/json','Authorization': `Bearer ${auth.accessToken}`},
             withCredentials:true 
@@ -37,7 +37,7 @@ export const getCustomerById = async (auth,customerId) => {
 export const modifyCustomerWithid = async (auth,customerId,customer) => {
     
     try{
-        const response = await axios.put(`/customers/${customerId}`,
+        const response = await axios.put(`/${auth.tenantId}/customers/${customerId}`,
         customer,
         {
             headers: {'Content-type':'application/json','Authorization': `Bearer ${auth.accessToken}`},
@@ -58,7 +58,7 @@ export const modifyCustomerWithid = async (auth,customerId,customer) => {
 export const  getAllCustomers = async (auth) => {
     
     try{
-        const response = await axios.get<Customer[]>(`/customers`,
+        const response = await axios.get<Customer[]>(`/${auth.tenantId}/customers`,
         {
             headers: {'Content-type':'application/json','Authorization': `Bearer ${auth.accessToken}`},
             withCredentials:true 
@@ -86,7 +86,7 @@ export const  getAllCustomers = async (auth) => {
 
 export const createCustomer = async (auth,customer)=>{
     try{
-        const response = await axios.post(`/customers`,
+        const response = await axios.post(`/${auth.tenantId}/customers`,
         customer,
         {
             headers: {'Content-type':'application/json','Authorization': `Bearer ${auth.accessToken}`},
@@ -111,7 +111,7 @@ export const createCustomer = async (auth,customer)=>{
 
 export const deleteCustomerWithId = async (auth,id) => {
     try{
-        const response = await axios.delete(`/customers/${id}`,
+        const response = await axios.delete(`/${auth.tenantId}/customers/${id}`,
         {
             headers: {'Content-type':'application/json','Authorization': `Bearer ${auth.accessToken}`},
             withCredentials:true 

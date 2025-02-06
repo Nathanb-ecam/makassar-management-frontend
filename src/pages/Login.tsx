@@ -18,12 +18,19 @@ const LoginForm = () => {
 
   const navigate = useNavigate()
 
-  const [mail, setMail] = useState('');
-  const [password, setPassword] = useState('');
+  // const [mail, setMail] = useState('');
+  // const [password, setPassword] = useState('');
+  const [loginData, setLoginData] = useState({mail:"",password:""});
+  const [signup, setSignup] = useState({});
   
-  const handleSubmit = async (e) => {
+  const [selectedTab, setSelectedTab] = useState('login');
+  const handleTabChange = (tabName:string) =>{
+    setSelectedTab(tabName)
+  }
+
+  const handleLoginForm = async (e) => {
     e.preventDefault();
-    const user = { mail, password };
+    const user = loginData;
 
     try{
       const response = await axios.post(
@@ -40,10 +47,11 @@ const LoginForm = () => {
 
       console.log(JSON.stringify(response?.data))
       const accessToken = response?.data?.accessToken
-      setAuth({user,accessToken})
-      setMail('');
-      setPassword('');
+      const tenantId = response?.data?.tenantId
+      setAuth({user,accessToken, tenantId})
+      setLoginData({mail:"", password:""})
       navigate("/dashboard")
+
     }catch(err){
         if(!err?.response){
           console.log("No server response")
@@ -59,42 +67,75 @@ const LoginForm = () => {
     finally{
       console.log("somehow done")
     }
-
-      
-      
-
-    
   };
+
+  const handleSignupForm = ()=>{
+      const newAccountData = signup;
+  }
   
   
   return (
     <div className='login-page'>
-      <div className='login-left-section'>
-        <img src="/assets/f.png" alt="logo makassar" />
-      </div>
-      <div className='login-right-section'>
-        <h1>Makassar <br/>management</h1>
-        <form onSubmit={handleSubmit} className='login-form'>
-          <div className='username-section'>
-            <label>Mail</label>
-            <input 
-            type="text" placeholder='Enter your email address'
-            value={mail}
-            onChange={(e) => setMail(e.target.value)}
-             />
+      <div className="card">
+
+        <div className="login-sliders">
+
+          <div className={`hider ${selectedTab == 'login' ? 'left' : 'right'}`}>
+            {
+            selectedTab == 'login' ? 
+                <div className='signup-link-wrapper'>
+                  <h4>Welcome to login</h4>
+                  <p>Don't have an account ? </p>
+                  <button onClick={() => handleTabChange("signup")}>Create one</button>                  
+                </div>
+                :
+                <div className='login-link-wrapper'>
+                  <h4>Already have an account ?</h4>
+                  <button onClick={() => handleTabChange("login")}>Log back in</button>
+                </div> 
+                
+            }
           </div>
-          <div className='password-section'>
-            <label >Mot de passe</label>
-            <input 
-            type="password" placeholder='Enter password' 
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            />
+
+          <div className='signin-section'>
+              <form className='signin-form' onSubmit={handleSignupForm}>                
+                <h3>Create an account</h3>
+                <div><label htmlFor="">Firstname</label><input type="text" /></div>
+                <div><label htmlFor="">Lastname</label><input type="text" /></div>
+                <div><label htmlFor="">Mail</label><input type="text" /></div>
+                <div><label htmlFor="">Password</label><input type="password" /></div>
+                <button type='submit'>Sign up</button>
+              </form>
           </div>
-          <button type='submit'>
-            Envoyer
-          </button>
-        </form>
+
+          <div className='login-section'>            
+            <form onSubmit={handleLoginForm} className='login-form'>
+              <h3>Login</h3>
+              <div className='username-section'>
+                <label>Mail</label>
+                <input 
+                type="text" placeholder='Enter your email address'
+                value={loginData.mail}
+                onChange={(e) => setLoginData(prev => ({...prev, mail: e.target.value}))}
+                />
+              </div>
+              <div className='password-section'>
+                <label>Password</label>
+                <input 
+                type="password" placeholder='Enter password' 
+                value={loginData.password}
+                onChange={(e) => setLoginData(prev => ({...prev, password: e.target.value}))}
+                />
+                <button className='forgot-password'>Forgot password?</button>
+              </div>
+              <button type='submit'>
+                Enter
+              </button>
+            </form>
+          </div>
+
+        </div>
+
       </div>
 
     </div>

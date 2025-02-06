@@ -7,7 +7,7 @@ import { processHttpError } from '../../utils/httpErros';
 export const getOrders = async (auth) => {
     
     try{
-        const response = await axios.get('/orders',{
+        const response = await axios.get(`/${auth.tenantId}/orders`,{
             headers: {'Content-type':'application/json','Authorization': `Bearer ${auth.accessToken}`},
             withCredentials:true }
         )
@@ -28,7 +28,7 @@ export const getOrders = async (auth) => {
 export const createOrder = async (auth,orderDto) => {
     
     try{
-        const response = await axios.post('/orders',
+        const response = await axios.post(`/${auth.tenantId}/orders`,
         orderDto,
         {
             headers: {'Content-type':'application/json','Authorization': `Bearer ${auth.accessToken}`},
@@ -51,7 +51,7 @@ export const createOrder = async (auth,orderDto) => {
 export const deleteOrderById = async (auth,id) => {
     
     try{
-        const response = await axios.delete(`/orders/${id}`,{
+        const response = await axios.delete(`/${auth.tenantId}/orders/${id}`,{
             headers: {'Content-type':'application/json','Authorization': `Bearer ${auth.accessToken}`},
             withCredentials:true }
         )
@@ -71,7 +71,7 @@ export const deleteOrderById = async (auth,id) => {
 
 export const getOverviewsOfOrders = async(auth) => {
     try{
-        const response = await axios.get('/orders-overviews',{
+        const response = await axios.get(`/${auth.tenantId}/orders-overviews`,{
             headers: {'Content-type':'application/json','Authorization': `Bearer ${auth.accessToken}`},
             withCredentials:true }
         )
@@ -92,7 +92,7 @@ export const getOverviewsOfOrders = async(auth) => {
 export const putOrder = async (auth,orderId,dataObj) => {
     
     try{
-        const response = await axios.put(`/orders/${orderId}`,
+        const response = await axios.put(`/${auth.tenantId}/orders/${orderId}`,
         dataObj,
         {
             headers: {'Content-type':'application/json','Authorization': `Bearer ${auth.accessToken}`},
@@ -117,7 +117,7 @@ export const updateBagsForOrderWithId = async (auth,orderId,bagIdsToQuantity: Ma
     try{
         const plainBagsIdsToQuantity = Object.fromEntries(bagIdsToQuantity);
         console.log("DEBUG",plainBagsIdsToQuantity);
-        const response = await axios.put(`/orders/${orderId}`,
+        const response = await axios.put(`/${auth.tenantId}/orders/${orderId}`,
         {"bags":plainBagsIdsToQuantity},
         {
             headers: {'Content-type':'application/json','Authorization': `Bearer ${auth.accessToken}`},
@@ -142,7 +142,7 @@ export const updateBagsForOrderWithId = async (auth,orderId,bagIdsToQuantity: Ma
 export const getOrderById = async (auth,orderId) => {
     
     try{
-        const response = await axios.get(`/orders/${orderId}`,{
+        const response = await axios.get(`/${auth.tenantId}/orders/${orderId}`,{
             headers: {'Content-type':'application/json','Authorization': `Bearer ${auth.accessToken}`},
             withCredentials:true }
         )
@@ -159,7 +159,7 @@ export const getOrderById = async (auth,orderId) => {
 export const getOrderOverviewById = async (auth,orderId) => {
     
     try{
-        const response = await axios.get(`/orders-overviews/${orderId}`,{
+        const response = await axios.get(`/${auth.tenantId}/orders-overviews/${orderId}`,{
             headers: {'Content-type':'application/json','Authorization': `Bearer ${auth.accessToken}`},
             withCredentials:true }
         )
@@ -177,7 +177,7 @@ export const getOrderOverviewById = async (auth,orderId) => {
 export const getOrderByIdWithCustomerDetailed = async (auth,orderId) => {
     
     try{
-        const response = await axios.get(`/orders/${orderId}/customer-detailed`,{
+        const response = await axios.get(`/${auth.tenantId}/orders/${orderId}/customer-detailed`,{
             headers: {'Content-type':'application/json','Authorization': `Bearer ${auth.accessToken}`},
             withCredentials:true }
         )
@@ -192,7 +192,7 @@ export const getOrderByIdWithCustomerDetailed = async (auth,orderId) => {
 
 export const getOrderFullyDetailedById = async (auth,orderId) => {
     try{
-        const response = await axios.get<OrderFullyDetailed>(`/orders/${orderId}/fully-detailed`,
+        const response = await axios.get<OrderFullyDetailed>(`/${auth.tenantId}/orders/${orderId}/fully-detailed`,
         {
             headers: {'Content-type':'application/json','Authorization': `Bearer ${auth.accessToken}`},
             withCredentials:true 
@@ -210,7 +210,7 @@ export const getOrderFullyDetailedById = async (auth,orderId) => {
 
 export const addBagToOrder = async (auth,orderId,bagId, quantity)=>{
     try{
-        const response = await axios.get(`/orders/${orderId}/addBag/${bagId}/${quantity}`,{
+        const response = await axios.get(`/${auth.tenantId}/orders/${orderId}/addBag/${bagId}/${quantity}`,{
             headers: {'Content-type':'application/json','Authorization': `Bearer ${auth.accessToken}`},
             withCredentials:true }
         )

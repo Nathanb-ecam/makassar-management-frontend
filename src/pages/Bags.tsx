@@ -209,7 +209,7 @@ const Bags = () => {
                                     
                                       <div className='bag-image-wrapper' key={index}>
                                         {/* <IoMdClose className='bag-image-close-btn' /> */}
-                                        <img className='bag-image' key={index} src={`${BASE_IMAGES_URL}/${bag.imageUrls[0]}`}  alt={`${bag.imageUrls[0]}`}/>
+                                        <img className='bag-image' key={index} src={`${BASE_IMAGES_URL}/${auth.tenantId}/${bag.imageUrls[0]}`}  alt={`${bag.imageUrls[0]}`}/>
                                       </div>
                                     
                                   :<BsHandbag className='nobag-image'/>
