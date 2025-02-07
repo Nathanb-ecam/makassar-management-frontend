@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button, Form, FormGroup, FormControl} from 'react-bootstrap';
 
 import { useAuth } from '../hooks/useAuth';
@@ -21,9 +21,15 @@ const LoginForm = () => {
   // const [mail, setMail] = useState('');
   // const [password, setPassword] = useState('');
   const [loginData, setLoginData] = useState({mail:"",password:""});
-  const [signup, setSignup] = useState({});
+  const [signupData, setSignupData] = useState({username:"", mail:"",password:""});
+  const [feedbackMsg, setFeedbackMsg] = useState({loginMsg:"", signupMsg:""});
   
   const [selectedTab, setSelectedTab] = useState('login');
+  
+  useEffect(()=>{
+    console.log(feedbackMsg)
+  },[feedbackMsg])
+  
   const handleTabChange = (tabName:string) =>{
     setSelectedTab(tabName)
   }
@@ -45,23 +51,33 @@ const LoginForm = () => {
         }
       )
 
-      console.log(JSON.stringify(response?.data))
-      const accessToken = response?.data?.accessToken
-      const tenantId = response?.data?.tenantId
-      setAuth({user,accessToken, tenantId})
-      setLoginData({mail:"", password:""})
-      navigate("/dashboard")
+      //console.log(JSON.stringify(response?.data))
+      if(response.status == 200){
+        const accessToken = response?.data?.accessToken
+        const tenantId = response?.data?.tenantId
+        setAuth({user,accessToken, tenantId})
+        setLoginData({mail:"", password:""})
+        navigate("/dashboard")
+        setFeedbackMsg(prev => ({...prev, loginMsg: response.statusText}))
+      }
+        
+    
 
-    }catch(err){
-        if(!err?.response){
+    }catch(err){      
+      const apiErrorMessage = err?.response.data        
+      if(!err?.response){
           console.log("No server response")
+          setFeedbackMsg(prev => ({...prev, loginMsg: "No server response"}))
         }else if (err?.response.status === 400){
+          setFeedbackMsg(prev => ({...prev, loginMsg: apiErrorMessage}))
           console.log("Missing Username or password")
         }
-        else if (err?.response.status === 401){
+        else if (err?.response.status == 401 || err?.response.status == 403){          
+          setFeedbackMsg(prev => ({...prev, loginMsg: apiErrorMessage}))
           console.log("Unauthorized")
         }else{
-          console.log("Login failed")
+          setFeedbackMsg(prev => ({...prev, loginMsg: "Something went wrong :("}))
+          console.log("Something went wrong :(")
         }
     }
     finally{
@@ -69,10 +85,32 @@ const LoginForm = () => {
     }
   };
 
-  const handleSignupForm = ()=>{
-      const newAccountData = signup;
+  const handleSignupForm = async (e)=>{
+    e.preventDefault()
+    const newAccountData = signupData;
+
+    try{
+      const response = await axios.post(
+        "/register",
+        JSON.stringify(newAccountData),
+        {
+          headers: {
+            'Accept':'application/json',
+            'Content-type':'application/json'
+          },
+          withCredentials: true
+        }
+      )
+      // if (response.status == 200) setFeedbackMsg(prev => ({...prev,signupMsg: response.data }))
+      console.log("response test")
+      console.log(response)
+      setFeedbackMsg(prev => ({...prev,signupMsg: response.data }))
+    }catch(err){
+      setFeedbackMsg(prev => ({...prev,signupMsg: err?.response.data }))
+      console.log(err)
+    }
+    
   }
-  
   
   return (
     <div className='login-page'>
@@ -100,10 +138,19 @@ const LoginForm = () => {
           <div className='signin-section'>
               <form className='signin-form' onSubmit={handleSignupForm}>                
                 <h3>Create an account</h3>
-                <div><label htmlFor="">Firstname</label><input type="text" /></div>
-                <div><label htmlFor="">Lastname</label><input type="text" /></div>
-                <div><label htmlFor="">Mail</label><input type="text" /></div>
-                <div><label htmlFor="">Password</label><input type="password" /></div>
+                <label>{feedbackMsg.signupMsg}</label>
+                <div>
+                  <label htmlFor="">Firstname</label>
+                  <input required type="text" value={signupData.username} onChange={(e) => setSignupData(prev => ({...prev, username: e.target.value}))}/>
+                </div>                
+                <div>
+                  <label htmlFor="">Mail</label>
+                  <input required type="text" value={signupData.mail} onChange={(e) => setSignupData(prev => ({...prev, mail: e.target.value}))}/>
+                </div>
+                <div>
+                  <label htmlFor="">Password</label>
+                  <input required type="password" value={signupData.password} onChange={(e) => setSignupData(prev => ({...prev, password: e.target.value}))}/>
+                </div>
                 <button type='submit'>Sign up</button>
               </form>
           </div>
@@ -111,9 +158,11 @@ const LoginForm = () => {
           <div className='login-section'>            
             <form onSubmit={handleLoginForm} className='login-form'>
               <h3>Login</h3>
+              <label>{feedbackMsg.loginMsg}</label>
               <div className='username-section'>
                 <label>Mail</label>
                 <input 
+                required
                 type="text" placeholder='Enter your email address'
                 value={loginData.mail}
                 onChange={(e) => setLoginData(prev => ({...prev, mail: e.target.value}))}
@@ -121,7 +170,8 @@ const LoginForm = () => {
               </div>
               <div className='password-section'>
                 <label>Password</label>
-                <input 
+                <input
+                required 
                 type="password" placeholder='Enter password' 
                 value={loginData.password}
                 onChange={(e) => setLoginData(prev => ({...prev, password: e.target.value}))}

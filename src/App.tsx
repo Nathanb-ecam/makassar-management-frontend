@@ -19,6 +19,7 @@ import Layout from './components/main/Layout.tsx';
 import Missing from './pages/Missing.tsx';
 import { OrdersProvider } from './hooks/useOrders.tsx';
 import Customers from './pages/Customers.tsx';
+import ConfirmAccount from './pages/ConfirmAccount.tsx';
 
 
 
@@ -33,8 +34,11 @@ const App = () => {
           
           <Route path='/' element={<Layout/>}>  
             {/* Public routes  */}
+            <Route path="/confirmAccount" element={<ConfirmAccount />} />
             <Route path="/" element={<Navigate to="login"/>} />
             <Route path="*"  element={<Missing/>} />
+
+
 
            
             {/* Private routes */}
