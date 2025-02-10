@@ -21,15 +21,19 @@
 
 .arrow-logo{
     position: absolute;
-    right: -20px;
+    /* right: -20px; */
+    right: -1.6rem;
     z-index: 999;
     border: none;
     height: 50px;
-    width: 20px;
+    width: 1.4rem;
     color: var(--primary);
     display: flex;
     align-items: end;
     transform: rotate(180deg);
+}
+.arrow-logo:hover{
+    cursor: pointer;
 }
 
 
@@ -58,7 +62,18 @@
 }
 
 
-
+.navbar .close-navbar-btn{
+    color: var(--primary);    
+    border-radius: 50%;
+    font-size: 2rem;
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+}
+.navbar .close-navbar-btn:hover{
+    background: var(--hover-grey);
+    cursor: pointer;
+}
 
 
 .navbar .nav-li-item{

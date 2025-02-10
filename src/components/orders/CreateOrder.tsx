@@ -1,33 +1,34 @@
 import React, { ReactElement, useEffect, useRef, useState } from 'react'
 import { MdInfoOutline } from 'react-icons/md';
-import { Bag, Customer, Order, OrderDto, OrderEditableData } from '../../models/entities';
+import { Product, Customer, Order, OrderDto, OrderEditableData } from '../../models/entities';
 
 
 import '../css/create-order.css'
-import BagSelector from '../bags/BagSelector.tsx';
+
 import { getAllCustomers } from '../../api/calls/Customer.tsx';
 import { useAuth } from '../../hooks/useAuth.tsx';
 import { useTopMessage } from '../../hooks/useTopMessagePopup.tsx';
+import ProductSelector from '../products/ProductSelector.tsx';
 
 
 interface Props{
     handleOrderCreated: (order : OrderDto) => void;
 }
 
-interface BagSeletorRef{
+interface productSeletorRef{
     getSelectionPrice: () => string;
 }
 
 const CreateOrder = ({handleOrderCreated} : Props) => {
     
-    const {auth} = useAuth()
+    const {auth}:any = useAuth()
     const [customers, setCustomers] = useState<Customer[]>([]); 
     
-    const bagSelectorRef = useRef<BagSeletorRef | null>(null)
+    const productSelectorRef = useRef<productSeletorRef | null>(null)
 
-    const {showTopMessage} = useTopMessage()
+    const {showTopMessage}:any = useTopMessage()
 
-    const [bagSelectionVisible,setBagSelectionVisible] = useState(false)
+    const [productSelectionVisible,setproductSelectionVisible] = useState(false)
     const [estimatedPrice,setEstimatedPrice] = useState(0)
     const [totalPrice,setTotalPrice] = useState('')
     const [currentOrder,setCurrentOrder] = useState<OrderDto>({
@@ -42,7 +43,7 @@ const CreateOrder = ({handleOrderCreated} : Props) => {
             discount:'',
             alreadyPaid:''
         },
-        bags: new Map(),
+        products: new Map(),
         plannedDate:'',
     })
     
@@ -111,24 +112,24 @@ const CreateOrder = ({handleOrderCreated} : Props) => {
 
     }
 
-    const setBagsOfCurrentOrder = (bags: Map<string, { bag: Bag; quantity: number; }>) => {
+    const setproductsOfCurrentOrder = (products: Map<string, { product: Product; quantity: number; }>) => {
         setCurrentOrder(prev=>{
             if(!prev) return prev 
             
-            const updated = new Map(prev.bags)
+            const updated = new Map(prev.products)
 
-            bags.forEach(({bag,quantity},bagId)=>{
+            products.forEach(({product,quantity},productId)=>{
                 if(quantity == 0){
-                    updated.delete(bagId)
+                    updated.delete(productId)
                 }else{
-                    updated.set(bagId,quantity.toString())
+                    updated.set(productId,quantity.toString())
                 }
             })
-            return {...prev, bags: updated}
+            return {...prev, products: updated}
         })
 
-        if(bagSelectorRef.current) {
-            const estimated = bagSelectorRef.current.getSelectionPrice()
+        if(productSelectorRef.current) {
+            const estimated = productSelectorRef.current.getSelectionPrice()
             setEstimatedPrice(Number(estimated))
             
         }
@@ -137,7 +138,7 @@ const CreateOrder = ({handleOrderCreated} : Props) => {
 
     const hanldeCreateOrder = (e : React.FormEvent<HTMLFormElement>) => {        
         e.preventDefault()
-        if(currentOrder?.bags?.size === 0){
+        if(currentOrder?.products?.size === 0){
             showTopMessage('Une commande doit contenir au moins 1 sac',{backgroundColor:'var(--info-orange)'})
             return 
         }
@@ -222,26 +223,26 @@ const CreateOrder = ({handleOrderCreated} : Props) => {
                     
 
 
-                    <div className='bag-selection'>
+                    <div className='product-selection'>
 
-                        <BagSelector  
-                        ref={bagSelectorRef}
-                        addBagsToCurrentBags={setBagsOfCurrentOrder}
-                        customBagSelectionWrapperCSS= {{}}
+                        <ProductSelector  
+                        ref={productSelectorRef}
+                        addProductsToCurrentProducts={setproductsOfCurrentOrder}
+                        customProductSelectionWrapperCSS= {{}}
                         customButtonSectionStyle={{justifyContent:'center'}}
                         customSaveButtonStyle={{background:'white',color:'var(--info-green)'}}
                         >
 
-                        </BagSelector>
+                        </ProductSelector>
 
-                        <div className='bag-selection-price'>
-                            <div className="bag-selection-item base-price">
+                        <div className='product-selection-price'>
+                            <div className="product-selection-item base-price">
                                 <label htmlFor="">Prix de base:(€)</label>
                                 <div>
                                     {estimatedPrice.toString()}
                                 </div>                             
                             </div>
-                            <div className="bag-selection-item discount">
+                            <div className="product-selection-item discount">
                                 <label htmlFor="">Réduction:(%)</label>
                                 <input               
                                     className='price-discount'
@@ -251,7 +252,7 @@ const CreateOrder = ({handleOrderCreated} : Props) => {
                                     placeholder="Ex: 12"
                                 />
                             </div>
-                            <div className="bag-selection-item deliveryCosts">
+                            <div className="product-selection-item deliveryCosts">
                                 <label htmlFor="">Coût de livraison(€):</label>
                                 <input               
                                     className='price-deliveryCost'
@@ -261,7 +262,7 @@ const CreateOrder = ({handleOrderCreated} : Props) => {
                                     placeholder="Ex: 35"
                                 />
                             </div>
-                            <div className='bag-selection-item create-order-total-price'>
+                            <div className='product-selection-item create-order-total-price'>
                                 <label htmlFor="">Prix total:</label>
                                 <div>
                                         {   

@@ -1,11 +1,11 @@
-.bags-list-wrapper{
+.products-list-wrapper{
     display: flex;
     justify-content: center;
     min-width: 400px;
     max-width: 1400px;
 }
 
-.bags-list{
+.products-list{
     display: flex;
     width: 90%;
     justify-content: flex-start;
@@ -14,7 +14,7 @@
     /* background: rgb(0, 0, 0); */
 }
 
-.bag{    
+.product{    
     margin: 10px ;
     padding: 10px;
     width: 180px;
@@ -26,20 +26,20 @@
     justify-content: end;
 }
 
-.bag:hover{
+.product:hover{
     /* background: var(--ligth-grey); */
     box-shadow: var(--ligth-grey) 10px 8px 8px 5px;
 
 }
 
-.bag-info{
+.product-info{
     display: flex;
     justify-content: space-between;
     align-items: center;
     position: relative;
 }
 
-.bag-info .bag-title{
+.product-info .product-title{
     /* font-family: var(--font-primary); */
     font-weight: lighter;
     /* text-transform: uppercase; */
@@ -52,7 +52,7 @@
 }
 
 
-.bag-info .bag-delete-btn{
+.product-info .product-delete-btn{
     position:absolute;
     right: 0;
     width: 1.2rem;
@@ -64,19 +64,19 @@
 }
 
 
-.bag-images{
+.product-images{
     padding: 10px 15px;
     /* max-height: 200px; */
     height: 90%;
     /* border: 1px solid green; */
 }
 
-.bag-images-title{
+.product-images-title{
     margin-bottom: 10px;
     /* font-weight: bold; */
 }
 
-.bag-images-wrapper{
+.product-images-wrapper{
     display: flex;
     justify-content: center;
     align-items: center;
@@ -86,7 +86,7 @@
     scrollbar-width: none;
     scroll-snap-type: x mandatory; */
 }
-.bag-image-wrapper, .nobag-wrapper{
+.product-image-wrapper, .noproduct-wrapper{
     /* scroll-snap-align: start; */
     padding: 5px;
     position: relative;
@@ -95,20 +95,20 @@
     
 }
 
-.nobag-image{
+.noproduct-image{
     /* margin-top: 20px; */
     width: 60px;
     height: 60px;
 }   
 
 
-.bag-image-close-btn{
+.product-image-close-btn{
     position: absolute;
     right: 0;
     top: 0;
 }
 
-.bag-image{
+.product-image{
     height: 140px;
     width:  120px;
     object-fit: contain;
@@ -121,7 +121,7 @@
 
 
 
-.bag-prop{
+.product-prop{
     display: flex;
     justify-content: space-between;
     width: 100%;
@@ -129,13 +129,13 @@
     
 }
 
-/* .bag-prop div{
+/* .product-prop div{
     min-width: 250px;
     text-align: end;
     
 }
 
-.bag-prop .bag-prop-text{
+.product-prop .product-prop-text{
     min-width: max-content;
     width: 100px;
     white-space: nowrap;
@@ -147,7 +147,7 @@
 
 
 
-.apply-bag-modification{
+.apply-product-modification{
     position: absolute;
     width: 100%;
     /*padding: 10px 0; */
@@ -162,7 +162,7 @@
     align-items: center;
 }
 
-.apply-bag-modification button{
+.apply-product-modification button{
     border: none;
     border-radius: 5px;
     margin: 10px;

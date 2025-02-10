@@ -20,7 +20,7 @@ const OrdersContext = createContext<OrdersContextType | undefined>(undefined);
 
 export const OrdersProvider = ({children}) => {
   
-    const {auth} = useAuth()
+    const {auth}:any = useAuth()
     const [ordersOverviews,setOrdersOverviews] = useState<Array<OrderOverview>>([]);
     const [loading, setLoading] = useState<boolean>(false);
     const [error, setError] = useState<string | null>(null);
@@ -58,7 +58,7 @@ export const OrdersProvider = ({children}) => {
             }   
         }
     
-        // if (['/dashboard', '/orders', '/clients', '/bags'].includes(location.pathname)) {
+        // if (['/dashboard', '/orders', '/clients', '/products'].includes(location.pathname)) {
         if (['/orders' ].includes(location.pathname)) {
             fetchOrders()
         }

@@ -1,6 +1,6 @@
 import React, { useRef } from 'react';
 import { useState,useEffect } from 'react';
-import {Bag, BagWithQuantity, Customer, Order, OrderDto, OrderEditableData, OrderFullyDetailed, OrderOverview, Price} from '../models/entities.ts'
+import {Product, ProductWithQuantity, Customer, Order, OrderDto, OrderEditableData, OrderFullyDetailed, OrderOverview, Price} from '../models/entities.ts'
 
 
 import { useAuth } from '../hooks/useAuth.tsx';
@@ -13,9 +13,7 @@ import { FaAngleLeft, FaRegFilePdf } from "react-icons/fa6";
 import "./css/orders.css"
 import { useOrdersContext } from '../hooks/useOrders.tsx';
 
-import BagCard from '../components/bags/BagCard.tsx';
 import {createOrder, deleteOrderById, getOrderFullyDetailedById, putOrder} from '../api/calls/Order.tsx';
-import AddBagCard from '../components/bags/AddBagCard.tsx';
 
 import SectionTitle from '../components/main/SectionTitle.tsx'
 import { useTopMessage } from '../hooks/useTopMessagePopup.tsx';
@@ -26,6 +24,8 @@ import { RiDeleteBin6Line } from 'react-icons/ri';
 import { handleFieldChange, processFieldChange } from '../utils/stateChange.tsx';
 import { PDFDownloadLink, pdf } from '@react-pdf/renderer';
 import OrderInvoiceTemplate from '../pdf/OrderInvoiceTemplate.tsx';
+import ProductCard from '../components/products/ProductCard.tsx';
+import AddProductCard from '../components/products/AddProductCard.tsx';
 
 
 const initialOrderEditableData: OrderEditableData = {
@@ -35,7 +35,7 @@ const initialOrderEditableData: OrderEditableData = {
   comments: '',             
   description: '',        
   plannedDate: '',        
-  bags: new Map<string, { bag: Bag, quantity: number }>(), 
+  products: new Map<string, { product: Product, quantity: number }>(), 
 };
 
 const currentOrderInitialisation = {
@@ -47,7 +47,7 @@ const currentOrderInitialisation = {
   description: null,
   comments: null,
   price: null,
-  bags: new Map<string, BagWithQuantity>(), 
+  products: new Map<string, ProductWithQuantity>(), 
   plannedDate: null,
   createdAt: null,
   updatedAt: null,
@@ -68,16 +68,18 @@ interface ChildOrderPriceRef{
 const Orders = () => {
 
   
-  const {auth} = useAuth()
+  const {auth}:any = useAuth()
 
-  const bagSelectorChildPopup = useRef<ChildPopupRef | null>(null);
+  const productSelectorChildPopup = useRef<ChildPopupRef | null>(null);
   const orderPriceRef = useRef<ChildOrderPriceRef | null>(null);
 
   
-  const descriptionRef = useRef<string | null>(null);
-  const commentsRef = useRef<string | null>(null);
+  // const descriptionRef = useRef<string | null>(null);
+  const descriptionRef = useRef<HTMLDivElement | null>(null);
+  // const commentsRef = useRef<string | null>(null);
+  const commentsRef = useRef<HTMLDivElement | null>(null);
 
-  const {showTopMessage} = useTopMessage()
+  const {showTopMessage}:any = useTopMessage()
 
   const { ordersOverviews,  loading, error , refreshOrdersOverviews,removeOrderFromOrdersState,modifyOrderFromOrdersState,refreshOrderOverviewById} = useOrdersContext();
 
@@ -104,21 +106,21 @@ const Orders = () => {
 
   
 
-  const removeBagFromOrder = (bag : Bag) => {
-    // console.log("received bag to remove", bag);
+  const removeProductFromOrder = (product : Product) => {
+    // console.log("received product to remove", product);
 
     setCurrentOrder(prev => {
       if (!prev) return prev;
-      if(bag.id === undefined) return prev
+      if(product.id === undefined) return prev
 
-      const updatedBags = new Map(prev.bags);
-      updatedBags.delete(bag.id); 
+      const updatedproducts = new Map(prev.products);
+      updatedproducts.delete(product.id); 
 
       setCurrentOrderHasBeenModified(true)
       
       return {
         ...prev,
-        bags: updatedBags
+        products: updatedproducts
       };
     });
   }
@@ -132,10 +134,10 @@ const Orders = () => {
       const price = recomputeOrderPrice()
       // console.log("recomputed price", price)
 
-      const bagIdToQmap = new Map<string,string>() 
-      if(currentOrder?.bags){
-        currentOrder?.bags.forEach((bagWithQ,bagId)=>{
-          bagIdToQmap.set(bagWithQ.bag.id!!,bagWithQ.quantity.toString())
+      const productIdToQmap = new Map<string,string>() 
+      if(currentOrder?.products){
+        currentOrder?.products.forEach((productWithQ,productId)=>{
+          productIdToQmap.set(productWithQ.product.id!!,productWithQ.quantity.toString())
         })
       }
       
@@ -147,7 +149,7 @@ const Orders = () => {
         ...rest,
         price: price,
         customerId:currentOrder.customer.id,
-        bags:Object.fromEntries(bagIdToQmap)
+        products:Object.fromEntries(productIdToQmap)
       }
 
       // console.log("modifiedOrder",modifiedOrder)
@@ -199,50 +201,50 @@ const Orders = () => {
       } return null
   }
 
-  const handleBagQuantityChange = (bag : Bag, newQuantity : number) => {
-    if(newQuantity === 0 ) return removeBagFromOrder(bag)
+  const handleproductQuantityChange = (product : Product, newQuantity : number) => {
+    if(newQuantity === 0 ) return removeProductFromOrder(product)
     setCurrentOrder((prev)=>{
       if(!prev) return prev
-      if(bag.id === undefined) return prev
+      if(product.id === undefined) return prev
 
-      const updatedMap = new Map(prev.bags);
-      updatedMap.set(bag.id, {bag,quantity:newQuantity});
+      const updatedMap = new Map(prev.products);
+      updatedMap.set(product.id, {product,quantity:newQuantity});
       setCurrentOrderHasBeenModified(true)
 
       return {
         ...prev,
-        bags: updatedMap
+        products: updatedMap
       }
     })
   }
 
 
-  const addBagSelectionToCurrentBags = (bags: Map<string, BagWithQuantity>)=> {
+  const addProductSelectionToCurrentProducts = (products: Map<string, ProductWithQuantity>)=> {
     // console.log('Final selection')
-    // console.log(bags)
+    // console.log(products)
     setCurrentOrder(prev=>{
       if(!prev) return prev
 
-      const updated = new Map(prev.bags instanceof Map ? prev.bags : []);
+      const updated = new Map(prev.products instanceof Map ? prev.products : []);
 
 
-      bags.forEach(({bag,quantity},bagId)=>{
-        if(updated.has(bagId)){
-          const existingBagQuantity = updated.get(bagId)?.quantity ?? 0
-          const newQ = Number(existingBagQuantity) + quantity
-          updated.set(bagId,{bag,quantity:newQ})
+      products.forEach(({product,quantity},productId)=>{
+        if(updated.has(productId)){
+          const existingProductQuantity = updated.get(productId)?.quantity ?? 0
+          const newQ = Number(existingProductQuantity) + quantity
+          updated.set(productId,{product,quantity:newQ})
         }else{
-          updated.set(bagId,{bag,quantity})
+          updated.set(productId,{product,quantity})
         }
       })
       setCurrentOrderHasBeenModified(true)
-      showTopMessage(`${bags.size} modèle(s) ajouté à la commande `, {backgroundColor:'var(--info-green)'})
-      if(bagSelectorChildPopup.current) bagSelectorChildPopup.current.hidePopup()
+      showTopMessage(`${products.size} modèle(s) ajouté à la commande `, {backgroundColor:'var(--info-green)'})
+      if(productSelectorChildPopup.current) productSelectorChildPopup.current.hidePopup()
 
 
       return {
         ...prev,
-        bags: updated
+        products: updated
       }
     })
   }
@@ -274,15 +276,15 @@ const Orders = () => {
           setCurrentOrder(prev => {
             if (!prev) return prev;
         
-            const bagsAsMap = order.bags instanceof Map
-                ? order.bags
-                : new Map<string, { bag: Bag; quantity: number }>(
-                    Object.entries(order.bags!!).map(([key, value]) => [key, value as BagWithQuantity])
+            const productsAsMap = order.products instanceof Map
+                ? order.products
+                : new Map<string, { product: Product; quantity: number }>(
+                    Object.entries(order.products!!).map(([key, value]) => [key, value as ProductWithQuantity])
             );
                     
             return {
                 ...order,
-                bags: bagsAsMap
+                products: productsAsMap
             };
           });
         
@@ -327,14 +329,16 @@ const Orders = () => {
 
   const handleNewOrderCreated = async (order : OrderDto) => {
 
-      const bagsObject = Object.fromEntries(order.bags)
-     
-      const orderWithBagsObject = {
+      // const productsObject = Object.fromEntries(order.products)
+      const productsObject = order.products ? Object.fromEntries(order.products) : {};
+
+
+      const orderWithProductsObject = {
         ...order,
-        bags: bagsObject,
+        products: productsObject,
       };
      
-      const {id,err} = await createOrder(auth,orderWithBagsObject)
+      const {id,err} = await createOrder(auth,orderWithProductsObject)
       
      if(!err){
       showTopMessage(`La commande a bien été crée`,{backgroundColor:'var(--info-green)'})
@@ -518,11 +522,11 @@ const Orders = () => {
   
   
 
-                          <div className='bag-infos'>
-                            <div className='bags-section-title'>
+                          <div className='product-infos'>
+                            <div className='products-section-title'>
                               <div className="left-title">
                                 <div className='title'>Produits</div>
-                                <AddBagCard addBagsSelectionToCurrentBags={addBagSelectionToCurrentBags} ref={bagSelectorChildPopup}/>
+                                <AddProductCard addProductsSelectionToCurrentProducts={addProductSelectionToCurrentProducts} ref={productSelectorChildPopup}/>
                               </div>
                               <button  
                                 className={`button-apply-order-changes ${currentOrderHasBeenModified ? 'active' : ''}`}
@@ -530,15 +534,15 @@ const Orders = () => {
                                     Appliquer les changements
                               </button>
                             </div>
-                            <div className='bags-list'>   
+                            <div className='products-list'>   
   
-                                {currentOrder?.bags instanceof Map && Array.from(currentOrder.bags.values()).map((bagWithQuantity, index) => (
-                                    <BagCard                                                                           
+                                {currentOrder?.products instanceof Map && Array.from(currentOrder.products.values()).map((productWithQuantity, index) => (
+                                    <ProductCard                                                                           
                                       key={index} 
-                                      bag={bagWithQuantity.bag} 
-                                      initialQuantity={bagWithQuantity.quantity} 
-                                      onBagRemoved={removeBagFromOrder} 
-                                      updateBagQuantity={handleBagQuantityChange} 
+                                      product={productWithQuantity.product} 
+                                      initialQuantity={productWithQuantity.quantity} 
+                                      onProductRemoved={removeProductFromOrder} 
+                                      updateProductQuantity={handleproductQuantityChange}                                       
                                       deleteButtonVisible={true}
                                     />
                                   ))
@@ -548,9 +552,9 @@ const Orders = () => {
 
                           <div className="order-infos">
                             <div className='order-price-section'>
-                                {currentOrder?.bags && <OrderPrice 
+                                {currentOrder?.products && <OrderPrice 
                                                             ref={orderPriceRef} 
-                                                            bags={currentOrder.bags} 
+                                                            products={currentOrder.products} 
                                                             order={currentOrder} 
                                                             handleOrderPriceChange={handleOrderPriceChange}/>}                             
                             </div>

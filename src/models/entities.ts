@@ -22,7 +22,7 @@ export interface Order {
     description?: string | null;
     comments?: string | null;
     price: Price | null;
-    bags?: Map<string, string> | null;  // "productId" to quantity
+    products?: Map<string, string> | null;  // "productId" to quantity
     // plannedDate?: {best:string,worst:string} | null;
     plannedDate?: string | null;
     createdAt?: string | null;
@@ -36,8 +36,8 @@ export interface Price{
     discount: string | undefined | null;
 }
 
-export interface BagWithQuantity{
-    bag: Bag;
+export interface ProductWithQuantity{
+    product: Product;
     quantity: number;
 }
 
@@ -51,8 +51,8 @@ export interface OrderFullyDetailed{
     description: string | null;
     comments: string | null;
     price: Price | null;
-    // bags: Map<Bag,String> | null;
-    bags: Map<string,BagWithQuantity> | null;
+    // products: Map<Product,String> | null;
+    products: Map<string,ProductWithQuantity> | null;
     plannedDate: string | null;
     createdAt: string | null;
     updatedAt: string | null;
@@ -68,7 +68,7 @@ export interface OrderDto{
     description?: string | null;
     comments?: string | null;
     price: Price | null;
-    bags?: Map<string, string> | null;  // "productId" to quantity
+    products?: Map<string, string> | null;  // "productId" to quantity
     // plannedDate?: {best:string,worst:string} | null;
     plannedDate?: string | null;
     
@@ -96,11 +96,11 @@ export interface OrderEditableData{
     description : string | null;
     // plannedDate : {best:string,worst:string} | null;
     plannedDate?: string | null;
-    bags: Map<string,BagWithQuantity> | null;
+    products: Map<string,ProductWithQuantity> | null;
 }
 
 
-export interface Bag {
+export interface Product {
     id?: string ;
     marketingName?: string | null;
     retailPrice?: string | null;

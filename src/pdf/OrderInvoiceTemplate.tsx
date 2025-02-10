@@ -32,7 +32,7 @@ const styles = StyleSheet.create({
     // padding: 10,
     // flexGrow: 1
   },
-  bagRow:{
+  productRow:{
     display:'flex',
     flexDirection:'row',
     justifyContent:'space-evenly'
@@ -100,18 +100,18 @@ const OrderInvoiceTemplate = ({ detailedOrder }: Props) => {
         </View>
 
         <View style={styles.section}>
-          <View style={styles.bagRow}>
+          <View style={styles.productRow}>
             <Text style={{width:'400px',margin:3}}>Modèle</Text>
             <Text style={{width:'150px',margin:3}}>Quantité</Text>
             <Text style={{width:'150px',margin:3}}>Prix unitaire</Text>
             <Text style={{width:'150px',margin:3}}>Prix total</Text>
           </View>
-          {detailedOrder?.bags && Array.from(detailedOrder?.bags?.entries()).map(([bagId,bagWithQ])=>(
-              <View key={bagId} style={styles.bagRow}>
-                <Text style={{width:'400px',margin:3}}>{bagWithQ.bag.marketingName}</Text>
-                <Text style={{width:'150px',margin:3}}>x{bagWithQ.quantity}</Text>
-                <Text style={{width:'150px',margin:3}}>{bagWithQ.bag.retailPrice}€</Text>
-                <Text style={{width:'150px',margin:3}}>{parseInt(bagWithQ?.bag?.retailPrice!!,10) * bagWithQ.quantity}€</Text>
+          {detailedOrder?.products && Array.from(detailedOrder?.products?.entries()).map(([productId,productWithQ])=>(
+              <View key={productId} style={styles.productRow}>
+                <Text style={{width:'400px',margin:3}}>{productWithQ.product.marketingName}</Text>
+                <Text style={{width:'150px',margin:3}}>x{productWithQ.quantity}</Text>
+                <Text style={{width:'150px',margin:3}}>{productWithQ.product.retailPrice}€</Text>
+                <Text style={{width:'150px',margin:3}}>{parseInt(productWithQ?.product?.retailPrice!!,10) * productWithQ.quantity}€</Text>
               </View>
 
           ))}

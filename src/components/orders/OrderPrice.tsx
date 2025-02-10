@@ -1,6 +1,6 @@
 import React, { Dispatch, SetStateAction, useEffect, useImperativeHandle, useRef, useState } from 'react'
 import { MdInfoOutline } from 'react-icons/md';
-import { Bag, Order, OrderFullyDetailed, Price } from '../../models/entities';
+import {  Order, OrderFullyDetailed, Price, Product } from '../../models/entities';
 
 
 import '../css/orderPrice.css'
@@ -9,21 +9,21 @@ import InfoButtonPopup from '../main/InfoButtonPopup';
 
 
 interface Props{
-    bags : Map<string,{bag:Bag, quantity:number}> | null | undefined;
+    products : Map<string,{product:Product, quantity:number}> | null | undefined;
     order: OrderFullyDetailed;
     // handleOrderDataChange: (orderId: string,key:string, newValue: string) => void;
     handleOrderPriceChange: () => void;
 }
 
 
-const OrderPrice = React.forwardRef(({bags,order, handleOrderPriceChange} : Props,ref) => {
+const OrderPrice = React.forwardRef(({products,order, handleOrderPriceChange} : Props,ref) => {
     
     if(order == null || order === undefined) return 
 
     const initialDiscount = order?.price?.discount ?? "0"
     const initialDeliveryCosts = order?.price?.deliveryCost ??  "0"
     
-    const [bagsTotalPrice,setBagsTotalPrice] = useState(0);
+    const [productsTotalPrice,setproductsTotalPrice] = useState(0);
     const [calculatedPrice,setCalculatedPrice] = useState(0);
     const [priceCalculationsVisible,setPriceCalculationsVisible] = useState(false);
 
@@ -46,11 +46,11 @@ const OrderPrice = React.forwardRef(({bags,order, handleOrderPriceChange} : Prop
 
     useEffect(()=>{
         setModifiedData(prev => prev ? {...prev, discount:initialDiscount, deliveryCost: initialDeliveryCosts} : prev)
-    },[bags])
+    },[products])
 
     useEffect(()=>{
         
-        if (bags === null || bags === undefined) return 
+        if (products === null || products === undefined) return 
 
 
         const discount = Number(modifiedData.discount)
@@ -58,22 +58,22 @@ const OrderPrice = React.forwardRef(({bags,order, handleOrderPriceChange} : Prop
 
         calculateDisplayedPrice(discount,deliveryCosts)
         
-    },[bags,order,modifiedData.discount,modifiedData.deliveryCost])
+    },[products,order,modifiedData.discount,modifiedData.deliveryCost])
 
 
 
     const calculateDisplayedPrice = (discount : number, deliveryCost : number)=>{
-        if (bags === null || bags === undefined) return 
+        if (products === null || products === undefined) return 
         
-        let bagsTotalPrice = 0;
-        bags.forEach(( {bag, quantity} ,index) => {
-            bagsTotalPrice += Number(bag.retailPrice) * quantity
+        let productsTotalPrice = 0;
+        products.forEach(( {product, quantity} ,index) => {
+            productsTotalPrice += Number(product.retailPrice) * quantity
         });
 
-        setBagsTotalPrice(bagsTotalPrice)
+        setproductsTotalPrice(productsTotalPrice)
 
 
-        var totalPrice = bagsTotalPrice;
+        var totalPrice = productsTotalPrice;
         totalPrice *=  (1-discount)
         totalPrice += deliveryCost
 
@@ -98,12 +98,12 @@ const OrderPrice = React.forwardRef(({bags,order, handleOrderPriceChange} : Prop
                 >
                     <div className='price-calculations'>
                         <div className="decompte">
-                            {bags instanceof Map && Array.from(bags.values()).map((bagWithQ ,index) => (
-                                <div key={index}>{bagWithQ.bag.retailPrice} x {bagWithQ.quantity} =  {(Number(bagWithQ.bag.retailPrice) * bagWithQ.quantity).toFixed(2)}€</div>
+                            {products instanceof Map && Array.from(products.values()).map((productWithQ ,index) => (
+                                <div key={index}>{productWithQ.product.retailPrice} x {productWithQ.quantity} =  {(Number(productWithQ.product.retailPrice) * productWithQ.quantity).toFixed(2)}€</div>
                             ))}
                         </div>
                         <div className="resume">
-                            <div className='total-price'>{bagsTotalPrice}€</div>
+                            <div className='total-price'>{productsTotalPrice}€</div>
                             <div className='discount-container'>
                                 <div className='discount-text'>
                                 Réduction:

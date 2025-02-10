@@ -25,7 +25,7 @@ const CustomerForm = ({ onFormSubmit }: Props) => {
   //   console.log(customerFormData)
   // },[customerFormData])
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     
     // if (name.startsWith('shippingAddress.') || name.startsWith('professionalAddress.')) {
@@ -66,7 +66,7 @@ const CustomerForm = ({ onFormSubmit }: Props) => {
             type="text"
             id="name"
             name="name"
-            value={customerFormData.name}
+            value={customerFormData.name!!}
             onChange={handleInputChange}
           />
         </div>
@@ -77,7 +77,7 @@ const CustomerForm = ({ onFormSubmit }: Props) => {
             type="text"
             id="mail"
             name="mail"
-            value={customerFormData.mail}
+            value={customerFormData.mail!!}
             onChange={handleInputChange}
           />
         </div>
@@ -88,7 +88,7 @@ const CustomerForm = ({ onFormSubmit }: Props) => {
             type="text"
             id="tva"
             name="tva"
-            value={customerFormData.tva}
+            value={customerFormData.tva!!}
             onChange={handleInputChange}
           />
         </div>
@@ -99,7 +99,7 @@ const CustomerForm = ({ onFormSubmit }: Props) => {
             type="text"
             id="phone"
             name="phone"
-            value={customerFormData.phone}
+            value={customerFormData.phone!!}
             onChange={handleInputChange}
           />
         </div>
@@ -108,7 +108,7 @@ const CustomerForm = ({ onFormSubmit }: Props) => {
           <label htmlFor="type">Type:</label>
           <select 
               name="type" id="type"
-              value={customerFormData.type}
+              value={customerFormData.type!!}
               onChange={handleInputChange}
 
               >
@@ -125,7 +125,7 @@ const CustomerForm = ({ onFormSubmit }: Props) => {
                 type="text"
                 id="professionalAddress"
                 name="professionalAddress"
-                value={customerFormData.professionalAddress}
+                value={customerFormData.professionalAddress!!}
                 onChange={handleInputChange}
               />
             </div>
@@ -137,7 +137,7 @@ const CustomerForm = ({ onFormSubmit }: Props) => {
                 type="text"
                 id="shippingAddress"
                 name="shippingAddress"
-                value={customerFormData.shippingAddress}
+                value={customerFormData.shippingAddress!!}
                 onChange={handleInputChange}
               />
             </div>

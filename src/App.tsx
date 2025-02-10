@@ -6,7 +6,7 @@ import './App.css'
 import MainNavbar from './components/main/MainNavbar.tsx'
 import Orders from './pages/Orders.tsx';
 import Materials from './pages/Materials.tsx';
-import Bags from './pages/Bags.tsx';
+import Products from './pages/Products.tsx';
 import Dashboard from './pages/Dashboard.tsx';
 
 import ProtectedRoutes from './components/main/ProtectedRoutes.tsx';
@@ -34,7 +34,7 @@ const App = () => {
           
           <Route path='/' element={<Layout/>}>  
             {/* Public routes  */}
-            <Route path="/confirmAccount" element={<ConfirmAccount />} />
+            {/* <Route path="/confirmAccount" element={<ConfirmAccount />} />/ */}
             <Route path="/" element={<Navigate to="login"/>} />
             <Route path="*"  element={<Missing/>} />
 
@@ -48,7 +48,7 @@ const App = () => {
                 <Route path='/dashboard' element={ <Dashboard /> } />
                 <Route path='/orders' element={ <Orders/> } />
                 <Route path='/clients' element={<Customers />} />
-                <Route path='/bags' element={<Bags />} />
+                <Route path='/products' element={<Products />} />
                 <Route path="/materials" element={<Materials />} />
               </Route>
             

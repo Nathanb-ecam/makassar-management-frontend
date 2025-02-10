@@ -8,6 +8,7 @@ import '../css/navbar.css'
 
 import { IoColorPalette } from "react-icons/io5";
 import { FaHouse,FaRegPenToSquare,FaBagShopping,FaPerson, FaAngleLeft } from 'react-icons/fa6';
+import { IoMdClose } from 'react-icons/io';
 
 
 
@@ -39,7 +40,7 @@ const MainNavbar = () => {
   
     {/* <div className="navbar "  style={{display:visibleNavbar? 'block':'none', transition:'translate 1s'}}>     */}
     <div className={`navbar ${visibleNavbar ? 'visible':'hidden'}`}>    
-      
+      <IoMdClose className='close-navbar-btn' onClick={()=>setVisibleNavbar(false)}/>
       <ul>
         {/* <li className={`nav-li-item ${selectedItem === "dashboard" ? "selected" : "" }`} onClick={(e)=>navigateTo("/dashboard","dashboard")}>
           <FaHouse className='nav-icons'/>
@@ -53,7 +54,7 @@ const MainNavbar = () => {
           <FaPerson className='nav-icons'/>
           <button className="nav-button" >Clients</button>
         </li>
-        <li className={`nav-li-item ${selectedItem === "bags" ? "selected" : "" }`} onClick={(e)=>navigateTo("/bags","bags")}>
+        <li className={`nav-li-item ${selectedItem === "products" ? "selected" : "" }`} onClick={(e)=>navigateTo("/products","products")}>
           <FaBagShopping className='nav-icons'/>
           <button className="nav-button" >Sacs</button>
         </li>

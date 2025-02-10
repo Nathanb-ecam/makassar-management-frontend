@@ -1,6 +1,6 @@
 import React from 'react'
 import axios from '../axios'
-import { Bag, OrderFullyDetailed } from '../../models/entities'
+import { Product, OrderFullyDetailed } from '../../models/entities'
 import Orders from '../../pages/Orders';
 import { processHttpError } from '../../utils/httpErros';
 
@@ -113,12 +113,12 @@ export const putOrder = async (auth,orderId,dataObj) => {
 
 
 
-export const updateBagsForOrderWithId = async (auth,orderId,bagIdsToQuantity: Map<string,string>) : Promise<boolean> => {
+export const updateProductsForOrderWithId = async (auth,orderId,productIdsToQuantity: Map<string,string>) : Promise<boolean> => {
     try{
-        const plainBagsIdsToQuantity = Object.fromEntries(bagIdsToQuantity);
-        console.log("DEBUG",plainBagsIdsToQuantity);
+        const plainProductsIdsToQuantity = Object.fromEntries(productIdsToQuantity);
+        console.log("DEBUG",plainProductsIdsToQuantity);
         const response = await axios.put(`/${auth.tenantId}/orders/${orderId}`,
-        {"bags":plainBagsIdsToQuantity},
+        {"Products":plainProductsIdsToQuantity},
         {
             headers: {'Content-type':'application/json','Authorization': `Bearer ${auth.accessToken}`},
             withCredentials:true 
@@ -127,10 +127,10 @@ export const updateBagsForOrderWithId = async (auth,orderId,bagIdsToQuantity: Ma
         )
         if (response.status == 200) return true  
         else false 
-        // console.log(`Update bags for order: `,JSON.stringify(response?.data))
+        // console.log(`Update Products for order: `,JSON.stringify(response?.data))
         
     }catch(err){
-        var errMsg = processHttpError('updateBagsForOrderWithId',err);
+        var errMsg = processHttpError('updateProductsForOrderWithId',err);
         return false
     }
     return false
@@ -208,16 +208,16 @@ export const getOrderFullyDetailedById = async (auth,orderId) => {
 }
 
 
-export const addBagToOrder = async (auth,orderId,bagId, quantity)=>{
+export const addProductToOrder = async (auth,orderId,productId, quantity)=>{
     try{
-        const response = await axios.get(`/${auth.tenantId}/orders/${orderId}/addBag/${bagId}/${quantity}`,{
+        const response = await axios.get(`/${auth.tenantId}/orders/${orderId}/addProduct/${productId}/${quantity}`,{
             headers: {'Content-type':'application/json','Authorization': `Bearer ${auth.accessToken}`},
             withCredentials:true }
         )
         // setOrders(response.data)
         // console.log("Fetched orders: ",JSON.stringify(response?.data))
         if(response?.status === 200){
-            console.log("Successfully added bag to order: ")
+            console.log("Successfully added Product to order: ")
             return true
         }else{
             return false

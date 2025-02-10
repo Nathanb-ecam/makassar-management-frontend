@@ -18,5 +18,5 @@
 </div>
 <div style="display: flex; flex-wrap: wrap;">
     <img src="documentation/project-images/new-order.png" alt="new order form"  width="50%" height="50%"/>
-    <img src="documentation/project-images/addBagToOrder.png" alt="add product to order"  width="50%" height="50%"/>
+    <img src="documentation/project-images/addProductToOrder.png" alt="add product to order"  width="50%" height="50%"/>
 </div>

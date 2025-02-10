@@ -20,7 +20,7 @@ const Popup = ({title,onPopupClose, popupVisible = true, customCSS,customCSSPopu
     <>
     {popupVisible && (
         <>
-        <div className="popup-overlay"></div>
+        <div className="popup-overlay" onClick={onPopupClose}></div>
           <div className="popup" style={customCSS}>
             <div className="popup-header">
                 <div className="pop-title">{title}</div>

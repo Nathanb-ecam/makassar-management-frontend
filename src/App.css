@@ -33,14 +33,16 @@
   --primary:rgb(76, 75, 73);
   --primary-lighter:rgb(109, 108, 106);
   
+  
   /* RED THEME */
   /* --primary:hsla(0, 79%, 54%, .808);      */
   /* --primary-lighter:hsla(0, 79%, 63%, 0.808);      */
   
   /* BLUE THEME */
-  --primary:hsla(211, 73%, 44%);     
-  --primary-lighter:rgb(75, 128, 244);
+  /* --primary:hsla(211, 73%, 44%);    */
+  /* --primary-lighter:rgb(75, 128, 244); */
   
+
   --secondary:rgb(208, 191, 170);
   --secondary:rgb(123, 126, 133);
 

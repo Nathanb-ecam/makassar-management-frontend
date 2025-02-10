@@ -1,12 +1,12 @@
 import React from 'react'
 import axios from '../axios'
 import { processHttpError } from '../../utils/httpErros'
-import { Bag } from '../../models/entities'
+import { Product } from '../../models/entities'
 
-export const getBagsWithIds = async (auth,ids: string[]) => {
+export const getProductsWithIds = async (auth,ids: string[]) => {
     
     try{
-        const response = await axios.post(`/${auth.tenantId}/bags/withIds`,
+        const response = await axios.post(`/${auth.tenantId}/products/withIds`,
         {
             stringList:ids
         },
@@ -17,8 +17,8 @@ export const getBagsWithIds = async (auth,ids: string[]) => {
         )
         if(response?.status === 200){
             if(Array.isArray(response.data)){
-                console.log("Fetched bags: ",JSON.stringify(response?.data))
-                return {"bags":response.data}
+                console.log("Fetched Products: ",JSON.stringify(response?.data))
+                return {"products":response.data}
             }else{
                 return null
             }
@@ -29,32 +29,32 @@ export const getBagsWithIds = async (auth,ids: string[]) => {
     }
 }
 
-export const getBags = async (auth) => {
+export const getProducts = async (auth) => {
     try{
-        const response = await axios.get(`/${auth.tenantId}/bags`,
+        const response = await axios.get(`/${auth.tenantId}/products`,
         {
             headers: {'Content-type':'application/json','Authorization': `Bearer ${auth.accessToken}`},
             withCredentials:true 
         },
         )
         
-        // console.log("Fetched bags: ",JSON.stringify(response?.data))
+        // console.log("Fetched Products: ",JSON.stringify(response?.data))
         if(Array.isArray(response.data)){
-            return {"bags":response.data}
+            return {"products":response.data}
         }else{
-            return {"err":"Bags is not an array"}
+            return {"err":"Products is not an array"}
         }
     }catch(err){
-        var msg = processHttpError("getBagsWithIds",err);
+        var msg = processHttpError("getProductsWithIds",err);
         return {"err" : msg}
     }
 }
 
 
-export const putBag = async (auth,bagId,dataObj) => {
+export const putProduct = async (auth,productId,dataObj) => {
     
     try{
-        const response = await axios.put(`/${auth.tenantId}/bags/${bagId}`,
+        const response = await axios.put(`/${auth.tenantId}/products/${productId}`,
         dataObj,
         {
             headers: {'Content-type':'application/json','Authorization': `Bearer ${auth.accessToken}`},
@@ -62,7 +62,7 @@ export const putBag = async (auth,bagId,dataObj) => {
         }
         )
         
-        console.log("Modified bag: ",JSON.stringify(response?.data))
+        console.log("Modified Product: ",JSON.stringify(response?.data))
         if(response?.status === 200){
             return true
         }
@@ -74,17 +74,17 @@ export const putBag = async (auth,bagId,dataObj) => {
 }
 
 
-export const deleteBag = async (auth,bagId,imageUrls) => {
+export const deleteProduct = async (auth,productId,imageUrls) => {
     
     try{
-        const response = await axios.delete(`/${auth.tenantId}/bags/${bagId}`,{
+        const response = await axios.delete(`/${auth.tenantId}/products/${productId}`,{
             headers: {'Content-type':'application/json','Authorization': `Bearer ${auth.accessToken}`},
             data:{stringList:imageUrls},
             withCredentials:true 
         })
     
         if(response?.status === 200){
-            console.log("Deleted bag: ",JSON.stringify(response?.data))
+            console.log("Deleted Product: ",JSON.stringify(response?.data))
             return true
         }
         return false
@@ -97,11 +97,11 @@ export const deleteBag = async (auth,bagId,imageUrls) => {
 
 
 
-export const createBagWithImages = async (auth, formData : FormData) : Promise<Bag | null> =>{
-    console.log("createBagWithImages" + auth.tenantId)
+export const createProductWithImages = async (auth, formData : FormData) : Promise<Product | null> =>{
+    console.log("createProductWithImages" + auth.tenantId)
     try{
         const response = await axios.post(
-            `/${auth.tenantId}/bags/withImages`,
+            `/${auth.tenantId}/products/withImages`,
             formData,
             {
                 headers: {'Content-type':'multipart/form-data','Authorization': `Bearer ${auth.accessToken}`},
@@ -110,12 +110,12 @@ export const createBagWithImages = async (auth, formData : FormData) : Promise<B
         )
         if(response?.status === 201){
             console.log(response)
-            return response.data.bag
+            return response.data.product
         } 
         else return null
 
     }catch(err){
-        var msg = processHttpError("getBagsWithIds",err);
+        var msg = processHttpError("getProductsWithIds",err);
         console.log(msg)
         return null
     }

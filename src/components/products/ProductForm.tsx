@@ -1,15 +1,15 @@
 import React, { useEffect, useState } from 'react'
-import { Bag } from '../../models/entities'
+import { Product } from '../../models/entities'
 
-import '../css/bagform.css'
+import '../css/productform.css'
 
 interface Props{
-    onBagFormSubmit :(formData: FormData) => void;
+    onProductFormSubmit :(formData: FormData) => void;
 }
 
-const BagForm = ({onBagFormSubmit} : Props) => {
+const ProductForm = ({onProductFormSubmit} : Props) => {
   
-    const [bag,setBag] = useState<Bag>({
+    const [product,setproduct] = useState<Product>({
         marketingName:'',
         retailPrice:'',
         sku:'',
@@ -21,7 +21,7 @@ const BagForm = ({onBagFormSubmit} : Props) => {
     const handleInputChange = (e : React.ChangeEvent<HTMLInputElement>) => {
         const {name, value} = e.target
 
-        setBag(prev=> prev ? {...prev, [name]:value} : prev)
+        setproduct(prev=> prev ? {...prev, [name]:value} : prev)
     }
    
     const handleImageChange = (e : React.ChangeEvent<HTMLInputElement>) =>{
@@ -36,11 +36,11 @@ const BagForm = ({onBagFormSubmit} : Props) => {
         }
     }
 
-    const handleBagSubmit = (e : React.FormEvent<HTMLFormElement>)=>{
+    const handleproductSubmit = (e : React.FormEvent<HTMLFormElement>)=>{
         e.preventDefault()
 
         const formData = new FormData();
-        formData.append("data",JSON.stringify(bag))
+        formData.append("data",JSON.stringify(product))
 
         images?.forEach((image : File)=>{
             formData.append("image",image)
@@ -50,13 +50,13 @@ const BagForm = ({onBagFormSubmit} : Props) => {
         //     console.log(`${key}:`, value);
         // }
 
-        onBagFormSubmit(formData)
+        onProductFormSubmit(formData)
         
     }
 
 
     return (
-    <form onSubmit={handleBagSubmit} className='create-bag-form'>
+    <form onSubmit={handleproductSubmit} className='create-product-form'>
         <div className='form-field-wrapper'>
             <label htmlFor="marketingName">Nom du sac:</label>
             <input 
@@ -64,7 +64,7 @@ const BagForm = ({onBagFormSubmit} : Props) => {
                 type="text" 
                 id='marketingName'
                 name='marketingName'
-                value={bag.marketingName}
+                value={product.marketingName!!}
                 onChange={handleInputChange}
             />
         </div>
@@ -76,7 +76,7 @@ const BagForm = ({onBagFormSubmit} : Props) => {
                 type="number" 
                 id='retailPrice'
                 name='retailPrice'
-                value={bag.retailPrice}
+                value={product.retailPrice!!}
                 onChange={handleInputChange}
             />
         </div>
@@ -87,7 +87,7 @@ const BagForm = ({onBagFormSubmit} : Props) => {
                 type="number" 
                 id='sku'
                 name='sku'
-                value={bag.sku}
+                value={product.sku!!}
                 onChange={handleInputChange}
             />
         </div>
@@ -115,7 +115,7 @@ const BagForm = ({onBagFormSubmit} : Props) => {
             }
         </div>
 
-        <input className='bag-form-submit' type="submit" value="Confirmer" />
+        <input className='product-form-submit' type="submit" value="Confirmer" />
 
 
 
@@ -123,4 +123,4 @@ const BagForm = ({onBagFormSubmit} : Props) => {
   )
 }
 
-export default BagForm
+export default ProductForm

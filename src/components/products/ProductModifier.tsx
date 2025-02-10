@@ -1,21 +1,21 @@
 import React, { ChangeEvent, useEffect, useState } from 'react'
 import Popup from '../main/Popup'
-import { Bag } from '../../models/entities';
+import { Product } from '../../models/entities';
 
-import '../css/bagModifier.css'
+import '../css/productModifier.css'
 
 interface Props{
-    bag : Bag | undefined | null;
-    applyBagModifications: (bagId :string, bag : Bag) => void; 
+    product : Product | undefined | null;
+    applyProductModifications: (productId :string, product : Product) => void; 
     onPopupClose: () => void;
 }
 
 
-const BagModifier = ({bag, applyBagModifications, onPopupClose} : Props) => {
+const productModifier = ({product, applyProductModifications, onPopupClose} : Props) => {
   
-    if (bag === null || bag === undefined) return 
+    if (product === null || product === undefined) return 
 
-    const [modifications, setModifications] = useState<Bag>({})
+    const [modifications, setModifications] = useState<Product>({})
 
     useEffect(()=>{
         console.log(modifications)
@@ -32,39 +32,39 @@ const BagModifier = ({bag, applyBagModifications, onPopupClose} : Props) => {
         // verifier que modifications est bien différent du sac original 
         if (modifications === undefined || modifications === null) return                                
         
-        applyBagModifications(bag.id, modifications)
+        applyProductModifications(product.id!!, modifications)
     }
 
     return (
     <>
         <Popup 
-            title={`${bag.marketingName}`} 
+            title={`${product.marketingName}`} 
             customCSS={{maxWidth:"40vw"}}
             onPopupClose={onPopupClose}>
-            <div className="bag-modifier">
+            <div className="product-modifier">
                 <form onSubmit={confirmChanges}>
-                    <div className="bag-modifier-fields">
-                        <div className='bag-field'>
+                    <div className="product-modifier-fields">
+                        <div className='product-field'>
                             <label htmlFor="marketingName">Modèle: </label>
-                            <input id="marketingName" name='marketingName' value={modifications?.marketingName ? modifications.marketingName : bag.marketingName} onChange={handleElementChange}/>
+                            <input id="marketingName" name='marketingName' value={modifications?.marketingName ? modifications.marketingName : product.marketingName!!} onChange={handleElementChange}/>
                         </div>
-                        <div className='bag-field'>
+                        <div className='product-field'>
                             <label htmlFor="retailPrice">Prix: </label>
-                            <input id="retailPrice" name='retailPrice' value={modifications?.retailPrice ? modifications?.retailPrice : bag.retailPrice  } onChange={handleElementChange}/>
+                            <input id="retailPrice" name='retailPrice' value={modifications?.retailPrice ? modifications?.retailPrice : product.retailPrice!!  } onChange={handleElementChange}/>
                         </div>
-                        <div className='bag-field'>
+                        <div className='product-field'>
                             <label htmlFor="sku">SKU: </label>
-                            <input id="sku" name='sku' value={modifications?.sku ? modifications.sku : bag.sku} onChange={handleElementChange}/>
+                            <input id="sku" name='sku' value={modifications?.sku ? modifications.sku : product.sku!!} onChange={handleElementChange}/>
                         </div>
                     </div>
 
 
                     
-                    <div className="confirm-bag-modifications-wrapper">
+                    <div className="confirm-product-modifications-wrapper">
                         <button 
                         type='submit'
-                        className='confirm-bag-modifications'
-                        onClick={confirmChanges}
+                        className='confirm-product-modifications'
+                        onClick={(e)=>confirmChanges}
                         >
                             Confirmer
                         </button>
@@ -77,4 +77,4 @@ const BagModifier = ({bag, applyBagModifications, onPopupClose} : Props) => {
   )
 }
 
-export default BagModifier
+export default productModifier

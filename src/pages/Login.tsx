@@ -22,7 +22,7 @@ const LoginForm = () => {
   // const [password, setPassword] = useState('');
   const [loginData, setLoginData] = useState({mail:"",password:""});
   const [signupData, setSignupData] = useState({username:"", mail:"",password:""});
-  const [feedbackMsg, setFeedbackMsg] = useState({loginMsg:"", signupMsg:""});
+  const [feedbackMsg, setFeedbackMsg] = useState({loginMsg:{text:"",color:"--info-red"}, signupMsg:{text:"",color:"--info-red"}});
   
   const [selectedTab, setSelectedTab] = useState('login');
   
@@ -58,7 +58,7 @@ const LoginForm = () => {
         setAuth({user,accessToken, tenantId})
         setLoginData({mail:"", password:""})
         navigate("/dashboard")
-        setFeedbackMsg(prev => ({...prev, loginMsg: response.statusText}))
+        setFeedbackMsg(prev => ({...prev, loginMsg: {text:response.statusText, color:""}}))
       }
         
     
@@ -67,16 +67,16 @@ const LoginForm = () => {
       const apiErrorMessage = err?.response.data        
       if(!err?.response){
           console.log("No server response")
-          setFeedbackMsg(prev => ({...prev, loginMsg: "No server response"}))
+          setFeedbackMsg(prev => ({...prev, loginMsg:{text:"No server response", color:prev.loginMsg.color || ""}}))
         }else if (err?.response.status === 400){
-          setFeedbackMsg(prev => ({...prev, loginMsg: apiErrorMessage}))
+          setFeedbackMsg(prev => ({...prev, loginMsg: {text:apiErrorMessage,color:prev.loginMsg.color || ""}}))
           console.log("Missing Username or password")
         }
         else if (err?.response.status == 401 || err?.response.status == 403){          
-          setFeedbackMsg(prev => ({...prev, loginMsg: apiErrorMessage}))
+          setFeedbackMsg(prev => ({...prev, loginMsg: {text:apiErrorMessage,color:prev.loginMsg.color || ""}}))
           console.log("Unauthorized")
         }else{
-          setFeedbackMsg(prev => ({...prev, loginMsg: "Something went wrong :("}))
+          setFeedbackMsg(prev => ({...prev, loginMsg: {text:"Something went wrong :(",color:prev.loginMsg.color || ""}}))
           console.log("Something went wrong :(")
         }
     }
@@ -104,9 +104,9 @@ const LoginForm = () => {
       // if (response.status == 200) setFeedbackMsg(prev => ({...prev,signupMsg: response.data }))
       console.log("response test")
       console.log(response)
-      setFeedbackMsg(prev => ({...prev,signupMsg: response.data }))
+      setFeedbackMsg(prev => ({...prev,signupMsg: {text:response.data, color:prev.signupMsg.color || ""} }))
     }catch(err){
-      setFeedbackMsg(prev => ({...prev,signupMsg: err?.response.data }))
+      setFeedbackMsg(prev => ({...prev,signupMsg: {text:err?.response.data,color:prev.signupMsg.color || ""}}))
       console.log(err)
     }
     
@@ -138,7 +138,7 @@ const LoginForm = () => {
           <div className='signin-section'>
               <form className='signin-form' onSubmit={handleSignupForm}>                
                 <h3>Create an account</h3>
-                <label>{feedbackMsg.signupMsg}</label>
+                <label style={{color:`var(${feedbackMsg.signupMsg.color})`, fontSize:'.8rem'}}>{feedbackMsg.signupMsg.text}</label>
                 <div>
                   <label htmlFor="">Firstname</label>
                   <input required type="text" value={signupData.username} onChange={(e) => setSignupData(prev => ({...prev, username: e.target.value}))}/>
@@ -158,7 +158,7 @@ const LoginForm = () => {
           <div className='login-section'>            
             <form onSubmit={handleLoginForm} className='login-form'>
               <h3>Login</h3>
-              <label>{feedbackMsg.loginMsg}</label>
+              <label style={{color:`var(${feedbackMsg.signupMsg.color})`, fontSize:'.8rem'}}>{feedbackMsg.loginMsg.text}</label>
               <div className='username-section'>
                 <label>Mail</label>
                 <input 
