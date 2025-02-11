@@ -118,7 +118,7 @@ export const updateProductsForOrderWithId = async (auth,orderId,productIdsToQuan
         const plainProductsIdsToQuantity = Object.fromEntries(productIdsToQuantity);
         console.log("DEBUG",plainProductsIdsToQuantity);
         const response = await axios.put(`/${auth.tenantId}/orders/${orderId}`,
-        {"Products":plainProductsIdsToQuantity},
+        {"products":plainProductsIdsToQuantity},
         {
             headers: {'Content-type':'application/json','Authorization': `Bearer ${auth.accessToken}`},
             withCredentials:true 
@@ -169,7 +169,7 @@ export const getOrderOverviewById = async (auth,orderId) => {
         return {"err":response?.status}
         
     }catch(err){
-        var errMsg = processHttpError('getOrderById',err)
+        var errMsg = processHttpError('getOrderOverviewById',err)
         return {"err":err,"errMsg" : errMsg }
     }
 }

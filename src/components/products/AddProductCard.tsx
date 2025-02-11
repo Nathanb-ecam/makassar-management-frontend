@@ -47,7 +47,7 @@ const AddProductCard = React.forwardRef(({addProductsSelectionToCurrentProducts}
             </div>
 
             {isPopupOpen && 
-            <Popup title="Ajouter des produits " onPopupClose={closePopup} customCSS={{}}>
+            <Popup title="Add products " onPopupClose={closePopup} customCSS={{}}>
                 <ProductSelector 
                     // close={closePopup} 
                     addProductsToCurrentProducts={addProductsSelectionToCurrentProducts}

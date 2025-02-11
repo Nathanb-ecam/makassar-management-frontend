@@ -182,11 +182,11 @@
 
 .customer-infos .order-description, 
 .customer-infos .customer-card,
-.bag-item-card{
+.product-item-card{
     margin-top: 20px;
 }
 
- .bag-item-card{
+ .product-item-card{
     margin-left: 20px;
 }
 
@@ -196,17 +196,17 @@
 }
 
 
-.bag-infos{
+.product-infos{
     position: relative;
     width: 100%;
 }
 
-.bag-infos .title{
+.product-infos .title{
     color: var(--primary);
     margin-left: 20px;
 }
 
-.bags-section-title{
+.products-section-title{
     background: white;
     display: flex;    
     justify-content: space-between;
@@ -215,24 +215,24 @@
     
 }
 
-.bags-section-title .left-title{
+.products-section-title .left-title{
     display: flex;
     width: 135px;
     align-items: center;
     justify-content: space-between;
 }
 
-.bags-section-title .left-title .title{
+.products-section-title .left-title .title{
     font-size: 1.4rem;
 }
 
 
-/* .bags-section-title .left-title .add-bag-section{
+/* .products-section-title .left-title .add-product-section{
     transform: translateY(-5px);
 } */
 
 
-.order-details .bag-infos .bags-list{
+.order-details .product-infos .products-list{
     display: flex;
     flex-wrap: wrap;
     height: 90%;
@@ -263,7 +263,7 @@
 }
 
 
-.bags-section-title .active{
+.products-section-title .active{
     opacity: 1;
     pointer-events: initial;
 }

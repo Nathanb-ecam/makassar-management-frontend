@@ -1,5 +1,5 @@
 
-.add-bag-section{
+.add-product-section{
     width: 35px;
     height: 100%;
     
@@ -20,7 +20,7 @@
 
 }
 
-.add-bag-section .add-bag-title{
+.add-product-section .add-product-title{
     width: 100%;
     text-align: center;
     background: white;
@@ -31,7 +31,7 @@
 }
 
 
-.add-bag-section .plus-button{
+.add-product-section .plus-button{
     width: 100%;
     height: 100%;
     background: white;

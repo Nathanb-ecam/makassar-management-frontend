@@ -41,7 +41,7 @@ const GeneralCRUDTable = ({tableProps,handlers} : Props) => {
 
     const [actualTableData, setActualTableData] = useState();
 
-    const {showTopMessage} = useTopMessage()
+    const {showTopMessage}:any = useTopMessage()
     
 
     // console.log(tableProps.data)

@@ -58,7 +58,7 @@ const ProductForm = ({onProductFormSubmit} : Props) => {
     return (
     <form onSubmit={handleproductSubmit} className='create-product-form'>
         <div className='form-field-wrapper'>
-            <label htmlFor="marketingName">Nom du sac:</label>
+            <label htmlFor="marketingName">Product name:</label>
             <input 
                 required
                 type="text" 
@@ -70,7 +70,7 @@ const ProductForm = ({onProductFormSubmit} : Props) => {
         </div>
 
         <div className='form-field-wrapper'>
-            <label htmlFor="retailPrice">Prix:</label>
+            <label htmlFor="retailPrice">Price:</label>
             <input 
                 required
                 type="number" 
@@ -94,7 +94,7 @@ const ProductForm = ({onProductFormSubmit} : Props) => {
 
         <div className='image-form-field-wrapper'>
             <div className='image-picker-title-wrapper'>
-                <label htmlFor="">Ajouter des images:</label>
+                <label htmlFor="">Add images:</label>
                 <input 
                     id='fileInput'
                     style={{display:'none'}}
@@ -104,7 +104,7 @@ const ProductForm = ({onProductFormSubmit} : Props) => {
                     accept=".jpeg, .jpg, .png, image/jpeg, image/jpg, image/png"
                     onChange={handleImageChange}
                 />
-                <label htmlFor="fileInput" className='custom-file-upload'>Sélectionner</label>
+                <label htmlFor="fileInput" className='custom-file-upload'>Select</label>
             </div>
             {fileSelection && fileSelection.length > 0 &&
                 <div className='custom-file-message'>
@@ -115,7 +115,7 @@ const ProductForm = ({onProductFormSubmit} : Props) => {
             }
         </div>
 
-        <input className='product-form-submit' type="submit" value="Confirmer" />
+        <input className='product-form-submit' type="submit" value="Confirm" />
 
 
 

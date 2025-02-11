@@ -10,6 +10,8 @@ export interface User {
     username: string | null;
     mail: string | null;
     phone: string | null;
+    vat: string | null;
+    address: string | null;
 }
 
 

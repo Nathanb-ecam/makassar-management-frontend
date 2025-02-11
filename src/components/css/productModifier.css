@@ -1,26 +1,26 @@
-.bag-modifier{
+.product-modifier{
     overflow: hidden;
 }
 
-.bag-modifier:first-child{
+.product-modifier:first-child{
     margin-top: 1.8rem;
 }
 
-.bag-modifier-fields{
+.product-modifier-fields{
     display: flex;
     flex-direction: column;
     align-items:end;
 }
 
-.bag-field{
+.product-field{
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
     margin: 5px 0;
 }
 
-.bag-field label,
-.bag-field input{
+.product-field label,
+.product-field input{
     margin: 0 10px;
 }
 
@@ -31,13 +31,13 @@ input{
 }
 
 
-.confirm-bag-modifications-wrapper{
+.confirm-product-modifications-wrapper{
     display: flex;
     justify-content: flex-end;
     margin-top: 20px;
 }
 
-.confirm-bag-modifications{
+.confirm-product-modifications{
     padding: 5px 10px;
     border: none;
     border-radius: 5px;
@@ -48,7 +48,7 @@ input{
 
 
 @media (max-width:650px){
-    .bag-modifier{
+    .product-modifier{
         font-size: .4rem;
     }
 }

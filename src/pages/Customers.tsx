@@ -14,23 +14,23 @@ import useRefreshToken from '../hooks/useRefreshToken.tsx';
 
 const Customers = () => {
   
-  const {auth} = useAuth();
+  const {auth}:any = useAuth();
 
   const refresh = useRefreshToken()
 
-  const {showTopMessage} = useTopMessage()
+  const {showTopMessage}:any = useTopMessage()
 
   const headers = [
     // {key : 'id', label:'Id'},
-    {key : 'name', label:'Nom', size: HeaderSizeClass.MEDIUM},
-    {key : 'phone', label:'Téléphone',size: HeaderSizeClass.MEDIUM}, 
+    {key : 'name', label:'Name', size: HeaderSizeClass.MEDIUM},
+    {key : 'phone', label:'Phone',size: HeaderSizeClass.MEDIUM}, 
     {key : 'mail', label:'Mail', size: HeaderSizeClass.LARGE},
-    {key : 'tva', label:'Tva', size: HeaderSizeClass.SMALL},
+    {key : 'tva', label:'VAT', size: HeaderSizeClass.SMALL},
     // {key : 'professionalAddress', label:'Adr. profesionnelle'},
-    {key : 'shippingAddress', label:'Adr. de livraison', size: HeaderSizeClass.LARGE},
+    {key : 'shippingAddress', label:'Shipping address', size: HeaderSizeClass.LARGE},
     // {key : 'type', label:'Type'},
-    {key : 'createdAt', label:'Crée le', size: HeaderSizeClass.SMALL},
-    {key : 'updatedAt', label:'Modifiée le', size: HeaderSizeClass.SMALL},
+    {key : 'createdAt', label:'Created', size: HeaderSizeClass.SMALL},
+    {key : 'updatedAt', label:'Modified', size: HeaderSizeClass.SMALL},
   ]
 
   
@@ -96,7 +96,7 @@ const Customers = () => {
         data: updatedData
       }
     })
-    showTopMessage(`Nouveau client ajouté`,{backgroundColor:'var(--info-green)'})
+    showTopMessage(`New client added`,{backgroundColor:'var(--info-green)'})
     setCreateCustomerPopupVisible(false)
   }
 
@@ -137,7 +137,7 @@ const Customers = () => {
   
     // console.log(modifiedData)
     if(!err){
-      showTopMessage("Client modifié", {backgroundColor:'var(--info-green)'})
+      showTopMessage("Client updated", {backgroundColor:'var(--info-green)'})
 
       setTableProps(prev => {
         const customerIndex = prev.data.findIndex(d => d.id === id);
@@ -170,7 +170,7 @@ const Customers = () => {
         // await refresh()
       }
       // console.log("Sent payload: ", modifiedData)
-      showTopMessage("Erreur lors de la modification du client", {backgroundColor:'var(--info-red)'})
+      showTopMessage("Error while modifying client", {backgroundColor:'var(--info-red)'})
     }
   }
 
@@ -190,7 +190,7 @@ const Customers = () => {
           data: filteredData
         }
       }) 
-      showTopMessage(`Client supprimé `,{backgroundColor:'var(--info-green)'})
+      showTopMessage(`Client removed `,{backgroundColor:'var(--info-green)'})
     }
   
   }
@@ -206,14 +206,14 @@ const Customers = () => {
   return (
     <div className="page">
         {createCustomerPopupVisible ? 
-          <Popup title='Créer un nouveau client' onPopupClose={onPopupClose} customCSS={{minWidth:'35%'}} >
+          <Popup title='Create new client' onPopupClose={onPopupClose} customCSS={{minWidth:'35%'}} >
             <CustomerForm onFormSubmit={handleCreateCustomer} />
           </Popup>
         : null
         }
         <SectionTitle 
           title='Clients' 
-          newElementButtonText='Nouveau client'
+          newElementButtonText='New client'
           onCreateButtonClicked={onCreateCustomerButtonClicked}>
     
         </SectionTitle>

@@ -1,10 +1,11 @@
 import React from 'react';
 import { Page, Text, View, Document, StyleSheet, Image } from '@react-pdf/renderer'; // Remove Note import
-import { OrderFullyDetailed } from '../models/entities';
+import { OrderFullyDetailed, User } from '../models/entities';
 import { currentDate, formatTime } from '../utils/formatTime';
 
 // Interface for the props
 interface Props {
+  user: User;
   detailedOrder: OrderFullyDetailed;
 }
 
@@ -62,7 +63,7 @@ const styles = StyleSheet.create({
   }
 });
 
-const OrderInvoiceTemplate = ({ detailedOrder }: Props) => {
+const OrderInvoiceTemplate = ({ user, detailedOrder }: Props) => {
   return (
     <Document
       // title={`${detailedOrder?.customer?.name || 'Unknown Customer'}-${detailedOrder?.orderNumber || ''}`}
@@ -85,26 +86,26 @@ const OrderInvoiceTemplate = ({ detailedOrder }: Props) => {
           <View style={styles.makassarInfos}>
             <Image style={styles.logoImage} src={"/assets/logo-text.png"}></Image>
             <Text>
-              laure.callewaert@gmail.com
+              {user.mail ?? "Mail not provided"}
             </Text>
-            <Text>Téléphone: 0495 54 21 51</Text>
-            <Text>TVA: 189218928</Text>
-            <Text>Av de la mercadona</Text>
+            <Text>Phone: {user.phone ?? ""}</Text>
+            <Text>VAT: {user.vat ?? ""}</Text>
+            <Text>{user.address ?? ""}</Text>
           </View>
 
         </View>
 
         <View style={styles.title}>
-          <Text>Commande:{detailedOrder.orderNumber ?? ""} </Text>
+          <Text>Order:{detailedOrder.orderNumber ?? ""} </Text>
           <Text>Date: {currentDate()} </Text>
         </View>
 
         <View style={styles.section}>
           <View style={styles.productRow}>
-            <Text style={{width:'400px',margin:3}}>Modèle</Text>
-            <Text style={{width:'150px',margin:3}}>Quantité</Text>
-            <Text style={{width:'150px',margin:3}}>Prix unitaire</Text>
-            <Text style={{width:'150px',margin:3}}>Prix total</Text>
+            <Text style={{width:'400px',margin:3}}>Product</Text>
+            <Text style={{width:'150px',margin:3}}>Quantity</Text>
+            <Text style={{width:'150px',margin:3}}>Unit price</Text>
+            <Text style={{width:'150px',margin:3}}>Total price</Text>
           </View>
           {detailedOrder?.products && Array.from(detailedOrder?.products?.entries()).map(([productId,productWithQ])=>(
               <View key={productId} style={styles.productRow}>

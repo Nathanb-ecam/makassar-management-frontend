@@ -114,7 +114,7 @@ const ProductSelector = React.forwardRef(({ addProductsToCurrentProducts,customP
 
 
                 <div className='bottom-section' style={customButtonSectionStyle} >
-                    <button type="button" style={customSaveButtonStyle} onClick={saveProductsSelection}>Enregistrer la sélection</button>
+                    <button type="button" style={customSaveButtonStyle} onClick={saveProductsSelection}>Save selection</button>
                 </div>
 
             

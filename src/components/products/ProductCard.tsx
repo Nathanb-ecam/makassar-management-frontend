@@ -25,8 +25,9 @@ interface Props{
 
 const ProductCard = ({product, initialQuantity,updateProductQuantity,  onProductRemoved,bottomVisible = false,deleteButtonVisible = false} : Props) => {
 
+    if(product == null || product == undefined ) return
 
-    const productImagesCount = product.imageUrls?.length ?? 0
+    const productImagesCount = product?.imageUrls?.length ?? 0
 
     const [imageCarouselIndex, setImageCarouselIndex] = useState(0);
     const [productQuantity, setProductQuantity] = useState("");

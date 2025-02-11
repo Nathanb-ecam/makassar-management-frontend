@@ -48,7 +48,7 @@ const MainNavbar = () => {
         </li> */}
         <li className={`nav-li-item ${selectedItem === "orders" ? "selected" : "" }`} onClick={(e)=>navigateTo("/orders","orders")}>
           <FaRegPenToSquare className='nav-icons' />
-          <button className="nav-button" >Commandes</button>
+          <button className="nav-button" >Orders</button>
         </li>
         <li className={`nav-li-item ${selectedItem === "clients" ? "selected" : "" }`} onClick={(e)=>navigateTo("/clients","clients")}>
           <FaPerson className='nav-icons'/>
@@ -56,7 +56,7 @@ const MainNavbar = () => {
         </li>
         <li className={`nav-li-item ${selectedItem === "products" ? "selected" : "" }`} onClick={(e)=>navigateTo("/products","products")}>
           <FaBagShopping className='nav-icons'/>
-          <button className="nav-button" >Sacs</button>
+          <button className="nav-button" >Products</button>
         </li>
         
         {/* <li className={`nav-li-item ${selectedItem === "materials" ? "selected" : "" }`} onClick={(e)=>navigateTo("/materials","materials")}>
@@ -67,7 +67,7 @@ const MainNavbar = () => {
           <button className="nav-sub-button" >Couleurs</button>
         </li> */}
       </ul>
-      <button className='fast-order'>Commande rapide</button>
+      <button className='fast-order'>Fast order</button>
     
    
         <FaAngleLeft

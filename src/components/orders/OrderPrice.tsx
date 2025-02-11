@@ -89,7 +89,7 @@ const OrderPrice = React.forwardRef(({products,order, handleOrderPriceChange} : 
     return (
         <>
             <div className='actual-price-wrapper'>
-                <div className="actual-price-text">Prix actuel: </div>
+                <div className="actual-price-text">Price: </div>
                 <div className="actual-price">
                     {Number(order?.price?.finalPrice).toFixed(2)}€                
                 </div>
@@ -106,7 +106,7 @@ const OrderPrice = React.forwardRef(({products,order, handleOrderPriceChange} : 
                             <div className='total-price'>{productsTotalPrice}€</div>
                             <div className='discount-container'>
                                 <div className='discount-text'>
-                                Réduction:
+                                Discount:
                                 </div>
         
                                 <div 
@@ -132,7 +132,7 @@ const OrderPrice = React.forwardRef(({products,order, handleOrderPriceChange} : 
                             </div>
                             <div className='delivery-costs-container'>
                                 <div className="delivery-costs-text">
-                                    Frais livraison:
+                                    Delivery costs:
                                 </div>
                                 <div 
                                 className="delivery-costs-value"
@@ -155,7 +155,7 @@ const OrderPrice = React.forwardRef(({products,order, handleOrderPriceChange} : 
                                 </div>
                             </div>
                             <div className='final-price'>
-                                Prix final : {calculatedPrice.toFixed(2)}€
+                                Total price: {calculatedPrice.toFixed(2)}€
                             </div>
                         </div>
                     </div>    

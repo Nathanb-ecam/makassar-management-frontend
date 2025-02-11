@@ -17,9 +17,9 @@ const productModifier = ({product, applyProductModifications, onPopupClose} : Pr
 
     const [modifications, setModifications] = useState<Product>({})
 
-    useEffect(()=>{
-        console.log(modifications)
-    },[modifications])
+    // useEffect(()=>{
+    //     console.log(modifications)
+    // },[modifications])
 
     // const handleElementChange = (key : string, value : string)=> {
     const handleElementChange = (e : ChangeEvent<HTMLInputElement>)=> {
@@ -45,11 +45,11 @@ const productModifier = ({product, applyProductModifications, onPopupClose} : Pr
                 <form onSubmit={confirmChanges}>
                     <div className="product-modifier-fields">
                         <div className='product-field'>
-                            <label htmlFor="marketingName">Modèle: </label>
+                            <label htmlFor="marketingName">Product name: </label>
                             <input id="marketingName" name='marketingName' value={modifications?.marketingName ? modifications.marketingName : product.marketingName!!} onChange={handleElementChange}/>
                         </div>
                         <div className='product-field'>
-                            <label htmlFor="retailPrice">Prix: </label>
+                            <label htmlFor="retailPrice">Price: </label>
                             <input id="retailPrice" name='retailPrice' value={modifications?.retailPrice ? modifications?.retailPrice : product.retailPrice!!  } onChange={handleElementChange}/>
                         </div>
                         <div className='product-field'>
@@ -66,7 +66,7 @@ const productModifier = ({product, applyProductModifications, onPopupClose} : Pr
                         className='confirm-product-modifications'
                         onClick={(e)=>confirmChanges}
                         >
-                            Confirmer
+                            Confirm
                         </button>
                     </div>
                 </form>

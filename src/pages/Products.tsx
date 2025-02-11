@@ -49,7 +49,7 @@ const Products = () => {
       setCreateProductPopupVisible(false)      
       if(createdProduct){
         showTopMessage(
-            `Nouveau sac : ${createdProduct.marketingName}`, 
+            `New product : ${createdProduct.marketingName}`, 
             {backgroundColor:'var(--info-green)'},
         )
         setProducts(prev=> {
@@ -108,7 +108,7 @@ const Products = () => {
   
         const updatedProducts = prev.map(existingProduct => {
           if(existingProduct.id === ProductId){
-            const msg = `Modification de ${existingProduct.marketingName} enregistrée`
+            const msg = `Modification of ${existingProduct.marketingName} saved`
             console.log(msg)
             showTopMessage(
               msg,
@@ -128,7 +128,7 @@ const Products = () => {
     else {
       // console.log("shit")
       showTopMessage(
-        `Une erreur s'est produite`, 
+        `Something went wrong`, 
         {backgroundColor:'var(--info-red)'},
       )
     }
@@ -154,7 +154,7 @@ const Products = () => {
         }) 
 
         showTopMessage(
-          `Sac supprimé : ${Product.marketingName}`, 
+          `Product removed : ${Product.marketingName}`, 
           {backgroundColor:'var(--info-green)'},
         )
 
@@ -180,8 +180,8 @@ const Products = () => {
     <div className='page'>
         
         <SectionTitle 
-          title='Sacs' 
-          newElementButtonText='Nouveau sac'
+          title='Products' 
+          newElementButtonText='New product'
           onCreateButtonClicked={handleCreateButtonClicked}/>
 
         
@@ -234,7 +234,7 @@ const Products = () => {
 
         {createProductPopupVisible ?
           <Popup 
-              title='Ajouter un nouveau modèle' 
+              title='Add a new product' 
               onPopupClose={onCreateProductPopupClosed} 
               popupVisible={createProductPopupVisible}
               // customCSS={{height:"400px",minWidth:'45%',maxWidth:'45%'}}

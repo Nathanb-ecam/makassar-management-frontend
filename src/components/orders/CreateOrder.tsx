@@ -32,7 +32,7 @@ const CreateOrder = ({handleOrderCreated} : Props) => {
     const [estimatedPrice,setEstimatedPrice] = useState(0)
     const [totalPrice,setTotalPrice] = useState('')
     const [currentOrder,setCurrentOrder] = useState<OrderDto>({
-        status: 'Ouverte',
+        status: 'Opened',
         customerId:'',
         description:'',
         comments: '',
@@ -93,7 +93,7 @@ const CreateOrder = ({handleOrderCreated} : Props) => {
             })
         }else{
             console.log("case not handled yet")
-            showTopMessage('Un erreur est survenue',{backgroundColor:'var(--info-red)'})
+            showTopMessage('An error occured',{backgroundColor:'var(--info-red)'})
         }
     }
 
@@ -139,11 +139,11 @@ const CreateOrder = ({handleOrderCreated} : Props) => {
     const hanldeCreateOrder = (e : React.FormEvent<HTMLFormElement>) => {        
         e.preventDefault()
         if(currentOrder?.products?.size === 0){
-            showTopMessage('Une commande doit contenir au moins 1 sac',{backgroundColor:'var(--info-orange)'})
+            showTopMessage('An order needs to contain at least 1 product',{backgroundColor:'var(--info-orange)'})
             return 
         }
         if(currentOrder?.customerId?.length === 0){
-            showTopMessage('Une commande doit contenir 1 client',{backgroundColor:'var(--info-orange)'})
+            showTopMessage('An order needs to contain one client',{backgroundColor:'var(--info-orange)'})
             return 
         }
         handleOrderCreated(currentOrder)
@@ -156,13 +156,13 @@ const CreateOrder = ({handleOrderCreated} : Props) => {
                 <form onSubmit={hanldeCreateOrder}>
 
                     <div className="customer-selection create-order-field">
-                        <label htmlFor="customer-select-id">Client: </label>
+                        <label htmlFor="customer-select-id">Customer: </label>
                         <select 
                             name="customerId" id="customer-select-id"
                             onChange={handleElementChange}                            
                             required                
                         >
-                            <option value="">Choisir un client</option>
+                            <option value="">Choose customer</option>
                             {customers instanceof Array && customers.map((customer,index)=>(
                                 <option key={index} value={customer.id}>{customer.name}</option>
                             ))}
@@ -171,12 +171,12 @@ const CreateOrder = ({handleOrderCreated} : Props) => {
 
 
                     <div className='create-order-field'>
-                        <label htmlFor="">Lieu:</label>
+                        <label htmlFor="">Location:</label>
                         <select                             
                             name="createdLocation" id="createdPlace"
                             onChange={handleElementChange}                                                   
                         >
-                            <option value="">Choisir un lieu</option>
+                            <option value="">Pick location</option>
                             <option value="Salon Paris">Salon Paris</option>
                             <option value="Salon Tokyo">Salon Tokyo</option>
                         </select>
@@ -184,13 +184,13 @@ const CreateOrder = ({handleOrderCreated} : Props) => {
                     
 
                     <div className='create-order-field'>
-                        <label htmlFor="planned-date">Date prévue:</label>
+                        <label htmlFor="planned-date">Planned date:</label>
                         <input 
                             className='planned-date'
                             id='planned-date'
                             name='plannedDate'
                             onChange={handleElementChange}                
-                            placeholder="Ex: Fin mars"
+                            placeholder="Ex: Late july"
                             type='text'             
                         />
 
@@ -209,7 +209,7 @@ const CreateOrder = ({handleOrderCreated} : Props) => {
                     </div>
 
                     <div className='create-order-field'>
-                        <label htmlFor="">Commentaire:</label>
+                        <label htmlFor="">Comments:</label>
                         <textarea                     
                             name="comments"
                             onChange={handleElementChange} 
@@ -237,13 +237,13 @@ const CreateOrder = ({handleOrderCreated} : Props) => {
 
                         <div className='product-selection-price'>
                             <div className="product-selection-item base-price">
-                                <label htmlFor="">Prix de base:(€)</label>
+                                <label htmlFor="">Base price:(€)</label>
                                 <div>
                                     {estimatedPrice.toString()}
                                 </div>                             
                             </div>
                             <div className="product-selection-item discount">
-                                <label htmlFor="">Réduction:(%)</label>
+                                <label htmlFor="">Discount:(%)</label>
                                 <input               
                                     className='price-discount'
                                     name='price.discount'
@@ -253,7 +253,7 @@ const CreateOrder = ({handleOrderCreated} : Props) => {
                                 />
                             </div>
                             <div className="product-selection-item deliveryCosts">
-                                <label htmlFor="">Coût de livraison(€):</label>
+                                <label htmlFor="">Delivery costs(€):</label>
                                 <input               
                                     className='price-deliveryCost'
                                     name='price.deliveryCost'
@@ -263,7 +263,7 @@ const CreateOrder = ({handleOrderCreated} : Props) => {
                                 />
                             </div>
                             <div className='product-selection-item create-order-total-price'>
-                                <label htmlFor="">Prix total:</label>
+                                <label htmlFor="">Total price:</label>
                                 <div>
                                         {   
                                             totalPrice
@@ -276,7 +276,7 @@ const CreateOrder = ({handleOrderCreated} : Props) => {
 
                     <div className='confirm-order-create'>
                         <button type='submit'>
-                            Créer la commande
+                            Create order
                         </button>
                     </div>
                 </form>

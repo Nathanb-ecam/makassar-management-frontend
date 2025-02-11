@@ -1,4 +1,4 @@
-.create-bag-form{
+.create-product-form{
     padding: 10px;
     display: flex;
     flex-direction: column;
@@ -6,12 +6,12 @@
     /* background: red; */
 }
 
-.create-bag-form .form-field-wrapper{
+.create-product-form .form-field-wrapper{
     display: flex;
     align-items: center;
 }
 
-.create-bag-form .form-field-wrapper label{
+.create-product-form .form-field-wrapper label{
     /* width: 150px;
     white-space: nowrap;
     overflow: hidden;
@@ -72,7 +72,7 @@
     margin: 0 5px;
 }
 
-.bag-form-submit{
+.product-form-submit{
     /* position: absolute; */
     /* bottom: 10px; */
     /* right: 20px; */
@@ -85,7 +85,7 @@
 }
 
 @media (max-width: 600px){
-    .create-bag-form{
+    .create-product-form{
         font-size: .7rem;
     }
 }

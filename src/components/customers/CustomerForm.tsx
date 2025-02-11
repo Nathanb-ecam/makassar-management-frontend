@@ -60,7 +60,7 @@ const CustomerForm = ({ onFormSubmit }: Props) => {
     <form className="create-customer-form" onSubmit={(e)=>onFormSubmit(e,customerFormData)}>
       <div className='form-fields-wrapper'>
         <div className="customer-form-field">
-          <label htmlFor="name">Nom:</label>
+          <label htmlFor="name">Name:</label>
           <input
             required
             type="text"
@@ -83,7 +83,7 @@ const CustomerForm = ({ onFormSubmit }: Props) => {
         </div>
 
         <div className="customer-form-field">
-          <label htmlFor="tva">Tva:</label>
+          <label htmlFor="tva">VAT:</label>
           <input
             type="text"
             id="tva"
@@ -94,7 +94,7 @@ const CustomerForm = ({ onFormSubmit }: Props) => {
         </div>
 
         <div className="customer-form-field">
-          <label htmlFor="phone">Téléphone:</label>
+          <label htmlFor="phone">Phone:</label>
           <input
             type="text"
             id="phone"
@@ -112,14 +112,14 @@ const CustomerForm = ({ onFormSubmit }: Props) => {
               onChange={handleInputChange}
 
               >
-            <option value="Professionel">Professionnel</option>
-            <option value="Indépendant">Particulier</option>
+            <option value="Professionel">Professionnal</option>
+            <option value="Indépendant">Independant</option>
           </select>
         </div>
 
         <div className="customer-form-field address-field">
             <div className="address-pro">
-              <label>Adresse pro:</label>
+              <label>Profesionnal address:</label>
               <input
                 placeholder='Ex: Av de la bourgogne 23, 1640 Rhode'
                 type="text"
@@ -131,7 +131,7 @@ const CustomerForm = ({ onFormSubmit }: Props) => {
             </div>
 
             <div className="address-delivery">
-              <label >Adresse de livraison:</label>        
+              <label >Shipping address:</label>        
               <input
                 placeholder='Ex: Av de la bourgogne 23, 1640 Rhode'
                 type="text"
@@ -147,7 +147,7 @@ const CustomerForm = ({ onFormSubmit }: Props) => {
     
         <div className='submit-btn-wrapper'>
 
-          <input className='customer-form-submit' type="submit" value="Créer" />
+          <input className='customer-form-submit' type="submit" value="Create" />
         </div>
       </div>
     </form>

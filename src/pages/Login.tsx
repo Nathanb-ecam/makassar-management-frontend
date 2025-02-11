@@ -14,7 +14,7 @@ import  axios  from '../api/axios';
 const LoginForm = () => {
   
 
-  const {setAuth} = useAuth()
+  const {setAuth}:any = useAuth()
 
   const navigate = useNavigate()
 

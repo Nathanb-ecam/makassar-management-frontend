@@ -100,9 +100,9 @@ const Orders = () => {
   
   
 
-  useEffect(()=>{
-    // console.log(currentOrder)
-  },[currentOrder])
+  // useEffect(()=>{
+  //   console.log(currentOrder)
+  // },[currentOrder])
 
   
 
@@ -155,7 +155,7 @@ const Orders = () => {
       // console.log("modifiedOrder",modifiedOrder)
       const {err, errMsg} = await putOrder(auth,orderOverview.id,modifiedOrder);
       if(!err){
-        showTopMessage(`Modification(s) de la commande de '${orderOverview.customerName}' enregistrée(s) `, {backgroundColor:'var(--info-green)'})
+        showTopMessage(`Modification(s) of order '${orderOverview.customerName}' saved`, {backgroundColor:'var(--info-green)'})
         setCurrentOrderHasBeenModified(false)
         refreshOrderOverviewById(auth,id!!)    
         setCurrentOrder(prev => {
@@ -173,7 +173,7 @@ const Orders = () => {
 
         
       }else{
-        showTopMessage(`Erreur lors de la sauvegarde des modifications `, {backgroundColor:'var(--info-red)'})  
+        showTopMessage(`Error while saving changes`, {backgroundColor:'var(--info-red)'})  
       }
   }  
 
@@ -184,7 +184,7 @@ const Orders = () => {
     const {id, err} = await deleteOrderById(auth,orderId)
     // console.log(id)
     if(!err){
-      showTopMessage(`Commande supprimée`, {backgroundColor:'var(--info-green)'})
+      showTopMessage(`Order removed`, {backgroundColor:'var(--info-green)'})
       removeOrderFromOrdersState(orderId)
     }else{
       // console.log("deleteOrderWithId",err)
@@ -238,7 +238,7 @@ const Orders = () => {
         }
       })
       setCurrentOrderHasBeenModified(true)
-      showTopMessage(`${products.size} modèle(s) ajouté à la commande `, {backgroundColor:'var(--info-green)'})
+      showTopMessage(`${products.size} product(s) added to the order`, {backgroundColor:'var(--info-green)'})
       if(productSelectorChildPopup.current) productSelectorChildPopup.current.hidePopup()
 
 
@@ -266,7 +266,8 @@ const Orders = () => {
     if (!rotatedRows[index]){      
       const result = await getOrderFullyDetailedById(auth,ord.id)
       
-      
+      console.log("LOG")
+      console.log(result)
       if(result.err){
         console.log(result.err)
       }
@@ -304,15 +305,15 @@ const Orders = () => {
     // const modifiedData = {[key]:newValue};
     // console.log(data,keys,err)
     if(err){
-      showTopMessage(`Les modifications n'ont pas pu être sauvegardées `, {backgroundColor:'var(--info-red)'})
+      showTopMessage(`Modifications couldn't be saved`, {backgroundColor:'var(--info-red)'})
       return
     } 
 
     // console.log(data);
     if(data){
       const successfullyModifiedOrder = await putOrder(auth,orderId,data);
-      if(successfullyModifiedOrder) showTopMessage(`Commande modifiée`, {backgroundColor:'var(--info-green)'})
-      else showTopMessage(`Les modifications n'ont pas pu être sauvegardées `, {backgroundColor:'var(--info-red)'})
+      if(successfullyModifiedOrder) showTopMessage(`Order modified`, {backgroundColor:'var(--info-green)'})
+      else showTopMessage(`Modifications couldn't be saved`, {backgroundColor:'var(--info-red)'})
     }
     // else{
     //   console.log("No changes")
@@ -341,7 +342,7 @@ const Orders = () => {
       const {id,err} = await createOrder(auth,orderWithProductsObject)
       
      if(!err){
-      showTopMessage(`La commande a bien été crée`,{backgroundColor:'var(--info-green)'})
+      showTopMessage(`Order successfuly created`,{backgroundColor:'var(--info-green)'})
       refreshOrdersOverviews(auth)
       setCreateOrderVisible(false)
       
@@ -351,7 +352,7 @@ const Orders = () => {
   const generateAndDownloadInvoice = async () => {
     try {
       console.log("Generating PDF...");
-      const doc = <OrderInvoiceTemplate detailedOrder={currentOrder} />;
+      const doc = <OrderInvoiceTemplate user={auth.user} detailedOrder={currentOrder} />;
       const asPdf = pdf(); // Create an instance of the pdf function
       asPdf.updateContainer(doc); // Pass your document to the pdf instance
 
@@ -398,7 +399,7 @@ const Orders = () => {
 
           {createOrderVisible && 
             <Popup 
-              title='Prendre une nouvelle commande' 
+              title='Take a new order' 
               onPopupClose={onCreateOrderClosed} 
               customCSS={{
                 // minHeight:'60%',
@@ -414,8 +415,8 @@ const Orders = () => {
 
         <div className="orders">
           <SectionTitle 
-              title='Commandes' 
-              newElementButtonText='Nouvelle commande'
+              title='Orders' 
+              newElementButtonText='New order'
               onCreateButtonClicked={onCreateOrderButtonClicked}>
 
           </SectionTitle>
@@ -427,12 +428,12 @@ const Orders = () => {
                   <div className='orders-header-row'>
                     <div className='small-col'>N°</div>
                     <div className='medium-col'>Client</div>
-                    <div className='medium-col'>Création</div>
-                    <div className='medium-col'>Modification</div>
+                    <div className='medium-col'>Created</div>
+                    <div className='medium-col'>Modified</div>
                     <div className='medium-col'>Status</div>
-                    <div className='medium-col'>Date prévue</div>
-                    <div className='small-col'>Prix</div>
-                    <div className='small-col'>Détails</div>
+                    <div className='medium-col'>Planned date</div>
+                    <div className='small-col'>Total price</div>
+                    <div className='small-col'>Details</div>
                     <div className='small-col'>Actions</div>
 
                   </div>
@@ -491,7 +492,7 @@ const Orders = () => {
                       <div className={`order-details ${rotatedRows[index] ? 'expanded' : 'collapsed'}`}>
                           {currentOrder?.customer ? 
                             <div className='customer-infos'>
-                              <div className='title'>Client</div>
+                              <div className='title'>Customer</div>
                               <div className='customer-card'>
                                 <div className='card-title'>{currentOrder.customer.name}</div>
                                 {currentOrder.customer.phone && currentOrder.customer.phone?.length>0 && <div className='phone'>{currentOrder.customer.phone}</div>}
@@ -499,18 +500,18 @@ const Orders = () => {
                                 {currentOrder.customer.tva && currentOrder.customer.tva?.length>0 && <div className='tva'>Tva: {currentOrder.customer.tva}</div>}
                                 {currentOrder.customer.shippingAddress &&                             
                                   <>
-                                    <div className='shippingAddress-text'>Adresse de livraison:</div>
+                                    <div className='shippingAddress-text'>Shipping address:</div>
                                     <div className='shippingAddress'>{currentOrder.customer.shippingAddress}</div>
                                   </>
                                 }
                                 {currentOrder.customer.professionalAddress &&
                                   <>
-                                    <div className='professionalAddress-text'>Adresse pro:</div>
-                                    <div className='professionalAddress'>{currentOrder.customer.professionalAddress ?? "Non renseignée"}</div>
+                                    <div className='professionalAddress-text'>Professional address:</div>
+                                    <div className='professionalAddress'>{currentOrder.customer.professionalAddress ?? "Not mentioned"}</div>
                                   </>
                                 }
                                 {currentOrder.plannedDate ? 
-                                <div className='plannedDate'>Délai prévu: {currentOrder.plannedDate}</div>
+                                <div className='plannedDate'>Planned date: {currentOrder.plannedDate}</div>
                                 : null
                                 }
                                 
@@ -531,7 +532,7 @@ const Orders = () => {
                               <button  
                                 className={`button-apply-order-changes ${currentOrderHasBeenModified ? 'active' : ''}`}
                                 onClick={() => applyOrderModifications(orderOverview)}>
-                                    Appliquer les changements
+                                    Apply changes
                               </button>
                             </div>
                             <div className='products-list'>   
@@ -560,7 +561,7 @@ const Orders = () => {
                             </div>
 
                             <div className="order-invoice-section">
-                              <label htmlFor="generate-pdf">Générer la facture </label>
+                              <label htmlFor="generate-pdf">Generate invoice</label>
                               {/* <PDFDownloadLink  
                                 fileName={`${currentOrder.customer.name}-${currentOrder.orderNumber ?? ''}`} 
                                 document={<OrderInvoiceTemplate detailedOrder={currentOrder}/>}
@@ -592,7 +593,7 @@ const Orders = () => {
                             
                             
                             <div className='order-comments'>
-                              <label onClick={()=> focusDiv("comments")}>Commentaires:</label>
+                              <label onClick={()=> focusDiv("comments")}>Comments:</label>
                               <div 
                               className='comments-text'
                               contentEditable={true}
@@ -622,7 +623,7 @@ const Orders = () => {
     
                 </div>
               
-                : <p>Pas de commandes</p>
+                : <p>No orders yet ...</p>
           }
 
         </div>

@@ -4,7 +4,7 @@ import { useEffect } from "react";
 
 
 const ProtectedRoutes = () => {
-    const {auth} = useAuth()
+    const {auth}:any = useAuth()
     const location = useLocation()
 
     return (
