@@ -1,3 +1,4 @@
+import { Provider } from "./components/ui/provider"
 import React from 'react'
 import ReactDOM from 'react-dom/client'
 import {BrowserRouter,Routes,Router, Route} from 'react-router-dom'
@@ -14,15 +15,17 @@ import { TopMessageProvider } from './hooks/useTopMessagePopup.tsx'
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   // <React.StrictMode>
-      <BrowserRouter>
-        <AuthProvider>
+    <Provider>
+      <AuthProvider>
+        <BrowserRouter>
           <TopMessageProvider>  
             <OrdersProvider>
               <App />
             </OrdersProvider>
           </TopMessageProvider>
-        </AuthProvider>
-      </BrowserRouter> 
+        </BrowserRouter> 
+      </AuthProvider>
+    </Provider>
   // </React.StrictMode>,
 )
 

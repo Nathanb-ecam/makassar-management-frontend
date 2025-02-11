@@ -1,4 +1,4 @@
-import React, { useImperativeHandle, useState } from 'react'
+import React, { CSSProperties, useImperativeHandle, useState } from 'react'
 
 import { CiSquarePlus } from 'react-icons/ci'
 import { Product } from '../../models/entities.ts';
@@ -13,12 +13,13 @@ interface Props {
     // orderId: string;
     addProductToCurrentProducts?: (product:Product,quantity: number) => void;
     addProductsSelectionToCurrentProducts: (products : Map<string,{product: Product, quantity: number}>) => void;
+    customPopupCSS?: CSSProperties
     // applyproductChangeToCurrentOrder: (product : {product: product, quantity: number}) => void;
 }
 
 
 
-const AddProductCard = React.forwardRef(({addProductsSelectionToCurrentProducts} : Props,ref) => {
+const AddProductCard = React.forwardRef(({addProductsSelectionToCurrentProducts, customPopupCSS} : Props,ref) => {
   
     const [isPopupOpen, setIsPopupOpen] = useState(false);
 
@@ -42,12 +43,11 @@ const AddProductCard = React.forwardRef(({addProductsSelectionToCurrentProducts}
         <div className='product-selector'>
             <div onClick={openProductSelector} className='add-product-section'>                    
                 {/* <div className='add-product-title'>Ajouter un sac</div> */}
-                <CiSquarePlus className='plus-button'/>
-
+                <CiSquarePlus className='plus-button' />                                
             </div>
 
             {isPopupOpen && 
-            <Popup title="Add products " onPopupClose={closePopup} customCSS={{}}>
+            <Popup title="Add products " onPopupClose={closePopup} customCSS={customPopupCSS}>
                 <ProductSelector 
                     // close={closePopup} 
                     addProductsToCurrentProducts={addProductsSelectionToCurrentProducts}

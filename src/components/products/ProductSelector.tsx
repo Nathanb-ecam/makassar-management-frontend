@@ -1,19 +1,20 @@
 import React, { useCallback, useEffect, useImperativeHandle, useState } from 'react'
-import { Product } from '../../models/entities.ts';
-import { useAuth } from '../../hooks/useAuth.tsx';
+import { Product } from '../../models/entities';
+import { getProducts } from '../../api/calls/Product';
+import { useAuth } from '../../hooks/useAuth';
 
 
-
+import { FaList } from "react-icons/fa";
+import { RiGalleryView2 } from "react-icons/ri";
 
 
 
 import '../css/Productselector.css'
 import ProductCard from './ProductCard.tsx';
-import { getProducts } from '../../api/calls/Product.tsx';
 
 
 interface Props {
-    addProductsToCurrentProducts: (Products : Map<string,{product: Product, quantity: number}>) => void;
+    addProductsToCurrentProducts: (products : Map<string,{product: Product, quantity: number}>) => void;
     customProductSelectionWrapperCSS?: React.CSSProperties;
     customButtonSectionStyle?: React.CSSProperties;
     customSaveButtonStyle?: React.CSSProperties;
@@ -27,7 +28,7 @@ const ProductSelector = React.forwardRef(({ addProductsToCurrentProducts,customP
     const [selectedProducts,setSelectedProducts] = useState<Map<string,{product:Product, quantity : number}>>(new Map());
     const [selectionPrice,setSelectionPrice] = useState(0)
     
-
+    const [displayMode, setDisplayMode] = useState("list");
     const [error,setError] = useState('');
 
 
@@ -64,12 +65,12 @@ const ProductSelector = React.forwardRef(({ addProductsToCurrentProducts,customP
     }
 
 
-    const handleProductQuantityChange =(product: Product, newQuantity: number) => {
+    const handleProductQuantityChange =(product: Product, quantity: number) => {
         setSelectedProducts(prev => {
             if (!prev || product.id === undefined) return prev;
 
             const updatedProducts = new Map(prev);
-            updatedProducts.set(product.id, { product, quantity: newQuantity });
+            updatedProducts.set(product.id, { product, quantity });
 
              
 
@@ -83,43 +84,71 @@ const ProductSelector = React.forwardRef(({ addProductsToCurrentProducts,customP
         addProductsToCurrentProducts(selectedProducts)
     }
 
-  return (
+    return (
     <>
-        {products instanceof Array && products.length >= 1 &&
-        <div className='product-selector-container' style={customProductSelectionWrapperCSS}>
-                {/* <div className='product-selector-name'>
-                    Sélection des sacs:
-                </div> */}
+        <div className='product-selector-wrapper'>
+            {products instanceof Array && products.length >= 1 &&
+            <div className='product-selector' style={customProductSelectionWrapperCSS}>
+                    {/* <div className='Product-selector-name'>
+                        Sélection des sacs:
+                    </div> */}
 
-                <div className="product-selection-list">
-                
-                {products ?
-                        products.map((p,index)=>(
-                            // <div 
-                            // className={`product-list-item`} 
-                            // key={index} 
-                            // // onClick={()=>handleSelectedProduct(index,p)}
-                            // >
-                                <ProductCard key={index} product={p} initialQuantity={0} updateProductQuantity={handleProductQuantityChange} bottomVisible={false}>
-
-                                </ProductCard>
-                            // </div>
-                            )
-                        )
+                    <div className='display-mode-selector'>
                         
-                        : <p>{error}</p>
-                    }
-                </div>
+                        <div onClick={()=>setDisplayMode("list")} className={`list-icon ${displayMode === "list" ? 'selected':''}`}><FaList /></div>
+                        <div onClick={()=>setDisplayMode("gallery")} className={`gallery-icon ${displayMode === "gallery" ? 'selected':''}`}><RiGalleryView2 /></div>
+                    </div>
+                    <div className="product-selection-list">
+                    
+                        {displayMode==="gallery" && products ?
+                                products.map((product,index)=>(
+                                        <ProductCard 
+                                            key={index} 
+                                            product={product} 
+                                            initialQuantity={selectedProducts.get(product.id!!)?.quantity ?? 0} 
+                                            updateProductQuantity={handleProductQuantityChange} 
+                                            bottomVisible={false}>
+
+                                        </ProductCard>                                    
+                                    )
+                                )
+                                
+                                : <p>{error}</p>
+                        }
+
+                        {displayMode==="list" && products && products.length > 0 ?
+                            <ul className='product-list'>
+                                <li className='product-list-items-title Product-list-item'>
+                                    <label htmlFor="">Product</label>
+                                    <label htmlFor="">SKU</label>
+                                    <input value="Quantity" disabled/>                                
+                                </li>
+                                {products.map((product,index)=>(
+                                    <li key={index} className='product-list-item'>
+                                        <label htmlFor="">{product.marketingName} ({product.retailPrice}€)</label>
+                                        <label htmlFor="">{product?.sku?.length===0 ?  "/" : product.sku}</label>
+                                        <input type="number" placeholder={`${selectedProducts.get(product.id!!)?.quantity.toString() ?? '0'}`} onBlur={(e)=>handleProductQuantityChange(product,parseInt(e.target.value,10))}/>
+                                    </li>
+                                ))}
+                            </ul>
+                            
+                            : <p>{error}</p>
+
+                        }
+
+
+                    </div>
+                    
+
+
+                    <div className='bottom-section' style={customButtonSectionStyle} >
+                        <button type="button" style={customSaveButtonStyle} onClick={saveProductsSelection}>Save selection</button>
+                    </div>
+
                 
-
-
-                <div className='bottom-section' style={customButtonSectionStyle} >
-                    <button type="button" style={customSaveButtonStyle} onClick={saveProductsSelection}>Save selection</button>
-                </div>
-
-            
+            </div>
+            }
         </div>
-        }
     </>
 
   )

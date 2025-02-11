@@ -20,6 +20,7 @@ import Missing from './pages/Missing.tsx';
 import { OrdersProvider } from './hooks/useOrders.tsx';
 import Customers from './pages/Customers.tsx';
 import ConfirmAccount from './pages/ConfirmAccount.tsx';
+import PersistLogin from './components/main/PersistLogin.tsx';
 
 
 
@@ -32,30 +33,30 @@ const App = () => {
         <Routes>
           <Route path="/login" element={<Login  />} />
           
+
           <Route path='/' element={<Layout/>}>  
             {/* Public routes  */}
             {/* <Route path="/confirmAccount" element={<ConfirmAccount />} />/ */}
             <Route path="/" element={<Navigate to="login"/>} />
-            <Route path="*"  element={<Missing/>} />
+            
 
 
 
            
             {/* Private routes */}
-            {/* <Route element={ <PersistLogin/> }> */}
-          
+            {/* <Route element={ <PersistLogin/> }>           */}
               <Route element={< ProtectedRoutes/> }>
                 <Route path='/dashboard' element={ <Dashboard /> } />
                 <Route path='/orders' element={ <Orders/> } />
                 <Route path='/clients' element={<Customers />} />
                 <Route path='/products' element={<Products />} />
                 <Route path="/materials" element={<Materials />} />
-              </Route>
-            
-          </Route>
+              </Route>        
+            {/* </Route> */}
 
-          {/* </Route> */}
+          </Route>
   
+          <Route path="*"  element={<Missing/>} />
             
         </Routes>
       

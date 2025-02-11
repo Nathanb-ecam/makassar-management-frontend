@@ -79,10 +79,14 @@
 .navbar .nav-li-item{
     width: 100%;
     display: flex;
-    align-items: center;
+    align-items: center;    
     /* background: red; */
-
 }
+.navbar .nav-li-item:nth-child(1) svg{font-size: 1.1rem;}
+.navbar .nav-li-item:nth-child(2) svg{font-size: 1.6rem;}
+.navbar .nav-li-item:nth-child(3) svg{font-size: 1.1rem;}
+.navbar .nav-li-item:nth-child(4) svg{font-size: 1.4rem;}
+
 
 .navbar .selected{
     background-color: var(--primary);
@@ -123,12 +127,14 @@
     
 
 .navbar .fast-order{
-    background: var(--info-green);
+    /* background: var(--info-green); */
+    background: var(--primary);
     color:rgba(255, 255, 255, 0.92);
     border:none;
     border-radius: 15px;
     padding:10px;
     font-weight: bold;
+    width: 70%;
     font-family: var(--font-secondary);
     
 }

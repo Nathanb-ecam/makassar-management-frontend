@@ -32,12 +32,15 @@
     display: flex;
     justify-content: space-evenly;
     width: 100%;
-    background-color: var(--primary);
-    color: white;
+    /* background: var(--ligth-gray); */
+    /* color: var(--black);
+    color : var(--ligth-gray); */
+    color: var(--light-grey);
+    background : var(--hover-grey);
     text-align: center;
     overflow: hidden;
-    border-radius:10px 10px 0 0;
-    font-weight: lighter;    
+    /* border-radius:10px 10px 0 0; */
+    font-weight: 100;
 }
 
 .orders-list .orders-header-row div{
@@ -62,7 +65,7 @@
 
 
 .orders-list .customer-row{
-    border-bottom: 1px solid var(--light-grey);
+    border-bottom: 1px solid var(--light-grey);    
 }
 
 
@@ -75,7 +78,8 @@
 
 
 .orders-list .customer-row .customer-base-info div{
-    text-align: center;
+    display: flex;
+    justify-content: center;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -90,8 +94,7 @@
 .orders-list .customer-row .customer-base-info:hover{
     color:var(--primary);
     font-weight: bold; 
-    background: var(--ligth-grey);
-
+    background: var(--ligth-grey);    
 }
 
 
@@ -109,27 +112,31 @@
     margin: 0 4px;
 }
 
-.order-details{
-    display: none;
-    min-width: 820px;
-    height: max-content;
-    max-height: 55vh;
+.order-details{    
+    display: flex;
+    min-width: 820px;        
+    /* height: max-content; */
+    /* max-height: 55vh;         */   
+    max-height: 0;        
     padding:10px;
     flex-direction: row;
     border:2px solid var(--primary);
+    border:.3px solid var(--hover-grey);
     transition: all .4s ease-in-out;
     background:var(--light-grey);
-    /* overflow: auto; */
-
-
+    
 }
 
-.customer-row .expanded {
-    display: flex;
+.customer-row .expanded {    
+    max-height: 55vh;         
+    /* display: flex; */
 }
 
 .customer-row .collapsed {
+    max-height: 0;     
     display: none;
+    
+    
 }
 
 .customer-row .editable-div:hover {
@@ -147,42 +154,65 @@
 }
 
 .order-details .order-infos{
-    padding: 15px;
+    padding: 0 15px;
 }
 
+
+.order-details .customer-infos .customer-card:hover{        
+    border: 1px solid var(--primary);    
+}
 
 .order-details .customer-infos .customer-card > div{
     word-wrap:break-word;
 }
 
-.customer-card .card-title{
+.order-details .customer-infos > *{
+    width: 100%;
+    text-align: center;
+}
+
+.order-details .customer-infos svg{
+    font-size: 2rem;    
     color: var(--primary);
+    
+}
+
+.customer-card{
+    color: var(--primary);
+    border: .3px solid var(--primary);
+    border-radius:5px;
+    text-align: center;
     font-weight: bold;
     font-size: 1.2rem;
+    padding: 2rem 0;
+}
+
+.customer-card .title-row{
+    margin-bottom: .4rem;    
+}
+
+
+.customer-card .mail,
+.customer-card .phone,
+.customer-card .tva,
+.customer-card .shippingAddress,
+.customer-card .professionalAddress
+{
+    font-size: .8rem;
+}
+
+.customer-card svg{
+    width: 100%;
 }
 
 .customer-card .phone,
 .customer-card .mail,
 .customer-card .tva{
     font-weight: 600;
-    /* font-size: 1.2rem; */
-
 }
 
-.customer-card .tva{
-    margin-bottom: 15px;    
-}
 
-.customer-card .shippingAddress-text,
-.customer-card .professionalAddress-text,
-.customer-card .plannedDate
-{
-    margin-top: 15px;
-}
-
-.customer-infos .order-description, 
-.customer-infos .customer-card,
-.product-item-card{
+.product-item-card{    
     margin-top: 20px;
 }
 
@@ -206,6 +236,7 @@
     margin-left: 20px;
 }
 
+
 .products-section-title{
     background: white;
     display: flex;    
@@ -217,7 +248,8 @@
 
 .products-section-title .left-title{
     display: flex;
-    width: 135px;
+    /* width: 135px; */
+    width: 100%;
     align-items: center;
     justify-content: space-between;
 }
@@ -226,20 +258,10 @@
     font-size: 1.4rem;
 }
 
-
-/* .products-section-title .left-title .add-product-section{
-    transform: translateY(-5px);
-} */
-
-
-.order-details .product-infos .products-list{
-    display: flex;
-    flex-wrap: wrap;
-    height: 90%;
+.products-section-title .left-title{
     width: 100%;
-    overflow: scroll;
+    display: flex;
 }
-
 
 
 
@@ -289,7 +311,20 @@
     position:relative;
 }
 
-.order-invoice-section svg{
-    color: var(--primary);
-    margin-left: 5px;
+
+.order-invoice-button{
+    /* border: 1px solid var(--primary-lighter); */
+    border-radius: 5px;    
+    border: none;
+    background: var(--primary);
+    color: white;
+    width: 100%;
+    display: flex;
+    gap: .5rem;
+    justify-content: center;
+    align-items: center;
+    padding-inline: 1rem;
+    font-size: 1.2rem;
+    font-weight: 'semibold';
 }
+

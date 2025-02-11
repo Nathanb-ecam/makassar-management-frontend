@@ -11,6 +11,7 @@ import { IoMdClose } from 'react-icons/io';
 import InfoButtonPopup from '../main/InfoButtonPopup';
 import Popup from '../main/Popup';
 
+
 interface Props{
     product: Product;
     initialQuantity:number;
@@ -30,7 +31,7 @@ const ProductCard = ({product, initialQuantity,updateProductQuantity,  onProduct
     const productImagesCount = product?.imageUrls?.length ?? 0
 
     const [imageCarouselIndex, setImageCarouselIndex] = useState(0);
-    const [productQuantity, setProductQuantity] = useState("");
+    const [productQuantity, setProductQuantity] = useState(initialQuantity.toString());
 
     const prevNextArrowVisible = (productImagesCount > 1)
 
@@ -50,6 +51,7 @@ const ProductCard = ({product, initialQuantity,updateProductQuantity,  onProduct
 
     const handleQuantityBlur = () => {
         const quantity = parseInt(productQuantity,10);
+        if(quantity < 0) return setProductQuantity(initialQuantity.toString())
         if(!isNaN(quantity)){
             updateProductQuantity?.(product,quantity);
         }else{
@@ -65,6 +67,7 @@ const ProductCard = ({product, initialQuantity,updateProductQuantity,  onProduct
 
     <div 
         className='product-item-card'
+        title={product.marketingName??"undefined"}
         key={product.id} 
         // onClick={(e) =>{setproductDetailsVisible(true)}}        
     >        

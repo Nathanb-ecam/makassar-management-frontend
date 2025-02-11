@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Form, FormGroup, FormControl} from 'react-bootstrap';
+
 
 import { useAuth } from '../hooks/useAuth';
 import { useNavigate } from 'react-router-dom';
 
 import './css/login.css'
 import  axios  from '../api/axios';
-
 
 
 
@@ -169,7 +168,7 @@ const LoginForm = () => {
                 />
               </div>
               <div className='password-section'>
-                <label>Password</label>
+                <label>Password</label>       
                 <input
                 required 
                 type="password" placeholder='Enter password' 

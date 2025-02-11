@@ -5,12 +5,16 @@
 .actual-price-wrapper{
     font-weight: bold;
     display: flex;
-    flex-wrap: wrap;
+    /* flex-wrap: wrap; */
+    justify-content: space-between;
+    align-items: center;
 }
 
-/* .actual-price::after{
-    content:'€'
-} */
+
+
+.actual-price{
+    font-size: 2rem;
+} 
 
 
 

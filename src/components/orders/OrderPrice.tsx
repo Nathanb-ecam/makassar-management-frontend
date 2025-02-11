@@ -88,13 +88,12 @@ const OrderPrice = React.forwardRef(({products,order, handleOrderPriceChange} : 
 
     return (
         <>
-            <div className='actual-price-wrapper'>
-                <div className="actual-price-text">Price: </div>
+            <div className='actual-price-wrapper'>                
                 <div className="actual-price">
                     {Number(order?.price?.finalPrice).toFixed(2)}€                
                 </div>
-                <InfoButtonPopup 
-                positionClass="left-pop" sizeClass='small-pop' customStyle={{maxWidth:'220px',right:'-25px',top:'25px'}}
+                <InfoButtonPopup                 
+                positionClass="left-pop" sizeClass='small-pop' customStyle={{maxWidth:'220px',right:'-15px',top:'15px'}}
                 >
                     <div className='price-calculations'>
                         <div className="decompte">

@@ -29,9 +29,10 @@
     border-radius: 5px;
     padding: 10px 20px;
     font-size: 1.1rem;
-    color: var(--info-green);
-    background: white;
-    border: 1px solid var(--info-green);
+    background: white;    
+    /* border: 1px solid var(--info-green); */
+    color: var(--primary);
+    border: 1px solid var(--primary);
 }
 
 .plus-button{

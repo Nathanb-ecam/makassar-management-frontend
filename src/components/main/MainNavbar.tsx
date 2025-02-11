@@ -9,6 +9,7 @@ import '../css/navbar.css'
 import { IoColorPalette } from "react-icons/io5";
 import { FaHouse,FaRegPenToSquare,FaBagShopping,FaPerson, FaAngleLeft } from 'react-icons/fa6';
 import { IoMdClose } from 'react-icons/io';
+import { MdAccountCircle } from 'react-icons/md';
 
 
 
@@ -57,6 +58,10 @@ const MainNavbar = () => {
         <li className={`nav-li-item ${selectedItem === "products" ? "selected" : "" }`} onClick={(e)=>navigateTo("/products","products")}>
           <FaBagShopping className='nav-icons'/>
           <button className="nav-button" >Products</button>
+        </li>
+        <li className={`nav-li-item ${selectedItem === "account" ? "selected" : "" }`} onClick={(e)=>navigateTo("/account","account")}>
+          <MdAccountCircle className='nav-icons'/>
+          <button className="nav-button" >Account</button>
         </li>
         
         {/* <li className={`nav-li-item ${selectedItem === "materials" ? "selected" : "" }`} onClick={(e)=>navigateTo("/materials","materials")}>

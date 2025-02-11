@@ -82,6 +82,7 @@
 
 .confirm-order-create button{
     padding: 5px 10px;
+    background: var(--primary);
     background: var(--info-green);
     color: white;
     border: none;

@@ -1,31 +1,32 @@
 import React, { useRef } from 'react';
 import { useState,useEffect } from 'react';
-import {Product, ProductWithQuantity, Customer, Order, OrderDto, OrderEditableData, OrderFullyDetailed, OrderOverview, Price} from '../models/entities.ts'
+import {Product, ProductWithQuantity, Customer, Order, OrderDto, OrderEditableData, OrderFullyDetailed, OrderOverview, Price} from '../models/entities'
 
 
-import { useAuth } from '../hooks/useAuth.tsx';
-import { formatTime } from '../utils/formatTime.tsx';
+import { useAuth } from '../hooks/useAuth';
+import { formatTime } from '../utils/formatTime';
 
 
-import { FaAngleLeft, FaRegFilePdf } from "react-icons/fa6";
+import { FaAngleLeft, FaRegFilePdf, FaUser } from "react-icons/fa6";
 
 
 import "./css/orders.css"
-import { useOrdersContext } from '../hooks/useOrders.tsx';
+import { useOrdersContext } from '../hooks/useOrders';
 
-import {createOrder, deleteOrderById, getOrderFullyDetailedById, putOrder} from '../api/calls/Order.tsx';
+import ProductCard from '../components/products/ProductCard';
+import {createOrder, deleteOrderById, getOrderFullyDetailedById, putOrder} from '../api/calls/Order';
+import AddProductCard from '../components/products/AddProductCard';
 
-import SectionTitle from '../components/main/SectionTitle.tsx'
-import { useTopMessage } from '../hooks/useTopMessagePopup.tsx';
-import Popup from '../components/main/Popup.tsx';
-import OrderPrice from '../components/orders/OrderPrice.tsx';
-import CreateOrder from '../components/orders/CreateOrder.tsx';
+import SectionTitle from '../components/main/SectionTitle'
+import { useTopMessage } from '../hooks/useTopMessagePopup';
+import Popup from '../components/main/Popup';
+import OrderPrice from '../components/orders/OrderPrice';
+import CreateOrder from '../components/orders/CreateOrder';
 import { RiDeleteBin6Line } from 'react-icons/ri';
-import { handleFieldChange, processFieldChange } from '../utils/stateChange.tsx';
+import { handleFieldChange, processFieldChange } from '../utils/stateChange';
 import { PDFDownloadLink, pdf } from '@react-pdf/renderer';
-import OrderInvoiceTemplate from '../pdf/OrderInvoiceTemplate.tsx';
-import ProductCard from '../components/products/ProductCard.tsx';
-import AddProductCard from '../components/products/AddProductCard.tsx';
+import OrderInvoiceTemplate from '../pdf/OrderInvoiceTemplate';
+import { CiDeliveryTruck } from 'react-icons/ci';
 
 
 const initialOrderEditableData: OrderEditableData = {
@@ -70,13 +71,11 @@ const Orders = () => {
   
   const {auth}:any = useAuth()
 
-  const productSelectorChildPopup = useRef<ChildPopupRef | null>(null);
+  const productselectorChildPopup = useRef<ChildPopupRef | null>(null);
   const orderPriceRef = useRef<ChildOrderPriceRef | null>(null);
 
   
-  // const descriptionRef = useRef<string | null>(null);
   const descriptionRef = useRef<HTMLDivElement | null>(null);
-  // const commentsRef = useRef<string | null>(null);
   const commentsRef = useRef<HTMLDivElement | null>(null);
 
   const {showTopMessage}:any = useTopMessage()
@@ -100,21 +99,21 @@ const Orders = () => {
   
   
 
-  // useEffect(()=>{
-  //   console.log(currentOrder)
-  // },[currentOrder])
+  useEffect(()=>{
+    console.log(ordersOverviews)
+  },[ordersOverviews])
 
   
 
-  const removeProductFromOrder = (product : Product) => {
-    // console.log("received product to remove", product);
+  const removeProductFromOrder = (Product : Product) => {
+    // console.log("received Product to remove", Product);
 
     setCurrentOrder(prev => {
       if (!prev) return prev;
-      if(product.id === undefined) return prev
+      if(Product.id === undefined) return prev
 
       const updatedproducts = new Map(prev.products);
-      updatedproducts.delete(product.id); 
+      updatedproducts.delete(Product.id); 
 
       setCurrentOrderHasBeenModified(true)
       
@@ -134,10 +133,10 @@ const Orders = () => {
       const price = recomputeOrderPrice()
       // console.log("recomputed price", price)
 
-      const productIdToQmap = new Map<string,string>() 
+      const ProductIdToQmap = new Map<string,string>() 
       if(currentOrder?.products){
-        currentOrder?.products.forEach((productWithQ,productId)=>{
-          productIdToQmap.set(productWithQ.product.id!!,productWithQ.quantity.toString())
+        currentOrder?.products.forEach((ProductWithQ,productId)=>{
+          ProductIdToQmap.set(ProductWithQ.product.id!!,ProductWithQ.quantity.toString())
         })
       }
       
@@ -149,13 +148,13 @@ const Orders = () => {
         ...rest,
         price: price,
         customerId:currentOrder.customer.id,
-        products:Object.fromEntries(productIdToQmap)
+        products:Object.fromEntries(ProductIdToQmap)
       }
 
       // console.log("modifiedOrder",modifiedOrder)
       const {err, errMsg} = await putOrder(auth,orderOverview.id,modifiedOrder);
       if(!err){
-        showTopMessage(`Modification(s) of order '${orderOverview.customerName}' saved`, {backgroundColor:'var(--info-green)'})
+        showTopMessage(`Modification(s) of the order '${orderOverview.customerName}' saved`, {backgroundColor:'var(--info-green)'})
         setCurrentOrderHasBeenModified(false)
         refreshOrderOverviewById(auth,id!!)    
         setCurrentOrder(prev => {
@@ -173,7 +172,7 @@ const Orders = () => {
 
         
       }else{
-        showTopMessage(`Error while saving changes`, {backgroundColor:'var(--info-red)'})  
+        showTopMessage(`Error while saving order changes `, {backgroundColor:'var(--info-red)'})  
       }
   }  
 
@@ -184,7 +183,7 @@ const Orders = () => {
     const {id, err} = await deleteOrderById(auth,orderId)
     // console.log(id)
     if(!err){
-      showTopMessage(`Order removed`, {backgroundColor:'var(--info-green)'})
+      showTopMessage(`Order successfuly removed`, {backgroundColor:'var(--info-green)'})
       removeOrderFromOrdersState(orderId)
     }else{
       // console.log("deleteOrderWithId",err)
@@ -201,7 +200,7 @@ const Orders = () => {
       } return null
   }
 
-  const handleproductQuantityChange = (product : Product, newQuantity : number) => {
+  const handleProductQuantityChange = (product : Product, newQuantity : number) => {
     if(newQuantity === 0 ) return removeProductFromOrder(product)
     setCurrentOrder((prev)=>{
       if(!prev) return prev
@@ -219,7 +218,7 @@ const Orders = () => {
   }
 
 
-  const addProductSelectionToCurrentProducts = (products: Map<string, ProductWithQuantity>)=> {
+  const addProductselectionToCurrentproducts = (products: Map<string, ProductWithQuantity>)=> {
     // console.log('Final selection')
     // console.log(products)
     setCurrentOrder(prev=>{
@@ -238,8 +237,8 @@ const Orders = () => {
         }
       })
       setCurrentOrderHasBeenModified(true)
-      showTopMessage(`${products.size} product(s) added to the order`, {backgroundColor:'var(--info-green)'})
-      if(productSelectorChildPopup.current) productSelectorChildPopup.current.hidePopup()
+      showTopMessage(`${products.size} model(s) added to order`, {backgroundColor:'var(--info-green)'})
+      if(productselectorChildPopup.current) productselectorChildPopup.current.hidePopup()
 
 
       return {
@@ -266,8 +265,7 @@ const Orders = () => {
     if (!rotatedRows[index]){      
       const result = await getOrderFullyDetailedById(auth,ord.id)
       
-      console.log("LOG")
-      console.log(result)
+      
       if(result.err){
         console.log(result.err)
       }
@@ -313,7 +311,7 @@ const Orders = () => {
     if(data){
       const successfullyModifiedOrder = await putOrder(auth,orderId,data);
       if(successfullyModifiedOrder) showTopMessage(`Order modified`, {backgroundColor:'var(--info-green)'})
-      else showTopMessage(`Modifications couldn't be saved`, {backgroundColor:'var(--info-red)'})
+      else showTopMessage(`Modifications could not be saved`, {backgroundColor:'var(--info-red)'})
     }
     // else{
     //   console.log("No changes")
@@ -330,19 +328,17 @@ const Orders = () => {
 
   const handleNewOrderCreated = async (order : OrderDto) => {
 
-      // const productsObject = Object.fromEntries(order.products)
       const productsObject = order.products ? Object.fromEntries(order.products) : {};
-
-
-      const orderWithProductsObject = {
+     
+      const orderWithproductsObject = {
         ...order,
         products: productsObject,
       };
      
-      const {id,err} = await createOrder(auth,orderWithProductsObject)
+      const {id,err} = await createOrder(auth,orderWithproductsObject)
       
      if(!err){
-      showTopMessage(`Order successfuly created`,{backgroundColor:'var(--info-green)'})
+      showTopMessage(`La commande a bien été crée`,{backgroundColor:'var(--info-green)'})
       refreshOrdersOverviews(auth)
       setCreateOrderVisible(false)
       
@@ -391,20 +387,21 @@ const Orders = () => {
 
 
 
-  if (loading) return <p>Loading ...</p>
-  if (error) return <p>{error}</p>
+  if (loading) return <p style={{textAlign:'center'}}>Chargement du contenu...</p>
+  if (error) return <p style={{textAlign:'center'}}>Erreur:{error}</p>
 
   return (
     <div className="page">
 
           {createOrderVisible && 
             <Popup 
-              title='Take a new order' 
+              title='Prendre une nouvelle commande' 
               onPopupClose={onCreateOrderClosed} 
               customCSS={{
                 // minHeight:'60%',
-                
-                maxHeight:'90vh'
+                width:'80vw',
+                maxWidth:'1000px',
+                maxHeight:'95vh'
               }}
               >
                 <CreateOrder handleOrderCreated={handleNewOrderCreated}>
@@ -415,8 +412,8 @@ const Orders = () => {
 
         <div className="orders">
           <SectionTitle 
-              title='Orders' 
-              newElementButtonText='New order'
+              title='Commandes' 
+              newElementButtonText='Nouvelle commande'
               onCreateButtonClicked={onCreateOrderButtonClicked}>
 
           </SectionTitle>
@@ -428,12 +425,12 @@ const Orders = () => {
                   <div className='orders-header-row'>
                     <div className='small-col'>N°</div>
                     <div className='medium-col'>Client</div>
-                    <div className='medium-col'>Created</div>
-                    <div className='medium-col'>Modified</div>
+                    <div className='medium-col'>Création</div>
+                    <div className='medium-col'>Modification</div>
                     <div className='medium-col'>Status</div>
-                    <div className='medium-col'>Planned date</div>
-                    <div className='small-col'>Total price</div>
-                    <div className='small-col'>Details</div>
+                    <div className='medium-col'>Date prévue</div>
+                    <div className='small-col'>Prix</div>
+                    <div className='small-col'>Détails</div>
                     <div className='small-col'>Actions</div>
 
                   </div>
@@ -447,7 +444,7 @@ const Orders = () => {
                       
                       <div className='customer-base-info'>       
                         <div className='small-col'>{orderOverview.orderNumber }</div>
-                        <div className='medium-col'>{orderOverview.customerName }</div>
+                        <div className='medium-col' title={`${orderOverview.customerName}`}>{orderOverview.customerName }</div>
                         <div className='medium-col'>{formatTime(orderOverview.createdAt)}</div>
                         <div className='medium-col'>{formatTime(orderOverview.updatedAt)}</div>
                         <div 
@@ -460,6 +457,7 @@ const Orders = () => {
                         </div>
                         <div                        
                         className='order-status medium-col editable-div' 
+                        title={`${orderOverview.plannedDate}`}
                         contentEditable={true}
                         suppressContentEditableWarning={true} 
                         onBlur={(e) => handleOrderChangeInRowItems(orderOverview.id,"plannedDate", (e.target as HTMLElement).innerText)}
@@ -485,37 +483,29 @@ const Orders = () => {
                             /> 
                         </div>
                         <div className='actions-icons small-col'>
-                                <RiDeleteBin6Line onClick={()=>deleteOrderWithId(orderOverview.id!!)}></RiDeleteBin6Line>                                
+                                {/* <FaRegFilePdf id="generate-pdf" onClick={generateAndDownloadInvoice} /> */}
+                                <RiDeleteBin6Line onClick={()=>deleteOrderWithId(orderOverview.id!!)} style={{color:'var(--info-red)'}}></RiDeleteBin6Line>                                
                         </div>
                       </div>
 
                       <div className={`order-details ${rotatedRows[index] ? 'expanded' : 'collapsed'}`}>
                           {currentOrder?.customer ? 
                             <div className='customer-infos'>
-                              <div className='title'>Customer</div>
                               <div className='customer-card'>
-                                <div className='card-title'>{currentOrder.customer.name}</div>
-                                {currentOrder.customer.phone && currentOrder.customer.phone?.length>0 && <div className='phone'>{currentOrder.customer.phone}</div>}
-                                {currentOrder.customer.mail && currentOrder.customer.mail?.length>0 &&<div className='mail'>{currentOrder.customer.mail}</div>}
-                                {currentOrder.customer.tva && currentOrder.customer.tva?.length>0 && <div className='tva'>Tva: {currentOrder.customer.tva}</div>}
-                                {currentOrder.customer.shippingAddress &&                             
-                                  <>
-                                    <div className='shippingAddress-text'>Shipping address:</div>
-                                    <div className='shippingAddress'>{currentOrder.customer.shippingAddress}</div>
-                                  </>
-                                }
-                                {currentOrder.customer.professionalAddress &&
-                                  <>
-                                    <div className='professionalAddress-text'>Professional address:</div>
-                                    <div className='professionalAddress'>{currentOrder.customer.professionalAddress ?? "Not mentioned"}</div>
-                                  </>
-                                }
-                                {currentOrder.plannedDate ? 
-                                <div className='plannedDate'>Planned date: {currentOrder.plannedDate}</div>
-                                : null
-                                }
-                                
-                                
+                                {/* <div className='card-title'> */}
+                                  <div className="title-row">
+                                    <FaUser />
+                                    {currentOrder.customer.name}
+                                  </div>
+                                  {currentOrder.customer.mail && currentOrder.customer.mail?.length>0 &&<div className='mail'>{currentOrder.customer.mail}</div>}
+                                  {currentOrder.customer.phone && currentOrder.customer.phone?.length>0 && <div className='phone'>{currentOrder.customer.phone}</div>}
+                                  {currentOrder.customer.tva && currentOrder.customer.tva?.length>0 && <div className='tva'>(VAT: {currentOrder.customer.tva})</div>}
+                                  {currentOrder.customer.shippingAddress && <div className='shippingAddress'>
+                                    <CiDeliveryTruck />
+                                    {currentOrder.customer.shippingAddress}
+                                  </div>}
+                                  {currentOrder.customer.professionalAddress && <div className='professionalAddress'>Adresse pro:{currentOrder.customer.professionalAddress ?? "Non renseignée"}</div>}
+                                {/* </div>                                                                                                 */}
                               </div>
                             </div>
                             : <p>Customer not found</p>
@@ -526,24 +516,28 @@ const Orders = () => {
                           <div className='product-infos'>
                             <div className='products-section-title'>
                               <div className="left-title">
-                                <div className='title'>Produits</div>
-                                <AddProductCard addProductsSelectionToCurrentProducts={addProductSelectionToCurrentProducts} ref={productSelectorChildPopup}/>
+                                <div className='title'>Products</div>
+                                <AddProductCard 
+                                customPopupCSS={{minWidth:'70vw'}}
+                                addProductsSelectionToCurrentProducts={addProductselectionToCurrentproducts} 
+                                ref={productselectorChildPopup}
+                                />
                               </div>
                               <button  
                                 className={`button-apply-order-changes ${currentOrderHasBeenModified ? 'active' : ''}`}
                                 onClick={() => applyOrderModifications(orderOverview)}>
-                                    Apply changes
+                                    Appliquer les changements
                               </button>
                             </div>
                             <div className='products-list'>   
   
-                                {currentOrder?.products instanceof Map && Array.from(currentOrder.products.values()).map((productWithQuantity, index) => (
+                                {currentOrder?.products instanceof Map && Array.from(currentOrder.products.values()).map((ProductWithQuantity, index) => (
                                     <ProductCard                                                                           
                                       key={index} 
-                                      product={productWithQuantity.product} 
-                                      initialQuantity={productWithQuantity.quantity} 
+                                      product={ProductWithQuantity.product} 
+                                      initialQuantity={ProductWithQuantity.quantity} 
                                       onProductRemoved={removeProductFromOrder} 
-                                      updateProductQuantity={handleproductQuantityChange}                                       
+                                      updateProductQuantity={handleProductQuantityChange} 
                                       deleteButtonVisible={true}
                                     />
                                   ))
@@ -560,21 +554,17 @@ const Orders = () => {
                                                             handleOrderPriceChange={handleOrderPriceChange}/>}                             
                             </div>
 
+                            
                             <div className="order-invoice-section">
-                              <label htmlFor="generate-pdf">Generate invoice</label>
-                              {/* <PDFDownloadLink  
-                                fileName={`${currentOrder.customer.name}-${currentOrder.orderNumber ?? ''}`} 
-                                document={<OrderInvoiceTemplate detailedOrder={currentOrder}/>}
-                              > */}
-                                <FaRegFilePdf id="generate-pdf" onClick={generateAndDownloadInvoice} />
-                              {/* </PDFDownloadLink> */}
+                              <label htmlFor="generate-pdf">Bon de commande</label>                    
+                                <FaRegFilePdf id="generate-pdf" onClick={generateAndDownloadInvoice} />                    
                             </div>
                             
                             
                             <div className='order-description'>
-                              <label onClick={()=> focusDiv("description")}>Description:</label>
+                              <label onClick={()=> focusDiv("description")}>Description:</label>                              
                               <div 
-                              className='description-text'
+                              className='description-text'                              
                               contentEditable={true}
                               suppressContentEditableWarning={true}
                               ref={descriptionRef}
@@ -593,7 +583,7 @@ const Orders = () => {
                             
                             
                             <div className='order-comments'>
-                              <label onClick={()=> focusDiv("comments")}>Comments:</label>
+                              <label onClick={()=> focusDiv("comments")}>Commentaires:</label>
                               <div 
                               className='comments-text'
                               contentEditable={true}
@@ -623,7 +613,7 @@ const Orders = () => {
     
                 </div>
               
-                : <p>No orders yet ...</p>
+                : <p>Pas de commandes</p>
           }
 
         </div>

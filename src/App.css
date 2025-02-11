@@ -23,8 +23,9 @@
   --ligth-grey: hsla(226, 49%, 90%, 0.371);
   --light-background: hsla(240, 1%, 96%,1);
   --light-grey-background: hsla(0, 0%, 98%,1);
+  --white-background : rgb(254,254,254);
   --light-white: rgb(249, 249, 249);
-  --ligth-gray: rgb(249, 249, 249);
+  --ligth-gray: rgb(231, 229, 229);
   --hover-grey: rgb(226,228,231);
   
 
@@ -39,8 +40,8 @@
   /* --primary-lighter:hsla(0, 79%, 63%, 0.808);      */
   
   /* BLUE THEME */
-  /* --primary:hsla(211, 73%, 44%);    */
-  /* --primary-lighter:rgb(75, 128, 244); */
+  --primary:hsla(211, 73%, 44%);   
+  --primary-lighter:rgb(75, 128, 244);
   
 
   --secondary:rgb(208, 191, 170);
@@ -71,10 +72,10 @@ body{
   /* position: fixed; */
 }
 
+
 .page{
   /* margin: 1rem; */
-  /* margin:0 auto; */
-  
+  /* margin:0 auto; */  
   padding: 50px;
   /* border: 1px solid red; */
   position: relative;
@@ -82,3 +83,9 @@ body{
   
 }
 
+
+input, textarea, select{
+  
+  border:1px solid var(--primary-lighter);
+  border-radius: 5px;
+}

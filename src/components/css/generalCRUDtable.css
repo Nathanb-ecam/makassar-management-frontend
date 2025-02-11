@@ -9,7 +9,7 @@
     width: max-content;
     flex-direction: column;
     box-shadow: var(--box-shadow) 0px 8px 24px;
-    border-radius: 0 0 10px 10px;
+    /* border-radius: 0 0 10px 10px; */
     overflow: auto;
 
 
@@ -27,7 +27,7 @@
 .general-crud-table .header-row{
     background: var(--primary);
     color: white;
-    border-radius:10px 10px 0 0;
+    /* border-radius:10px 10px 0 0; */
 }
 
 .content-row{

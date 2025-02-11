@@ -171,7 +171,7 @@ const CreateOrder = ({handleOrderCreated} : Props) => {
 
 
                     <div className='create-order-field'>
-                        <label htmlFor="">Location:</label>
+                        <label htmlFor="createdPlace">Location:</label>
                         <select                             
                             name="createdLocation" id="createdPlace"
                             onChange={handleElementChange}                                                   
@@ -198,10 +198,10 @@ const CreateOrder = ({handleOrderCreated} : Props) => {
                     </div>
 
                     <div className='create-order-field'>
-                        <label htmlFor="">Description:</label>
+                        <label htmlFor="description">Description:</label>
                         <textarea 
                             name="description"
-                            id=""
+                            id="description"
                             onChange={handleElementChange}
                         >
 
@@ -209,11 +209,11 @@ const CreateOrder = ({handleOrderCreated} : Props) => {
                     </div>
 
                     <div className='create-order-field'>
-                        <label htmlFor="">Comments:</label>
+                        <label htmlFor="comments">Comments:</label>
                         <textarea                     
                             name="comments"
                             onChange={handleElementChange} 
-                            id=""                        
+                            id="comments"                        
                         >
                         </textarea>
                     </div>

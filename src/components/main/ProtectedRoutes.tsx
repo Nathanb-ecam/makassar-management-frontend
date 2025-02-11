@@ -8,9 +8,13 @@ const ProtectedRoutes = () => {
     const location = useLocation()
 
     return (
-        auth?.user 
+        (auth?.accessToken && auth?.user)
             ? <Outlet /> 
-            : <Navigate to="/login" state={{from: location}} replace/>
+            : auth === null
+            ? <p>Loading...</p>
+            : <Navigate to="/login" state={{ from: location }} replace />
+            // ? <Outlet /> 
+            // : <Navigate to="/login" state={{from: location}} replace/>
          
     )
 }
