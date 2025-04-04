@@ -1,7 +1,6 @@
 import React from 'react'
 import axios from '../axios'
 import { Product, OrderFullyDetailed } from '../../models/entities'
-import Orders from '../../pages/Orders';
 import { processHttpError } from '../../utils/httpErros';
 
 export const getOrders = async (auth) => {

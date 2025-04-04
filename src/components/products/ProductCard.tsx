@@ -71,7 +71,7 @@ const ProductCard = ({product, initialQuantity,updateProductQuantity,  onProduct
         key={product.id} 
         // onClick={(e) =>{setproductDetailsVisible(true)}}        
     >        
-        <div className="product-details-popup-wrapper">    
+        {/* <div className="product-details-popup-wrapper">    
             <InfoButtonPopup 
                 positionClass='right-pop' 
                 customStyle={{
@@ -83,11 +83,8 @@ const ProductCard = ({product, initialQuantity,updateProductQuantity,  onProduct
                 <div className='marketingName'>{product.marketingName}</div>
                 <div className='sku'>{product.sku}</div>        
             </InfoButtonPopup>
-        </div>
-        { deleteButtonVisible && <IoMdClose className='productcard-delete-btn' onClick={()=>onProductRemoved?.(product)}/>}
-        {/* <div className="product-card-title-wrapper">
-            <div className='product-card-title'>{product.marketingName}</div>
         </div> */}
+        { deleteButtonVisible && <IoMdClose className='productcard-delete-btn' onClick={()=>onProductRemoved?.(product)}/>}
 
         { product.imageUrls && product.imageUrls.length > 0 ?
             <div className={`products-carousel ${prevNextArrowVisible ? '' : 'prev-next-arrow-hidden'}`}>

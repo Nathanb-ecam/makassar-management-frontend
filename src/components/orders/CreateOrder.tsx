@@ -229,8 +229,12 @@ const CreateOrder = ({handleOrderCreated} : Props) => {
                         ref={productSelectorRef}
                         addProductsToCurrentProducts={setproductsOfCurrentOrder}
                         customProductSelectionWrapperCSS= {{}}
-                        customButtonSectionStyle={{justifyContent:'center'}}
-                        customSaveButtonStyle={{background:'white',color:'var(--info-green)'}}
+                        customButtonSectionStyle={{justifyContent:'end'}}
+                        customSaveButtonStyle={{
+                            // width:'100%',
+                            background:'white',color:'var(--info-green)',
+                            border:'1px solid var(--info-green)',borderRadius:'5px'
+                        }}
                         >
 
                         </ProductSelector>

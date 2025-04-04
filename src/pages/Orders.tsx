@@ -27,6 +27,8 @@ import { handleFieldChange, processFieldChange } from '../utils/stateChange';
 import { PDFDownloadLink, pdf } from '@react-pdf/renderer';
 import OrderInvoiceTemplate from '../pdf/OrderInvoiceTemplate';
 import { CiDeliveryTruck } from 'react-icons/ci';
+import OrderCustomerInfos from '../components/orders/OrderCustomerInfos';
+import OrderProductItem from '../components/orders/OrderProductItem';
 
 
 const initialOrderEditableData: OrderEditableData = {
@@ -338,7 +340,7 @@ const Orders = () => {
       const {id,err} = await createOrder(auth,orderWithproductsObject)
       
      if(!err){
-      showTopMessage(`La commande a bien été crée`,{backgroundColor:'var(--info-green)'})
+      showTopMessage(`Order successfuly created`,{backgroundColor:'var(--info-green)'})
       refreshOrdersOverviews(auth)
       setCreateOrderVisible(false)
       
@@ -395,7 +397,7 @@ const Orders = () => {
 
           {createOrderVisible && 
             <Popup 
-              title='Prendre une nouvelle commande' 
+              title='Register new order' 
               onPopupClose={onCreateOrderClosed} 
               customCSS={{
                 // minHeight:'60%',
@@ -412,8 +414,8 @@ const Orders = () => {
 
         <div className="orders">
           <SectionTitle 
-              title='Commandes' 
-              newElementButtonText='Nouvelle commande'
+              title='Orders' 
+              newElementButtonText='New order'
               onCreateButtonClicked={onCreateOrderButtonClicked}>
 
           </SectionTitle>
@@ -424,13 +426,13 @@ const Orders = () => {
                 <div className='orders-list'>
                   <div className='orders-header-row'>
                     <div className='small-col'>N°</div>
-                    <div className='medium-col'>Client</div>
-                    <div className='medium-col'>Création</div>
+                    <div className='medium-col'>Customer</div>
+                    <div className='medium-col'>Creation</div>
                     <div className='medium-col'>Modification</div>
                     <div className='medium-col'>Status</div>
-                    <div className='medium-col'>Date prévue</div>
-                    <div className='small-col'>Prix</div>
-                    <div className='small-col'>Détails</div>
+                    <div className='medium-col'>Planned date</div>
+                    <div className='small-col'>Price</div>
+                    <div className='small-col'>Details</div>
                     <div className='small-col'>Actions</div>
 
                   </div>
@@ -489,63 +491,59 @@ const Orders = () => {
                       </div>
 
                       <div className={`order-details ${rotatedRows[index] ? 'expanded' : 'collapsed'}`}>
-                          {currentOrder?.customer ? 
-                            <div className='customer-infos'>
-                              <div className='customer-card'>
-                                {/* <div className='card-title'> */}
-                                  <div className="title-row">
-                                    <FaUser />
-                                    {currentOrder.customer.name}
-                                  </div>
-                                  {currentOrder.customer.mail && currentOrder.customer.mail?.length>0 &&<div className='mail'>{currentOrder.customer.mail}</div>}
-                                  {currentOrder.customer.phone && currentOrder.customer.phone?.length>0 && <div className='phone'>{currentOrder.customer.phone}</div>}
-                                  {currentOrder.customer.tva && currentOrder.customer.tva?.length>0 && <div className='tva'>(VAT: {currentOrder.customer.tva})</div>}
-                                  {currentOrder.customer.shippingAddress && <div className='shippingAddress'>
-                                    <CiDeliveryTruck />
-                                    {currentOrder.customer.shippingAddress}
-                                  </div>}
-                                  {currentOrder.customer.professionalAddress && <div className='professionalAddress'>Adresse pro:{currentOrder.customer.professionalAddress ?? "Non renseignée"}</div>}
-                                {/* </div>                                                                                                 */}
-                              </div>
-                            </div>
-                            : <p>Customer not found</p>
-                          }
-  
-  
+                          
+                          <OrderCustomerInfos customer={currentOrder.customer}/>    
 
                           <div className='product-infos'>
+
                             <div className='products-section-title'>
-                              <div className="left-title">
-                                <div className='title'>Products</div>
-                                <AddProductCard 
-                                customPopupCSS={{minWidth:'70vw'}}
-                                addProductsSelectionToCurrentProducts={addProductselectionToCurrentproducts} 
-                                ref={productselectorChildPopup}
-                                />
+                              <div className="left-title">                                
+                                  <div className='title'>Order items</div>
+                                  {/* <AddProductCard 
+                                  customPopupCSS={{minWidth:'70vw'}}
+                                  addProductsSelectionToCurrentProducts={addProductselectionToCurrentproducts} 
+                                  ref={productselectorChildPopup}
+                                  />                                 */}
                               </div>
                               <button  
                                 className={`button-apply-order-changes ${currentOrderHasBeenModified ? 'active' : ''}`}
                                 onClick={() => applyOrderModifications(orderOverview)}>
-                                    Appliquer les changements
+                                    Apply changes
                               </button>
                             </div>
-                            <div className='products-list'>   
-  
+
+                            <div className='products-list'>     
                                 {currentOrder?.products instanceof Map && Array.from(currentOrder.products.values()).map((ProductWithQuantity, index) => (
-                                    <ProductCard                                                                           
+                                    // <ProductCard                                                                           
+                                    //   key={index} 
+                                    //   product={ProductWithQuantity.product} 
+                                    //   initialQuantity={ProductWithQuantity.quantity} 
+                                    //   onProductRemoved={removeProductFromOrder} 
+                                    //   updateProductQuantity={handleProductQuantityChange} 
+                                    //   deleteButtonVisible={true}
+                                    // />
+                                    <OrderProductItem
                                       key={index} 
                                       product={ProductWithQuantity.product} 
                                       initialQuantity={ProductWithQuantity.quantity} 
                                       onProductRemoved={removeProductFromOrder} 
-                                      updateProductQuantity={handleProductQuantityChange} 
-                                      deleteButtonVisible={true}
-                                    />
+                                      updateProductQuantity={handleProductQuantityChange}                                       
+                                    >
+
+                                    </OrderProductItem>
                                   ))
                                 }                                
                             </div>
+
                           </div>
 
                           <div className="order-infos">
+
+                            <button className="order-invoice-section" onClick={generateAndDownloadInvoice}>
+                                <label htmlFor="generate-pdf">Invoice</label>                    
+                                <FaRegFilePdf id="generate-pdf" />                    
+                            </button>
+
                             <div className='order-price-section'>
                                 {currentOrder?.products && <OrderPrice 
                                                             ref={orderPriceRef} 
@@ -555,12 +553,10 @@ const Orders = () => {
                             </div>
 
                             
-                            <div className="order-invoice-section">
-                              <label htmlFor="generate-pdf">Bon de commande</label>                    
-                                <FaRegFilePdf id="generate-pdf" onClick={generateAndDownloadInvoice} />                    
-                            </div>
+                   
                             
                             
+                          
                             <div className='order-description'>
                               <label onClick={()=> focusDiv("description")}>Description:</label>                              
                               <div 
@@ -577,13 +573,15 @@ const Orders = () => {
                                               setCurrentOrderHasBeenModified
                                             )}
                               >
-                                {currentOrder?.description}
+                                {currentOrder.description}
                               </div>
                             </div>
                             
                             
+                            
+                            
                             <div className='order-comments'>
-                              <label onClick={()=> focusDiv("comments")}>Commentaires:</label>
+                              <label onClick={()=> focusDiv("comments")}>Comments:</label>
                               <div 
                               className='comments-text'
                               contentEditable={true}
@@ -598,9 +596,10 @@ const Orders = () => {
                                 setCurrentOrderHasBeenModified
                               )}                                  
                               >
-                                {currentOrder?.comments}
+                                {currentOrder.comments}
                               </div>
                             </div>
+                            
                             
 
                           </div>

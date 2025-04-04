@@ -72,7 +72,7 @@ const MainNavbar = () => {
           <button className="nav-sub-button" >Couleurs</button>
         </li> */}
       </ul>
-      <button className='fast-order'>Fast order</button>
+      <button className='fast-order'>Quick order</button>
     
    
         <FaAngleLeft

@@ -89,7 +89,7 @@ const ProductSelector = React.forwardRef(({ addProductsToCurrentProducts,customP
         <div className='product-selector-wrapper'>
             {products instanceof Array && products.length >= 1 &&
             <div className='product-selector' style={customProductSelectionWrapperCSS}>
-                    {/* <div className='Product-selector-name'>
+                    {/* <div className='product-selector-name'>
                         Sélection des sacs:
                     </div> */}
 
@@ -101,24 +101,28 @@ const ProductSelector = React.forwardRef(({ addProductsToCurrentProducts,customP
                     <div className="product-selection-list">
                     
                         {displayMode==="gallery" && products ?
-                                products.map((product,index)=>(
-                                        <ProductCard 
-                                            key={index} 
-                                            product={product} 
-                                            initialQuantity={selectedProducts.get(product.id!!)?.quantity ?? 0} 
-                                            updateProductQuantity={handleProductQuantityChange} 
-                                            bottomVisible={false}>
-
-                                        </ProductCard>                                    
+                                <div className='gallery'>
+                                    {
+                                    products.map((product,index)=>(
+                                            <ProductCard 
+                                                key={index} 
+                                                product={product} 
+                                                initialQuantity={selectedProducts.get(product.id!!)?.quantity ?? 0} 
+                                                updateProductQuantity={handleProductQuantityChange} 
+                                                bottomVisible={false}>
+    
+                                            </ProductCard>                                    
+                                        )
                                     )
-                                )
+                                    }
+                                </div>
                                 
                                 : <p>{error}</p>
                         }
 
                         {displayMode==="list" && products && products.length > 0 ?
                             <ul className='product-list'>
-                                <li className='product-list-items-title Product-list-item'>
+                                <li className='product-list-items-title product-list-item'>
                                     <label htmlFor="">Product</label>
                                     <label htmlFor="">SKU</label>
                                     <input value="Quantity" disabled/>                                
