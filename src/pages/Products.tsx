@@ -79,35 +79,35 @@ const Products = () => {
 
 
 
-  const handleDivChange = (ProductId :string | undefined, key: string, value: string) => {
+  const handleDivChange = (productId :string | undefined, key: string, value: string) => {
     // console.log("value",value)
-    if (ProductId === undefined || ProductId === null) return 
+    if (productId === undefined || productId === null) return 
     
     setModifiedProducts(prev=>{
       if(!prev) return prev
 
       
       const updatedProducts = new Map(prev)
-      const Product = updatedProducts.get(ProductId)
+      const product = updatedProducts.get(productId)
 
-      updatedProducts.set(ProductId, {...Product,[key]:value})
+      updatedProducts.set(productId, {...product,[key]:value})
 
       return updatedProducts
     })
   }
 
-  const applyProductModifications = async (ProductId : string, ProductModifications : Product) => {
+  const applyProductModifications = async (productId : string, productModifications : Product) => {
     
 
-    if(ProductModifications === undefined) return 
+    if(productModifications === undefined) return 
 
-    const result = await putProduct(auth,ProductId,ProductModifications)
+    const result = await putProduct(auth,productId,productModifications)
     if(result){      
       setProducts(prev => {
         if (!prev) return prev;
   
         const updatedProducts = prev.map(existingProduct => {
-          if(existingProduct.id === ProductId){
+          if(existingProduct.id === productId){
             const msg = `Modification of ${existingProduct.marketingName} saved`
             console.log(msg)
             showTopMessage(
@@ -116,7 +116,7 @@ const Products = () => {
             )
             return {
               ...existingProduct,
-              ...ProductModifications,
+              ...productModifications,
               imageUrls: existingProduct.imageUrls
             }
           }else return existingProduct
@@ -137,24 +137,24 @@ const Products = () => {
   
   }
 
-  const removeProduct = async (Product :Product)=>{
+  const removeProduct = async (product :Product)=>{
       // console.log("Product to remove",Product)
       
-      if (Product.id === undefined) return 
+      if (product.id === undefined) return 
 
-      const imageUrls = Product?.imageUrls ?? []
+      const imageUrls = product?.imageUrls ?? []
 
-      const result = await deleteProduct(auth,Product.id,imageUrls)
+      const result = await deleteProduct(auth,product.id,imageUrls)
       if(result) {
         setProducts(prev=>{
           if(!prev) return prev
           
-          const updated  = prev.filter(currProduct => currProduct.id != Product.id)
+          const updated  = prev.filter(currProduct => currProduct.id != product.id)
           return updated
         }) 
 
         showTopMessage(
-          `Product removed : ${Product.marketingName}`, 
+          `Product removed : ${product.marketingName}`, 
           {backgroundColor:'var(--info-green)'},
         )
 
@@ -164,10 +164,10 @@ const Products = () => {
   }
 
 
-  const showProductPopup = (Product : Product) =>{
+  const showProductPopup = (product : Product) =>{
       // const Product = Products.find(b => b.id === ProductId)
       // console.log("clicked Product",Product)
-      setCurrentProductToModify(Product)
+      setCurrentProductToModify(product)
       setProductModifierVisible(true)
   }
 
@@ -197,17 +197,11 @@ const Products = () => {
                       <div className="product-images">
                           <div className='product-images-wrapper'>
                             {product.imageUrls.length > 0 
-                                  ?
-                                    // Product.imageUrls.map((imageUrl,index)=>(
-                                    //   <div className='Product-image-wrapper' key={index}>
-                                    //     {/* <IoMdClose className='product-image-close-btn' /> */}
-                                    //     <img className='Product-image' key={index} src={`${BASE_IMAGES_URL}/${imageUrl}`}  alt={`${imageUrl}`}/>
-                                    //   </div>
-                                    // ))
-                                    
+                                  ?   
                                       <div className='product-image-wrapper' key={index}>
                                         {/* <IoMdClose className='product-image-close-btn' /> */}
-                                        <img className='product-image' key={index} src={`${BASE_IMAGES_URL}/${auth.tenantId}/${product.imageUrls[0]}`}  alt={`${product.imageUrls[0]}`}/>
+                                        <img className='product-image' key={index} src={`${BASE_IMAGES_URL}/${product.imageUrls[0]}`}  alt={`${product.imageUrls[0]}`}/>
+                                        
                                       </div>
                                     
                                   :<BsHandbag className='noproduct-image'/>

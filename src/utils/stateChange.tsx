@@ -5,12 +5,13 @@ export const handleFieldChange = (initialState,setStateFunction, key:string, val
     // var originalFieldValue : any = null
     
     // process change to obtain the payload to be stored
-    var {data,keys,err} = processFieldChange(initialState,key,value)
+    var {data,keys,err} = processFieldChange(initialState,key,value)        
     
-    // if(initialState?.[key] === data?.[key]){
-    //   console.log("No changes performed on this field")
-    //   return 
-    // }
+    
+    if(data === undefined && keys === undefined && err === undefined) {            
+      // console.log("No changes detected")
+      return;
+    }
     
     // update state with the payload
     if(!err && keys){
@@ -39,7 +40,7 @@ export const handleFieldChange = (initialState,setStateFunction, key:string, val
     const amountOfKeys = keys.length 
 
     var modifiedData: any = null
-    var originalFieldValue : any = null
+    var originalFieldValue : string | null = null
 
     if(amountOfKeys === 1){
       modifiedData = {"data":{[key]:value}};  
@@ -52,7 +53,8 @@ export const handleFieldChange = (initialState,setStateFunction, key:string, val
       // console.log(`case not handled (${amountOfKeys} keys)`)
     }
 
-    if(originalFieldValue === value){
+    if(originalFieldValue?.trim() === value?.trim()){
+      // console.log("No changes detected")
       return {}
     }
 

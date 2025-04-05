@@ -105,6 +105,7 @@ export interface OrderEditableData{
 export interface Product {
     id?: string ;
     marketingName?: string | null;
+    collectionName?: string | null;
     retailPrice?: string | null;
     wholesalePrice?: string | null;
     description?: string | null;

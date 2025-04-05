@@ -25,9 +25,11 @@
 }
 
 .general-crud-table .header-row{
-    background: var(--primary);
+    background: var(--primary-lighter);
     color: white;
-    /* border-radius:10px 10px 0 0; */
+    font-size: 1.2rem;
+    font-weight: 300;
+    border-radius:10px 10px 0 0;
 }
 
 .content-row{
@@ -106,6 +108,24 @@
     font-size: 1.2rem;
     min-width: 40px;
     max-width: 40px;
-    color: red;
+    display: flex;
+    gap: .3rem;    
 }
 
+
+.action-edit:hover,
+.action-delete:hover{
+    cursor: pointer;
+}
+.action-edit,
+.action-delete{
+    /* width:  40px;
+    height: 40px; */
+}
+.action-edit{
+    color: var(--primary-lighter);
+}
+
+.action-delete{
+    color: var(--info-red);
+}

@@ -22,6 +22,8 @@ const OrderPrice = React.forwardRef(({products,order, handleOrderPriceChange} : 
 
     const initialDiscount = order?.price?.discount ?? "0"
     const initialDeliveryCosts = order?.price?.deliveryCost ??  "0"
+
+    const [calculationsVisible,setCalculationsVisible] = useState(false);
     
     const [productsTotalPrice,setproductsTotalPrice] = useState(0);
     const [calculatedPrice,setCalculatedPrice] = useState(0);
@@ -78,10 +80,12 @@ const OrderPrice = React.forwardRef(({products,order, handleOrderPriceChange} : 
         totalPrice += deliveryCost
 
         setCalculatedPrice(totalPrice)
-        setModifiedData(prev => prev ? {...prev, finalPrice:totalPrice.toString()} : prev)
+        setModifiedData(prev => prev ? {...prev, finalPrice:totalPrice.toString()} : prev)        
+    }
 
-        
-
+    const toggleCalculationsVisibility = () =>{
+        if(calculationsVisible) setCalculationsVisible(false)
+        else setCalculationsVisible(true)
     }
 
 
@@ -92,9 +96,10 @@ const OrderPrice = React.forwardRef(({products,order, handleOrderPriceChange} : 
                 <div className="actual-price">
                     {Number(order?.price?.finalPrice).toFixed(2)}€                
                 </div>
-                <InfoButtonPopup                 
-                positionClass="left-pop" sizeClass='small-pop' customStyle={{maxWidth:'220px',right:'-15px',top:'15px'}}
-                >
+                <button className='toggle-details-visibility-btn' onClick={toggleCalculationsVisibility}>{calculationsVisible ? 'Show' : 'Hide'} details</button>
+            </div>
+
+            {calculationsVisible && 
                     <div className='price-calculations'>
                         <div className="decompte">
                             {products instanceof Map && Array.from(products.values()).map((productWithQ ,index) => (
@@ -157,9 +162,8 @@ const OrderPrice = React.forwardRef(({products,order, handleOrderPriceChange} : 
                                 Total price: {calculatedPrice.toFixed(2)}€
                             </div>
                         </div>
-                    </div>    
-                </InfoButtonPopup>                                
-            </div>
+                    </div>                    
+                }
 
         </>
   )

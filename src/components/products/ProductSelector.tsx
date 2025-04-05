@@ -88,7 +88,7 @@ const ProductSelector = React.forwardRef(({ addProductsToCurrentProducts,customP
     <>
         <div className='product-selector-wrapper'>
             {products instanceof Array && products.length >= 1 &&
-            <div className='product-selector' style={customProductSelectionWrapperCSS}>
+            <div className='product-selector-component' style={customProductSelectionWrapperCSS}>
                     {/* <div className='product-selector-name'>
                         Sélection des sacs:
                     </div> */}

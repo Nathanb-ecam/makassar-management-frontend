@@ -4,6 +4,7 @@ import '../css/generalCRUDtable.css'
 import { RiDeleteBin6Line } from 'react-icons/ri';
 import { formatTime } from '../../utils/formatTime';
 import { useTopMessage } from '../../hooks/useTopMessagePopup';
+import { MdModeEdit } from 'react-icons/md';
 
 type Header = {
     key: string;
@@ -107,7 +108,11 @@ const GeneralCRUDTable = ({tableProps,handlers} : Props) => {
                         
                     ))}
                     <div className="row-item actions-col">
-                        <RiDeleteBin6Line onClick={() => handlers.onDeleteRow(dataItem.id)} />
+                        {/* <MdModeEdit className='action-edit' onClick={()=>{openTableEditer}}/> */}
+                        <RiDeleteBin6Line 
+                            className='action-delete'
+                            onClick={() => handlers.onDeleteRow(dataItem.id)} 
+                        />
                     </div>
                 </div> 
             ))}

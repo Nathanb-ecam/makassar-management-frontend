@@ -1,5 +1,5 @@
 .price-calculations{
-
+    overflow: hidden;
 }
 
 .actual-price-wrapper{
@@ -13,11 +13,16 @@
 
 
 .actual-price{
-    color: var(--ligth-black);
+    color: var(--black-lighter);
     font-size: 2rem;
+    font-weight: 4p00;
 } 
 
 
+.actual-price-wrapper .toggle-details-visibility-btn{
+    font-size: .6rem;
+    text-wrap: nowrap;
+}
 
 
 .decompte{

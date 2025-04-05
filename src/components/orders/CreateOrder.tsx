@@ -232,7 +232,7 @@ const CreateOrder = ({handleOrderCreated} : Props) => {
                         customButtonSectionStyle={{justifyContent:'end'}}
                         customSaveButtonStyle={{
                             // width:'100%',
-                            background:'white',color:'var(--info-green)',
+                            color:'white',background:'var(--info-green)',
                             border:'1px solid var(--info-green)',borderRadius:'5px'
                         }}
                         >

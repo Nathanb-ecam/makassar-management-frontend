@@ -29,6 +29,7 @@ import OrderInvoiceTemplate from '../pdf/OrderInvoiceTemplate';
 import { CiDeliveryTruck } from 'react-icons/ci';
 import OrderCustomerInfos from '../components/orders/OrderCustomerInfos';
 import OrderProductItem from '../components/orders/OrderProductItem';
+import { MdModeEdit } from 'react-icons/md';
 
 
 const initialOrderEditableData: OrderEditableData = {
@@ -66,7 +67,7 @@ interface ChildOrderPriceRef{
 }
 
 
-
+const orderStatuses = ["OPENED","IN PROGRESS" , "SHIPPED", "DELIVERED", "CANCELLED"];
 
 const Orders = () => {
 
@@ -97,16 +98,8 @@ const Orders = () => {
   
 
   const [createOrderVisible,setCreateOrderVisible] = useState(false)
-
+    
   
-  
-
-  useEffect(()=>{
-    console.log(ordersOverviews)
-  },[ordersOverviews])
-
-  
-
   const removeProductFromOrder = (Product : Product) => {
     // console.log("received Product to remove", Product);
 
@@ -298,8 +291,7 @@ const Orders = () => {
   };
 
 
-  const handleOrderChangeInRowItems = async (orderId,key : string,value : any) => {
-
+  const handleOrderChangeInRowItems = async (orderId,key : string,value : any) => {    
     const order = ordersOverviews.find(o => o.id === orderId)
     var {data,keys, err} = processFieldChange(order as Object,key,value)
     // const modifiedData = {[key]:newValue};
@@ -429,8 +421,8 @@ const Orders = () => {
                     <div className='medium-col'>Customer</div>
                     <div className='medium-col'>Creation</div>
                     <div className='medium-col'>Modification</div>
-                    <div className='medium-col'>Status</div>
                     <div className='medium-col'>Planned date</div>
+                    <div className='medium-col'>Status</div>
                     <div className='small-col'>Price</div>
                     <div className='small-col'>Details</div>
                     <div className='small-col'>Actions</div>
@@ -449,16 +441,8 @@ const Orders = () => {
                         <div className='medium-col' title={`${orderOverview.customerName}`}>{orderOverview.customerName }</div>
                         <div className='medium-col'>{formatTime(orderOverview.createdAt)}</div>
                         <div className='medium-col'>{formatTime(orderOverview.updatedAt)}</div>
-                        <div 
-                            className='order-status medium-col editable-div' 
-                            contentEditable={true}
-                            suppressContentEditableWarning={true} 
-                            onBlur={(e) => handleOrderChangeInRowItems(orderOverview.id,"status", (e.target as HTMLElement).innerText)}
-                            >
-                            {orderOverview.status}
-                        </div>
                         <div                        
-                        className='order-status medium-col editable-div' 
+                        className='medium-col editable-div' 
                         title={`${orderOverview.plannedDate}`}
                         contentEditable={true}
                         suppressContentEditableWarning={true} 
@@ -466,6 +450,33 @@ const Orders = () => {
                         >
                           {orderOverview.plannedDate ? orderOverview.plannedDate : ""}
                         </div>
+                        
+                        {/* <div 
+                            className='order-status medium-col editable-div' 
+                            contentEditable={true}
+                            suppressContentEditableWarning={true} 
+                            onBlur={(e) => handleOrderChangeInRowItems(orderOverview.id,"status", (e.target as HTMLElement).innerText)}
+                            >
+                            {orderOverview.status}
+                        </div> */}
+                        <select 
+                          
+                          defaultValue={orderOverview.status}                          
+                          className={`
+                            order-status medium-col
+                            ${["DELIVERED","CANCELLED"].includes(orderOverview.status ?? "") ? 'grey-option' :''}`
+                          }
+                          onChange={(e) => handleOrderChangeInRowItems(orderOverview.id, "status", e.target.value)}                                                    
+                        >
+                        {orderStatuses.map((status) => (                          
+                          <option key={status} value={status}>
+                            {status.charAt(0).toUpperCase() + status.slice(1)}
+                          </option>                            
+                        ))}
+                        </select>
+                        
+
+  
                         <div
                           className='order-price small-col'                          
                         >
@@ -473,7 +484,7 @@ const Orders = () => {
                         </div>
   
                         <div 
-                        className='small-col'
+                        className='small-col action-arrow'
                         onClick={() => toggleOrderExpanded(index,orderOverview)}
                         >
                             <FaAngleLeft className='arrow-button'
@@ -486,7 +497,13 @@ const Orders = () => {
                         </div>
                         <div className='actions-icons small-col'>
                                 {/* <FaRegFilePdf id="generate-pdf" onClick={generateAndDownloadInvoice} /> */}
-                                <RiDeleteBin6Line onClick={()=>deleteOrderWithId(orderOverview.id!!)} style={{color:'var(--info-red)'}}></RiDeleteBin6Line>                                
+                                <button 
+                                  onClick={()=>deleteOrderWithId(orderOverview.id!!)}
+                                  style={{color:'var(--info-red)',fontWeight:'400'}}
+                                >
+                                  Delete
+                                </button>
+                                {/* <RiDeleteBin6Line onClick={()=>deleteOrderWithId(orderOverview.id!!)} style={{color:'var(--info-red)'}}></RiDeleteBin6Line>                                 */}
                         </div>
                       </div>
 
@@ -499,11 +516,11 @@ const Orders = () => {
                             <div className='products-section-title'>
                               <div className="left-title">                                
                                   <div className='title'>Order items</div>
-                                  {/* <AddProductCard 
+                                  <AddProductCard 
                                   customPopupCSS={{minWidth:'70vw'}}
                                   addProductsSelectionToCurrentProducts={addProductselectionToCurrentproducts} 
                                   ref={productselectorChildPopup}
-                                  />                                 */}
+                                  />                                
                               </div>
                               <button  
                                 className={`button-apply-order-changes ${currentOrderHasBeenModified ? 'active' : ''}`}
@@ -513,15 +530,7 @@ const Orders = () => {
                             </div>
 
                             <div className='products-list'>     
-                                {currentOrder?.products instanceof Map && Array.from(currentOrder.products.values()).map((ProductWithQuantity, index) => (
-                                    // <ProductCard                                                                           
-                                    //   key={index} 
-                                    //   product={ProductWithQuantity.product} 
-                                    //   initialQuantity={ProductWithQuantity.quantity} 
-                                    //   onProductRemoved={removeProductFromOrder} 
-                                    //   updateProductQuantity={handleProductQuantityChange} 
-                                    //   deleteButtonVisible={true}
-                                    // />
+                                {currentOrder?.products instanceof Map && Array.from(currentOrder.products.values()).map((ProductWithQuantity, index) => (                                    
                                     <OrderProductItem
                                       key={index} 
                                       product={ProductWithQuantity.product} 
@@ -537,12 +546,7 @@ const Orders = () => {
 
                           </div>
 
-                          <div className="order-infos">
-
-                            <button className="order-invoice-section" onClick={generateAndDownloadInvoice}>
-                                <label htmlFor="generate-pdf">Invoice</label>                    
-                                <FaRegFilePdf id="generate-pdf" />                    
-                            </button>
+                          <div className="order-infos">        
 
                             <div className='order-price-section'>
                                 {currentOrder?.products && <OrderPrice 
@@ -551,14 +555,17 @@ const Orders = () => {
                                                             order={currentOrder} 
                                                             handleOrderPriceChange={handleOrderPriceChange}/>}                             
                             </div>
-
                             
-                   
-                            
-                            
+                            <button className="order-invoice-section" onClick={generateAndDownloadInvoice}>
+                                <label htmlFor="generate-pdf">Invoice</label>                    
+                                <FaRegFilePdf id="generate-pdf" />                    
+                            </button>                                                        
                           
                             <div className='order-description'>
-                              <label onClick={()=> focusDiv("description")}>Description:</label>                              
+                              <div>
+                                <label>Description:</label>  
+                                <MdModeEdit onClick={()=> focusDiv("description")} />                            
+                              </div>
                               <div 
                               className='description-text'                              
                               contentEditable={true}
@@ -581,7 +588,10 @@ const Orders = () => {
                             
                             
                             <div className='order-comments'>
-                              <label onClick={()=> focusDiv("comments")}>Comments:</label>
+                              <div>
+                                <label>Comments:</label>
+                                <MdModeEdit onClick={()=> focusDiv("comments")}/>
+                              </div>
                               <div 
                               className='comments-text'
                               contentEditable={true}

@@ -25,7 +25,10 @@ const OrderProductItem = ({product, initialQuantity,updateProductQuantity,  onPr
 
 
     const handleQuantityBlur = () => {
-        const quantity = parseInt(productQuantity,10);
+        const quantity = parseInt(productQuantity,10);        
+        if (quantity.toString() === initialQuantity.toString()) return;
+        
+        
         if(quantity < 0) return setProductQuantity(initialQuantity.toString())
         if(!isNaN(quantity)){
             updateProductQuantity?.(product,quantity);
@@ -44,20 +47,21 @@ const OrderProductItem = ({product, initialQuantity,updateProductQuantity,  onPr
             <div className="image-section">
                 {product?.imageUrls?.length && product.imageUrls.length >= 1 ? 
                     <img className='product-image' src={`${BASE_IMAGES_URL}/${product.imageUrls[0]}`} alt={`image ${product.marketingName}`} />
-                    : <BsHandbag className='noproduct-image'/>
+                    : <div className="noproduct-image"></div>
                 }
             </div>
 
             <div className="item-details-section">
-                    <p>{product.marketingName}</p>
-                    <p>sku: {product.sku}</p>
-                    <p>{product.retailPrice}</p>
+                    {product.collectionName && <div className='collectionName'>{product.collectionName}</div>}
+                    <div className='marketingName'>{product.marketingName}</div>
+                    {product.sku && <div className='sku'>SKU: {product.sku}</div>}
+                    <div className='retailPrice'>€ {product.retailPrice}</div>
             </div>
 
             <div className="item-actions">
                 <input 
                     className='product-quantity-input'
-                    type="number" placeholder={initialQuantity.toString()} 
+                    type="text" placeholder={initialQuantity.toString()} 
                     onChange={(e)=> {setProductQuantity(e.target.value)}} 
                     value={productQuantity}
                     onBlur={handleQuantityBlur}

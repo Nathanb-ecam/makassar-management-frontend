@@ -1,0 +1,39 @@
+.customer-card{
+    outline: 2px solid var(--primary-lighter);
+    border-radius: 10px;
+    overflow: hidden;
+}
+.customer-card .card-title{
+    padding: 0.5rem 1rem;    
+    background: var(--primary-lighter);
+    color: white;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+
+.customer-card .card-content{
+    margin: .7rem 1rem;
+    text-align: center;
+    color: var(--black-lighter);
+}
+
+.customer-card .card-content .mail-phone{    
+    font-weight: 300;
+}
+.customer-card .card-content .tva{    
+    font-size: .8rem;
+}
+
+.customer-card .card-content svg{
+    margin-top: 1.5rem;
+    width: 100%;
+    font-size: 2rem;    
+    color: var(--primary-lighter);
+}
+
+.customer-card{}
+.customer-card{}

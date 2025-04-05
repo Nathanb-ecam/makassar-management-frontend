@@ -49,6 +49,10 @@ const productModifier = ({product, applyProductModifications, onPopupClose} : Pr
                             <input id="marketingName" name='marketingName' value={modifications?.marketingName ? modifications.marketingName : product.marketingName!!} onChange={handleElementChange}/>
                         </div>
                         <div className='product-field'>
+                            <label htmlFor="collectionName">Collection: </label>
+                            <input id="collectionName" name='collectionName' value={modifications?.collectionName ? modifications.collectionName : product.collectionName!!} onChange={handleElementChange}/>
+                        </div>
+                        <div className='product-field'>
                             <label htmlFor="retailPrice">Price: </label>
                             <input id="retailPrice" name='retailPrice' value={modifications?.retailPrice ? modifications?.retailPrice : product.retailPrice!!  } onChange={handleElementChange}/>
                         </div>

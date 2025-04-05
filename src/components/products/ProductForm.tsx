@@ -70,6 +70,18 @@ const ProductForm = ({onProductFormSubmit} : Props) => {
         </div>
 
         <div className='form-field-wrapper'>
+            <label htmlFor="collectionName">Collection:</label>
+            <input 
+                required
+                type="text" 
+                id='collectionName'
+                name='collectionName'
+                value={product.collectionName!!}
+                onChange={handleInputChange}
+            />
+        </div>
+
+        <div className='form-field-wrapper'>
             <label htmlFor="retailPrice">Price:</label>
             <input 
                 required

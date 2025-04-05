@@ -36,7 +36,9 @@ const ProductCard = ({product, initialQuantity,updateProductQuantity,  onProduct
     const prevNextArrowVisible = (productImagesCount > 1)
 
     // const [productDetailsVisible,setproductDetailsVisible] = useState(false)
+    const containsImages = product?.imageUrls?.length ? product?.imageUrls?.length >= 1 : false
 
+    if(!containsImages) return;
 
     const handlePrevImage = () =>{ 
         if(product.imageUrls){
@@ -71,19 +73,6 @@ const ProductCard = ({product, initialQuantity,updateProductQuantity,  onProduct
         key={product.id} 
         // onClick={(e) =>{setproductDetailsVisible(true)}}        
     >        
-        {/* <div className="product-details-popup-wrapper">    
-            <InfoButtonPopup 
-                positionClass='right-pop' 
-                customStyle={{
-                    height:'calc(var(--productcard-height) - 10px)',width:'var(--productcard-width)',
-                    top:'20px'
-                }}
-                customButtonStyle={{fontSize:'18px'}}
-                >
-                <div className='marketingName'>{product.marketingName}</div>
-                <div className='sku'>{product.sku}</div>        
-            </InfoButtonPopup>
-        </div> */}
         { deleteButtonVisible && <IoMdClose className='productcard-delete-btn' onClick={()=>onProductRemoved?.(product)}/>}
 
         { product.imageUrls && product.imageUrls.length > 0 ?
@@ -107,8 +96,11 @@ const ProductCard = ({product, initialQuantity,updateProductQuantity,  onProduct
                     <FaAngleRight />
                 </button>
             </div>
-            : <div className="products-carousel">
-                <BsHandbag className='noproduct-image'/>
+            : 
+            <div className="products-carousel">
+                <div className='noproduct-image'>
+                    
+                </div>
             </div>
         }
 
@@ -118,7 +110,7 @@ const ProductCard = ({product, initialQuantity,updateProductQuantity,  onProduct
                     <div className='quantity-text'>x 
                         <input 
                         className='product-quantity-input'
-                        type="number" placeholder={initialQuantity.toString()} 
+                        type="text" placeholder={initialQuantity.toString()} 
                         onChange={(e)=> {setProductQuantity(e.target.value)}} 
                         value={productQuantity}
                         onBlur={handleQuantityBlur}
