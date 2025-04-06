@@ -28,11 +28,10 @@ const CreateOrder = ({handleOrderCreated} : Props) => {
 
     const {showTopMessage}:any = useTopMessage()
 
-    const [productSelectionVisible,setproductSelectionVisible] = useState(false)
     const [estimatedPrice,setEstimatedPrice] = useState(0)
     const [totalPrice,setTotalPrice] = useState('')
     const [currentOrder,setCurrentOrder] = useState<OrderDto>({
-        status: 'Opened',
+        status: 'OPENED',
         customerId:'',
         description:'',
         comments: '',
@@ -48,9 +47,9 @@ const CreateOrder = ({handleOrderCreated} : Props) => {
     })
     
 
-    useEffect(()=>{
-        console.log(currentOrder)
-    },[currentOrder])
+    // useEffect(()=>{
+    //     console.log(currentOrder)
+    // },[currentOrder])
 
 
     useEffect(()=>{

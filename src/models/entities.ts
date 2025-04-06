@@ -32,6 +32,7 @@ export interface Order {
 }
 
 export interface Price{
+    totalTVAC: string | undefined | null;
     finalPrice: string | undefined | null;
     alreadyPaid: string | undefined | null;
     deliveryCost: string | undefined | null;
@@ -137,6 +138,7 @@ export interface Customer{
     mail?: string | null;
     phone?: string | null;
     tva?: string | null;
+    societyName?: string | null;
     professionalAddress?: string | null;
     shippingAddress?: string | null;
     // professionalAddress?: Address | null;

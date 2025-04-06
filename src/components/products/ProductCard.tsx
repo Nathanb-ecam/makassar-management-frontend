@@ -110,7 +110,7 @@ const ProductCard = ({product, initialQuantity,updateProductQuantity,  onProduct
                     <div className='quantity-text'>x 
                         <input 
                         className='product-quantity-input'
-                        type="text" placeholder={initialQuantity.toString()} 
+                        type="number" placeholder={initialQuantity.toString()} 
                         onChange={(e)=> {setProductQuantity(e.target.value)}} 
                         value={productQuantity}
                         onBlur={handleQuantityBlur}

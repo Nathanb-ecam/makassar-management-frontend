@@ -43,8 +43,11 @@ const ProductSelector = React.forwardRef(({ addProductsToCurrentProducts,customP
     useEffect(()=>{
         const fetchProducts = async()=> {
             const {products,err} = await getProducts(auth);
+        
             if(err === undefined) setProducts(products)
             else setError(err)
+
+            if(products?.length == 0) return;
         }
 
         fetchProducts()
@@ -131,7 +134,7 @@ const ProductSelector = React.forwardRef(({ addProductsToCurrentProducts,customP
                                     <li key={index} className='product-list-item'>
                                         <label htmlFor="">{product.marketingName} ({product.retailPrice}€)</label>
                                         <label htmlFor="">{product?.sku?.length===0 ?  "/" : product.sku}</label>
-                                        <input type="number" placeholder={`${selectedProducts.get(product.id!!)?.quantity.toString() ?? '0'}`} onBlur={(e)=>handleProductQuantityChange(product,parseInt(e.target.value,10))}/>
+                                        <input type="text" placeholder={`${selectedProducts.get(product.id!!)?.quantity.toString() ?? '0'}`} onBlur={(e)=>handleProductQuantityChange(product,parseInt(e.target.value,10))}/>
                                     </li>
                                 ))}
                             </ul>

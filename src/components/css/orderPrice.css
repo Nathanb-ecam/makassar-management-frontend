@@ -1,27 +1,38 @@
 .price-calculations{
     overflow: hidden;
+    outline: .3px solid var(--ligth-grey);
+    border-radius: 5px;
+    padding: 5px 10px;
 }
 
 .actual-price-wrapper{
     font-weight: bold;
     display: flex;
-    /* flex-wrap: wrap; */
+    flex-wrap: wrap;
     justify-content: space-between;
     align-items: center;
+    
 }
 
 
 
 .actual-price{
+    font-family: var(--font-primary);
+    letter-spacing: .1rem;
     color: var(--black-lighter);
     font-size: 2rem;
-    font-weight: 4p00;
+    font-weight: 800;
 } 
 
 
 .actual-price-wrapper .toggle-details-visibility-btn{
-    font-size: .6rem;
+    font-size: .7rem;
+    margin-bottom: .5rem;
+    text-decoration: underline .3px var(--primary-lighter);
+    text-underline-offset: 2px;
     text-wrap: nowrap;
+    width: 100%;
+    text-align: center;
 }
 
 

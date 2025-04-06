@@ -10,6 +10,7 @@ import CustomerForm from '../components/customers/CustomerForm.tsx';
 import { useTopMessage } from '../hooks/useTopMessagePopup.tsx';
 import { getTimeStamp } from '../utils/formatTime.tsx';
 import useRefreshToken from '../hooks/useRefreshToken.tsx';
+import ConfirmActionPopup from '../components/main/ConfirmActionPopup.tsx';
 
 
 const Customers = () => {
@@ -24,13 +25,14 @@ const Customers = () => {
     // {key : 'id', label:'Id'},
     {key : 'name', label:'Name', size: HeaderSizeClass.MEDIUM},
     {key : 'phone', label:'Phone',size: HeaderSizeClass.MEDIUM}, 
+    {key : 'societyName', label:'Company',size: HeaderSizeClass.MEDIUM}, 
     {key : 'mail', label:'Mail', size: HeaderSizeClass.LARGE},
     {key : 'tva', label:'VAT', size: HeaderSizeClass.SMALL},
     // {key : 'professionalAddress', label:'Adr. profesionnelle'},
     {key : 'shippingAddress', label:'Shipping address', size: HeaderSizeClass.LARGE},
     // {key : 'type', label:'Type'},
-    {key : 'createdAt', label:'Created', size: HeaderSizeClass.SMALL},
-    {key : 'updatedAt', label:'Modified', size: HeaderSizeClass.SMALL},
+    // {key : 'createdAt', label:'Created', size: HeaderSizeClass.SMALL},
+    // {key : 'updatedAt', label:'Modified', size: HeaderSizeClass.SMALL},
   ]
 
   
@@ -42,6 +44,8 @@ const Customers = () => {
 
 
   const [createCustomerPopupVisible,setCreateCustomerPopupVisible] = useState(false);
+  const [confirmCustomerDeletionPopupVisible, setConfirmCustomerDeletionPopupVisible] = useState(false);
+  const [customerIdMarkedForDeletion,setCustomerIdMarkedForDeletion] = useState('');
 
 
   useEffect(()=>{
@@ -176,6 +180,11 @@ const Customers = () => {
 
 
   const onDeleteRow = async (id : string)=>{
+    setCustomerIdMarkedForDeletion(id)
+    setConfirmCustomerDeletionPopupVisible(true)
+  }
+
+  const deleteCustomer = async (id : string)=>{
     // console.log(`Customer to delete : ${id}`)
 
     const customerDeleted = await deleteCustomerWithId(auth,id) 
@@ -192,6 +201,8 @@ const Customers = () => {
       }) 
       showTopMessage(`Client removed `,{backgroundColor:'var(--info-green)'})
     }
+
+    setConfirmCustomerDeletionPopupVisible(false);
   
   }
 
@@ -219,6 +230,20 @@ const Customers = () => {
         </SectionTitle>
 
         <GeneralCRUDTable tableProps={tableProps} handlers={handlers}/>
+
+        {confirmCustomerDeletionPopupVisible && 
+
+          <ConfirmActionPopup 
+            title='Are you sure you want to delete this customer ?'
+            onConfirmActionPopupClosed={() => setConfirmCustomerDeletionPopupVisible(false)} 
+            onConfirm={()=> deleteCustomer(customerIdMarkedForDeletion)} 
+            onCancel={() => setConfirmCustomerDeletionPopupVisible(false)}
+            confirmText='Delete customer'
+            confirmActionButtonStyles={{background:'var(--info-red)',borderRadius:'5px', color:'white'}}
+          />                        
+        }
+
+
     </div>
   );
 };

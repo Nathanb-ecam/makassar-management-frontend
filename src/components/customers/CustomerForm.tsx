@@ -74,8 +74,8 @@ const CustomerForm = ({ onFormSubmit }: Props) => {
         <div className="customer-form-field">
           <label htmlFor="mail">Mail:</label>
           <input
-            type="text"
-            id="mail"
+            type="email"
+            id="email"
             name="mail"
             value={customerFormData.mail!!}
             onChange={handleInputChange}
@@ -96,7 +96,7 @@ const CustomerForm = ({ onFormSubmit }: Props) => {
         <div className="customer-form-field">
           <label htmlFor="phone">Phone:</label>
           <input
-            type="text"
+            type="tel"
             id="phone"
             name="phone"
             value={customerFormData.phone!!}

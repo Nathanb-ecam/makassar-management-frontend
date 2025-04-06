@@ -4,7 +4,7 @@ import {Product, ProductWithQuantity, Customer, Order, OrderDto, OrderEditableDa
 
 
 import { useAuth } from '../hooks/useAuth';
-import { formatTime } from '../utils/formatTime';
+import { currentDate, formatTime } from '../utils/formatTime';
 
 
 import { FaAngleLeft, FaRegFilePdf, FaUser } from "react-icons/fa6";
@@ -30,6 +30,8 @@ import { CiDeliveryTruck } from 'react-icons/ci';
 import OrderCustomerInfos from '../components/orders/OrderCustomerInfos';
 import OrderProductItem from '../components/orders/OrderProductItem';
 import { MdModeEdit } from 'react-icons/md';
+import ConfirmAction from '../components/main/ConfirmAction';
+import ConfirmActionPopup from '../components/main/ConfirmActionPopup';
 
 
 const initialOrderEditableData: OrderEditableData = {
@@ -83,11 +85,13 @@ const Orders = () => {
 
   const {showTopMessage}:any = useTopMessage()
 
-  const { ordersOverviews,  loading, error , refreshOrdersOverviews,removeOrderFromOrdersState,modifyOrderFromOrdersState,refreshOrderOverviewById} = useOrdersContext();
+  const {ordersOverviews,  loading, error , refreshOrdersOverviews,removeOrderFromOrdersState,modifyOrderFromOrdersState,refreshOrderOverviewById} = useOrdersContext();
 
   const [currentOrderHasBeenModified,setCurrentOrderHasBeenModified] = useState(false);
   
   const [rotatedRows, setRotatedRows] = useState<{ [key: number]: boolean }>({});
+
+  const [orderPriceDetailsExpanded, setOrderPriceDetailsExpanded] = useState(true);
 
   
   // const [currentOrderModifications,setCurrentOrderModifications] = useState<OrderEditableData | undefined>(initialOrderEditableData);
@@ -98,7 +102,13 @@ const Orders = () => {
   
 
   const [createOrderVisible,setCreateOrderVisible] = useState(false)
+  const [confirmOrderDeletionPopupVisible,setConfirmOrderDeletionPopupVisible] = useState(false)
     
+  const [refreshProductItems, setRefreshProductItems] = useState(false);
+
+  useEffect(()=>{
+    console.log(ordersOverviews)
+  },[ordersOverviews])
   
   const removeProductFromOrder = (Product : Product) => {
     // console.log("received Product to remove", Product);
@@ -151,7 +161,11 @@ const Orders = () => {
       if(!err){
         showTopMessage(`Modification(s) of the order '${orderOverview.customerName}' saved`, {backgroundColor:'var(--info-green)'})
         setCurrentOrderHasBeenModified(false)
-        refreshOrderOverviewById(auth,id!!)    
+        refreshOrderOverviewById(auth,id!!)        
+        orderOverview.price = price;
+        // orderOverview.updatedAt = Date.now().toString();
+        console.log("DEBYG" + Date.now().toString());
+        modifyOrderFromOrdersState(orderOverview)           
         setCurrentOrder(prev => {
           if (!prev) return prev;
                     
@@ -183,9 +197,8 @@ const Orders = () => {
     }else{
       // console.log("deleteOrderWithId",err)
     }
-
+    setConfirmOrderDeletionPopupVisible(false)
   }
-
   
 
   const recomputeOrderPrice = () =>{
@@ -236,6 +249,10 @@ const Orders = () => {
       if(productselectorChildPopup.current) productselectorChildPopup.current.hidePopup()
 
 
+      // to refresh orderProductitems
+      if(refreshProductItems === true) setRefreshProductItems(false)
+      else setRefreshProductItems(false)
+
       return {
         ...prev,
         products: updated
@@ -247,6 +264,11 @@ const Orders = () => {
   const toggleOrderExpanded = async (index: number,ord : OrderOverview) => {
 
     setCurrentOrderHasBeenModified(false)
+    
+    // trigger recomposition of orderPrice component 
+    if(orderPriceDetailsExpanded) setOrderPriceDetailsExpanded(false);
+    else setOrderPriceDetailsExpanded(true);
+
     // setCurrentOrderModifications({});
     setCurrentOrder(currentOrderInitialisation)
     
@@ -339,7 +361,7 @@ const Orders = () => {
      }
   }
 
-  const generateAndDownloadInvoice = async () => {
+  const generateAndDownloadOrderPdf = async () => {
     try {
       console.log("Generating PDF...");
       const doc = <OrderInvoiceTemplate user={auth.user} detailedOrder={currentOrder} />;
@@ -358,6 +380,23 @@ const Orders = () => {
     }
   };
 
+  const generateAndDownloadInvoice = async () => {
+    // need to generate a pdf and sent it to the backend, by adding the path in a filesUrls
+    
+    try {
+      console.log("Generating PDF...");
+      const doc = <OrderInvoiceTemplate user={auth.user} detailedOrder={currentOrder} />;
+      const asPdf = pdf(); // Create an instance of the pdf function
+      asPdf.updateContainer(doc); // Pass your document to the pdf instance
+
+      const blob = await asPdf.toBlob(); // Convert the document to a Blob
+   
+      console.log("PDF generated and downloaded.");
+    } catch (error) {
+      console.error("Error generating PDF: ", error);
+    }
+  };
+
 
 
  
@@ -368,6 +407,9 @@ const Orders = () => {
   const onCreateOrderClosed = ()=>{
     setCreateOrderVisible(false)
   }
+  
+    
+  
 
   const focusDiv = (divName : string) => {
     var ref : any = null
@@ -389,7 +431,7 @@ const Orders = () => {
 
           {createOrderVisible && 
             <Popup 
-              title='Register new order' 
+              title='Take a new order' 
               onPopupClose={onCreateOrderClosed} 
               customCSS={{
                 // minHeight:'60%',
@@ -438,7 +480,7 @@ const Orders = () => {
                       
                       <div className='customer-base-info'>       
                         <div className='small-col'>{orderOverview.orderNumber }</div>
-                        <div className='medium-col' title={`${orderOverview.customerName}`}>{orderOverview.customerName }</div>
+                        <div className='medium-col customer-name' title={`${orderOverview.customerName}`}>{orderOverview.customerName }</div>
                         <div className='medium-col'>{formatTime(orderOverview.createdAt)}</div>
                         <div className='medium-col'>{formatTime(orderOverview.updatedAt)}</div>
                         <div                        
@@ -459,8 +501,7 @@ const Orders = () => {
                             >
                             {orderOverview.status}
                         </div> */}
-                        <select 
-                          
+                        <select                           
                           defaultValue={orderOverview.status}                          
                           className={`
                             order-status medium-col
@@ -498,7 +539,7 @@ const Orders = () => {
                         <div className='actions-icons small-col'>
                                 {/* <FaRegFilePdf id="generate-pdf" onClick={generateAndDownloadInvoice} /> */}
                                 <button 
-                                  onClick={()=>deleteOrderWithId(orderOverview.id!!)}
+                                  onClick={()=> setConfirmOrderDeletionPopupVisible(true)}
                                   style={{color:'var(--info-red)',fontWeight:'400'}}
                                 >
                                   Delete
@@ -506,6 +547,19 @@ const Orders = () => {
                                 {/* <RiDeleteBin6Line onClick={()=>deleteOrderWithId(orderOverview.id!!)} style={{color:'var(--info-red)'}}></RiDeleteBin6Line>                                 */}
                         </div>
                       </div>
+
+                      {confirmOrderDeletionPopupVisible && 
+
+                        <ConfirmActionPopup 
+                          title='Are you sure you want to delete the order ?'
+                          onConfirmActionPopupClosed={()=>setConfirmOrderDeletionPopupVisible(false)} 
+                          onConfirm={() => deleteOrderWithId(orderOverview.id!!)} 
+                          onCancel={() => setConfirmOrderDeletionPopupVisible(false)}
+                          confirmText='Delete order'
+                          confirmActionButtonStyles={{background:'var(--info-red)',borderRadius:'5px', color:'white'}}
+                        />                        
+                      }
+
 
                       <div className={`order-details ${rotatedRows[index] ? 'expanded' : 'collapsed'}`}>
                           
@@ -548,18 +602,30 @@ const Orders = () => {
 
                           <div className="order-infos">        
 
+
+                          <div className='sale-invoice-wrapper'>
+                              <button className="order-sale-btn" onClick={generateAndDownloadOrderPdf}>
+                                  <label className='sale-label' htmlFor="generate-pdf">Sale order</label>                    
+                                  <FaRegFilePdf id="generate-pdf" />                    
+                              </button>                                                        
+
+                              <button className="order-invoice-btn" onClick={generateAndDownloadInvoice}>
+                                  <label className='invoice-label' htmlFor="generate-pdf">Invoice</label>                    
+                                  <FaRegFilePdf id="generate-pdf" />                    
+                              </button>                                                        
+                            </div>
+
                             <div className='order-price-section'>
-                                {currentOrder?.products && <OrderPrice 
+                                {currentOrder?.products && <OrderPrice                                           
+                                                            key={`${orderOverview.id}-${orderPriceDetailsExpanded}`}
                                                             ref={orderPriceRef} 
                                                             products={currentOrder.products} 
-                                                            order={currentOrder} 
+                                                            order={currentOrder}                                                             
+                                                            //detailsExpanded={orderPriceDetailsExpanded}
                                                             handleOrderPriceChange={handleOrderPriceChange}/>}                             
                             </div>
                             
-                            <button className="order-invoice-section" onClick={generateAndDownloadInvoice}>
-                                <label htmlFor="generate-pdf">Invoice</label>                    
-                                <FaRegFilePdf id="generate-pdf" />                    
-                            </button>                                                        
+                            
                           
                             <div className='order-description'>
                               <div>
@@ -622,7 +688,7 @@ const Orders = () => {
     
                 </div>
               
-                : <p>Pas de commandes</p>
+                : <p>No orders yet</p>
           }
 
         </div>

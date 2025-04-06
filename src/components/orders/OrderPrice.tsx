@@ -12,24 +12,23 @@ interface Props{
     products : Map<string,{product:Product, quantity:number}> | null | undefined;
     order: OrderFullyDetailed;
     // handleOrderDataChange: (orderId: string,key:string, newValue: string) => void;
-    handleOrderPriceChange: () => void;
+    handleOrderPriceChange: () => void;    
+    detailsExpanded? : boolean;
 }
 
 
-const OrderPrice = React.forwardRef(({products,order, handleOrderPriceChange} : Props,ref) => {
+const OrderPrice = React.forwardRef(({products,order, handleOrderPriceChange, detailsExpanded = false} : Props,ref) => {
     
     if(order == null || order === undefined) return 
 
     const initialDiscount = order?.price?.discount ?? "0"
     const initialDeliveryCosts = order?.price?.deliveryCost ??  "0"
 
-    const [calculationsVisible,setCalculationsVisible] = useState(false);
+    const [calculationsVisible,setCalculationsVisible] = useState(detailsExpanded);
     
     const [productsTotalPrice,setproductsTotalPrice] = useState(0);
     const [calculatedPrice,setCalculatedPrice] = useState(0);
-    const [priceCalculationsVisible,setPriceCalculationsVisible] = useState(false);
-
-    const [currentPriceHasBeenModified, setCurrentPriceHasBeenModified] = useState(false)
+    
 
 
     useImperativeHandle(ref,()=>({
@@ -96,14 +95,14 @@ const OrderPrice = React.forwardRef(({products,order, handleOrderPriceChange} : 
                 <div className="actual-price">
                     {Number(order?.price?.finalPrice).toFixed(2)}€                
                 </div>
-                <button className='toggle-details-visibility-btn' onClick={toggleCalculationsVisibility}>{calculationsVisible ? 'Show' : 'Hide'} details</button>
+                <button className='toggle-details-visibility-btn' onClick={toggleCalculationsVisibility}>{calculationsVisible ? 'Hide' : 'Show'} details</button>
             </div>
 
             {calculationsVisible && 
                     <div className='price-calculations'>
                         <div className="decompte">
                             {products instanceof Map && Array.from(products.values()).map((productWithQ ,index) => (
-                                <div key={index}>{productWithQ.product.retailPrice} x {productWithQ.quantity} =  {(Number(productWithQ.product.retailPrice) * productWithQ.quantity).toFixed(2)}€</div>
+                                <div key={index}>{productWithQ.product.retailPrice}€ x {productWithQ.quantity} =  {(Number(productWithQ.product.retailPrice) * productWithQ.quantity).toFixed(2)}€</div>
                             ))}
                         </div>
                         <div className="resume">
@@ -119,8 +118,7 @@ const OrderPrice = React.forwardRef(({products,order, handleOrderPriceChange} : 
                                     suppressContentEditableWarning={true}
                                     onBlur={(e) => {
                                         const discount = (e.target as HTMLElement).innerText
-                                        const formattedDiscount = (Number(discount) / 100)
-                                        setCurrentPriceHasBeenModified(true)
+                                        const formattedDiscount = (Number(discount) / 100)                                        
                                         setModifiedData(prev => prev ? {...prev,discount:formattedDiscount.toString()} : prev)
                                         handleOrderPriceChange()
 
@@ -136,15 +134,14 @@ const OrderPrice = React.forwardRef(({products,order, handleOrderPriceChange} : 
                             </div>
                             <div className='delivery-costs-container'>
                                 <div className="delivery-costs-text">
-                                    Delivery costs:
+                                    Delivery:
                                 </div>
                                 <div 
                                 className="delivery-costs-value"
                                 contentEditable={true}
                                 suppressContentEditableWarning={true}
                                 onBlur={(e)=>{
-                                    const deliveryCosts = Number((e.target as HTMLElement).innerText)
-                                    setCurrentPriceHasBeenModified(true)
+                                    const deliveryCosts = Number((e.target as HTMLElement).innerText)                                    
                                     setModifiedData(prev => prev ? {...prev,deliveryCost:deliveryCosts.toString()} : prev) 
                                     handleOrderPriceChange()
 

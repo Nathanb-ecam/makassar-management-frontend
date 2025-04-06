@@ -29,16 +29,26 @@
     border-radius: 5px;
     padding: 10px 20px;
     font-size: 1.1rem;
-    background: white;    
     /* border: 1px solid var(--info-green); */
     color: var(--primary);
-    border: 1px solid var(--primary);
+    background: white;    
+    color: white;    
+    background: var(--primary-lighter);    
+    display: flex;
+    align-items: center;
+    gap: .5rem;        
 }
 
+.title-plus-button:hover{
+    cursor: pointer;
+}
+
+
 .plus-button{
-    /* font-size: 45px;
-    color: var(--primary);
-    border: none; */
+    font-size: 18px;
+    color: var(--ligth-white);
+    border: none;
+    
 }
 
 .classic-button{

@@ -1,3 +1,15 @@
+
+.hover-area {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 50px; /* Small hover area */
+    height: 100vh;
+    z-index: 100;
+    background: transparent;
+  }
+
+  
 .navbar{
     background : var(--ligth-gray);    
     border-right: 1px solid var(--light-gray);

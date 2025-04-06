@@ -9,7 +9,7 @@
 :root {
   --black: rgb(61,61,61);
   --dark-black: #161718;
-  --light-black: #525355;
+  --ligth-black: #525355;
   --black-lighter: #525355d6;
 
    /* TOP */
@@ -22,10 +22,10 @@
   --info-red: #e72e2e;
 
   --ligth-grey: hsla(226, 49%, 90%, 0.371);
-  --light-background: hsla(240, 1%, 96%,1);
-  --light-grey-background: hsla(0, 0%, 98%,1);
+  --ligth-background: hsla(240, 1%, 96%,1);
+  --ligth-grey-background: hsla(0, 0%, 98%,1);
   --white-background : rgb(254,254,254);
-  --light-white: rgb(249, 249, 249);
+  --ligth-white: rgb(249, 249, 249);
   --ligth-gray: rgb(231, 229, 229);
   --hover-grey: rgb(226,228,231);
   
@@ -87,6 +87,6 @@ body{
 
 input, textarea, select{
   
-  border:1px solid var(--primary-lighter);
+  border:1px solid var(--black-lighter);
   border-radius: 5px;
 }

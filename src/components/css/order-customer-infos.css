@@ -2,6 +2,7 @@
     outline: 2px solid var(--primary-lighter);
     border-radius: 10px;
     overflow: hidden;
+    /* min-width: 100%; */
 }
 .customer-card .card-title{
     padding: 0.5rem 1rem;    
@@ -9,6 +10,7 @@
     color: white;
     display: flex;
     align-items: center;
+    border-radius: 8px 8px 0 0;
     gap: 1rem;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -21,18 +23,87 @@
     color: var(--black-lighter);
 }
 
-.customer-card .card-content .mail-phone{    
-    font-weight: 300;
+.card-content .customer-section{
+    margin: 1rem 0;
 }
+
+.card-content .subsection-titles{
+    font-size: .9rem;
+    font-weight: 500;
+    text-align: left;
+    padding-bottom: .1rem;
+    border-bottom: 1px solid var(--ligth-grey);
+}
+
+
+.customer-card .card-content .mail-phone{    
+    display: flex;
+    flex-direction: column;
+    font-weight: 300;
+    gap: 1rem;
+}
+
+.customer-card .card-content .mail-phone > div{    
+    display: flex;
+    /* flex-wrap: wrap; */
+    justify-content: space-between;
+    align-items: center;    
+}
+.customer-card .card-content .mail-phone > div label{    
+    flex-grow:1;
+}
+
+.customer-card .mail svg,
+.customer-card .phone svg{    
+    color: var(--ligth-black);        
+    width:  15px;
+    height: 15px;
+}
+
+.mail, .phone{
+    display: flex;    
+    flex-wrap: wrap;
+}
+
+.customer-card .mail label,
+.customer-card .phone label{
+    font-size: .9rem;
+}    
+
+.customer-card .mail-phone .mail svg{
+    font-size: .8rem;
+}
+.customer-card .mail-phone .phone svg{    
+    font-size: .7rem;    
+}
+
 .customer-card .card-content .tva{    
     font-size: .8rem;
 }
 
-.customer-card .card-content svg{
-    margin-top: 1.5rem;
-    width: 100%;
-    font-size: 2rem;    
-    color: var(--primary-lighter);
+
+.company-data{
+    text-align: center;
+    font-size: .8rem;
+    color: var(--ligth-black);
+}
+
+.additional-infos{
+    font-size: .8rem;
+    color: var(--ligth-black);
+    text-align: center;
+}
+
+.additional-infos > div{        
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    align-items: center;
+    
+}
+
+.additional-infos svg{
+    font-size: 2rem;
 }
 
 .customer-card{}

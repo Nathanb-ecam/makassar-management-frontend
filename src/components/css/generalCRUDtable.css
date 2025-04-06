@@ -24,6 +24,17 @@
     font-weight: lighter;        
 }
 
+.content-row{
+    height: 3rem;
+    border-bottom: 1px solid var(--ligth-grey) ;
+    border-inline-start: 1px solid var(--ligth-grey) ;
+    border-inline-end: 1px solid var(--ligth-grey) ;
+}
+
+.content-row:last-child{
+    border-bottom: 1px solid var(--ligth-grey);
+}
+
 .general-crud-table .header-row{
     background: var(--primary-lighter);
     color: white;
@@ -41,12 +52,13 @@
 }
 
 .content-row:hover{
-    /* color:var(--ligth-gray); */
-    font-weight: 300; 
+    color:var(--primary);
+    /* font-weight: 300;  */
+    background: var(--ligth-grey);
 }
 
 .content-row:nth-of-type(2n){
-    background: var(--ligth-grey);
+    
     
 }
 

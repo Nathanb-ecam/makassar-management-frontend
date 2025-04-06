@@ -1,7 +1,7 @@
 import React from 'react'
-import { CiSquarePlus } from 'react-icons/ci'
 
 import '../css/sectionTitle.css'
+import { FaPlus } from 'react-icons/fa6';
 
 
 interface Props{
@@ -20,10 +20,12 @@ const SectionTitle = ({title,newElementButtonText, onCreateButtonClicked,  child
               <div className="classic-button-wrapper">
                 {children}
               </div>
-              <button className='title-plus-button' onClick={onCreateButtonClicked}>
-                {newElementButtonText}
-                {/* <CiSquarePlus className='plus-button' /> */}
-              </button>
+              <div className='title-plus-button' onClick={onCreateButtonClicked}>              
+                <FaPlus className='plus-button' />
+                <button>
+                  {newElementButtonText}
+                </button>
+              </div>
             </div>
     </div>
   )

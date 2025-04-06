@@ -40,17 +40,6 @@ interface Props{
 
 const GeneralCRUDTable = ({tableProps,handlers} : Props) => {
 
-    const [actualTableData, setActualTableData] = useState();
-
-    const {showTopMessage}:any = useTopMessage()
-    
-
-    // console.log(tableProps.data)
-
-    // tableProps.data.map((dataItem,index)=>{
-    //     console.log(dataItem)
-    // })
-
     const renderDataItem = (itemId: string,  fieldName : string, fieldValue: any , itemSizeClass : string)=>{
 
         const editable = !(fieldName === 'createdAt' || fieldName === 'updatedAt')
@@ -107,11 +96,10 @@ const GeneralCRUDTable = ({tableProps,handlers} : Props) => {
                             </React.Fragment>                                        
                         
                     ))}
-                    <div className="row-item actions-col">
-                        {/* <MdModeEdit className='action-edit' onClick={()=>{openTableEditer}}/> */}
+                    <div className="row-item actions-col">                        
                         <RiDeleteBin6Line 
                             className='action-delete'
-                            onClick={() => handlers.onDeleteRow(dataItem.id)} 
+                            onClick={() => handlers.onDeleteRow(dataItem.id)}                             
                         />
                     </div>
                 </div> 

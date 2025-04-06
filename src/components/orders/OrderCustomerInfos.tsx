@@ -1,9 +1,10 @@
 import React from 'react'
 import { Customer } from '../../models/entities'
 import { FaUser } from 'react-icons/fa'
-import { CiDeliveryTruck } from 'react-icons/ci'
+import { CiDeliveryTruck, CiMail } from 'react-icons/ci'
 
 import '../css/order-customer-infos.css'
+import { FaPhone } from 'react-icons/fa6'
 
 
 
@@ -20,24 +21,54 @@ const OrderCustomerInfos = ({customer} : Customer) => {
             <label htmlFor="">{customer.name}</label>
           </div>
           <div className="card-content">
-            <div className="mail-phone">
-                {customer.mail && customer.mail?.length>0 &&<div className='mail'>{customer.mail}</div>}
-                {customer.phone && customer.phone?.length>0 && <div className='phone'>{customer.phone}</div>}
+
+            <div className="customer-section">
+                <h3 className='subsection-titles'>Contacts</h3>
+                <div className='mail-phone'>
+                    {customer.mail && customer.mail?.length>0 &&
+                        <div className='mail'>
+                            <CiMail />
+                            <label>{customer.mail}</label>
+                        </div>
+                    }
+                    
+                    {customer.phone && customer.phone?.length>0 && 
+                        <div className='phone'>
+                            <FaPhone></FaPhone>
+                            <label>{customer.phone}</label>
+                        </div>
+                    }
+                </div>
             </div>
-            {customer.tva && customer.tva?.length>0 && <div className='tva'>VAT: {customer.tva}</div>}
 
-            {customer.shippingAddress && <div className='shippingAddress'>
-                <CiDeliveryTruck />
-                {customer.shippingAddress}
-            </div>}
-            {customer.professionalAddress && <div className='professionalAddress'>Adresse pro:{customer.professionalAddress ?? "Non renseignée"}</div>}        
+            <div className="customer-section">
+                <h3 className='subsection-titles'>Company</h3>    
+                <div className='company-data'>
+                {customer.societyName && customer.societyName?.length>0 && <div className='societyName'>{customer.societyName}</div>}
+                {customer.tva && customer.tva?.length>0 && <div className='tva'>VAT: {customer.tva}</div>}
+                {customer.professionalAddress && <div className='professionalAddress'>{customer.professionalAddress ?? "Non renseignée"}</div>}        
+                </div>
+                
+            </div>
 
-          </div>
+            <div className="others-section">
+                
+                    {customer.shippingAddress && 
+                    <>
+                        <h3 className='subsection-titles'>Additional infos</h3>        
+                        <div className="additional-infos">
+                            <div className='shippingAddress'>
+                                <CiDeliveryTruck />
+                                <div>{customer.shippingAddress}</div>
+                            </div>
+                        </div>
+                    </>
+                    }
+            </div>
+
             
-          
-          
-          
-          
+
+          </div>                                                    
           
       </div>
     </div>    

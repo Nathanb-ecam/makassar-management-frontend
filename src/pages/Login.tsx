@@ -25,9 +25,9 @@ const LoginForm = () => {
   
   const [selectedTab, setSelectedTab] = useState('login');
   
-  useEffect(()=>{
-    console.log(feedbackMsg)
-  },[feedbackMsg])
+  // useEffect(()=>{
+  //   console.log(feedbackMsg)
+  // },[feedbackMsg])
   
   const handleTabChange = (tabName:string) =>{
     setSelectedTab(tabName)
@@ -50,7 +50,7 @@ const LoginForm = () => {
         }
       )
 
-      //console.log(JSON.stringify(response?.data))
+      console.log(JSON.stringify(response?.data))
       if(response.status == 200){
         const accessToken = response?.data?.accessToken
         const tenantId = response?.data?.tenantId

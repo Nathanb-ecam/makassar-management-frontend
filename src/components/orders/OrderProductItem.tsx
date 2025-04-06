@@ -54,14 +54,14 @@ const OrderProductItem = ({product, initialQuantity,updateProductQuantity,  onPr
             <div className="item-details-section">
                     {product.collectionName && <div className='collectionName'>{product.collectionName}</div>}
                     <div className='marketingName'>{product.marketingName}</div>
+                    <div className='retailPrice'>€ {product.retailPrice} <span>(htva)</span></div>                    
                     {product.sku && <div className='sku'>SKU: {product.sku}</div>}
-                    <div className='retailPrice'>€ {product.retailPrice}</div>
             </div>
 
             <div className="item-actions">
                 <input 
                     className='product-quantity-input'
-                    type="text" placeholder={initialQuantity.toString()} 
+                    type="number" placeholder={initialQuantity.toString()} 
                     onChange={(e)=> {setProductQuantity(e.target.value)}} 
                     value={productQuantity}
                     onBlur={handleQuantityBlur}

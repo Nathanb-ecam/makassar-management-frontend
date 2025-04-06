@@ -1,0 +1,28 @@
+.actions-cancel-confirm{
+    width: 100%;    
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+
+}
+
+
+.confirm-action,
+.cancel-action{
+    padding: 5px 10px;
+    border-radius:'5px';
+}
+
+.confirm-action{
+    background:'var(--info-green)';
+    padding: 5px 10px;
+    border: none;    
+    color:'white';
+}
+
+
+.cancel-action{    
+    color: var(--ligth-black);
+    border: 1px solid var(--ligth-black);
+    border-radius:'5px';
+}

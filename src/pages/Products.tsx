@@ -17,6 +17,7 @@ import { IoMdClose } from 'react-icons/io';
 import { useTopMessage } from '../hooks/useTopMessagePopup.tsx';
 import { BsHandbag } from 'react-icons/bs';
 import ProductModifier from '../components/products/ProductModifier.tsx';
+import ConfirmActionPopup from '../components/main/ConfirmActionPopup.tsx';
 
 const Products = () => {
 
@@ -33,6 +34,9 @@ const Products = () => {
   const[currentProductToModify, setCurrentProductToModify] = useState<Product | undefined>(undefined);
   const [ProductModifierVisible,setProductModifierVisible] = useState(false);
   
+
+  const [confirmProductDeletionPopupVisible, setConfirmProductDeletionPopupVisible] = useState(false);
+  const [productMarkedForDeletion,setProductMarkedForDeletion] = useState<Product | null>(null);
 
   const handleCreateButtonClicked = () => {
     setCreateProductPopupVisible(true)
@@ -137,9 +141,18 @@ const Products = () => {
   
   }
 
-  const removeProduct = async (product :Product)=>{
+
+  const hadnleDeletePopupOpening = (product : Product)=>{    
+    setProductMarkedForDeletion(product)
+    setConfirmProductDeletionPopupVisible(true)
+  }
+
+  const removeProduct = async ()=>{
       // console.log("Product to remove",Product)
       
+      const product = productMarkedForDeletion
+      if(product == null) return
+
       if (product.id === undefined) return 
 
       const imageUrls = product?.imageUrls ?? []
@@ -161,6 +174,8 @@ const Products = () => {
       }else{
         // console.log('Failed to delete Product')
       }
+
+      setConfirmProductDeletionPopupVisible(false)
   }
 
 
@@ -186,7 +201,8 @@ const Products = () => {
 
         
 
-        {Products &&  
+        {
+        Products &&  
           <div className="products-list-wrapper">
             <div className='products-list'>
               {Products.map((product,index)=>(
@@ -211,17 +227,14 @@ const Products = () => {
                     }
                     <div className="product-info">              
                       <div className="product-title">{product.marketingName}</div>
-                      <IoMdClose className='product-delete-btn' onClick={(e)=>{e.stopPropagation(); removeProduct(product);}} />
+                      <IoMdClose className='product-delete-btn' onClick={(e)=>{e.stopPropagation(); hadnleDeletePopupOpening(product);}} />
                     </div>
                 
                 </div>
               ))}
             </div>
           </div>
-
-          
- 
-        }
+          }
 
 
 
@@ -244,6 +257,18 @@ const Products = () => {
                                   applyProductModifications={applyProductModifications}
                                   onPopupClose={()=>setProductModifierVisible(false)} 
                                   />
+        }
+
+        {confirmProductDeletionPopupVisible && 
+
+        <ConfirmActionPopup 
+          title='Are you sure you want to delete this product ?'
+          onConfirmActionPopupClosed={() => setConfirmProductDeletionPopupVisible(false)} 
+          onConfirm={removeProduct} 
+          onCancel={() => setConfirmProductDeletionPopupVisible(false)}
+          confirmText='Delete product'
+          confirmActionButtonStyles={{background:'var(--info-red)',borderRadius:'5px', color:'white'}}
+        />                        
         }
 
 

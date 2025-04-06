@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { Navbar,Container,Nav, NavDropdown } from 'react-bootstrap';
 import { Link, useNavigate } from 'react-router-dom';
 
@@ -15,8 +15,11 @@ import { MdAccountCircle } from 'react-icons/md';
 
 const MainNavbar = () => {
   
-  const [visibleNavbar,setVisibleNavbar] = useState(true)
+  const [visibleNavbar,setVisibleNavbar] = useState(false)
   const [selectedItem,setSelectedItem] = useState('')
+
+  const hoverTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
+
   
   const navigate = useNavigate()
   
@@ -29,14 +32,33 @@ const MainNavbar = () => {
 
   const toggleNavbarVisibility = () =>{
     // console.log("clicked",visibleNavbar)
-    setVisibleNavbar(prev=>!prev)
-    
-    
+    setVisibleNavbar(prev=>!prev)        
   }
+
+   // Handle hover enter (start timeout)
+   const handleMouseEnter = () => {
+    hoverTimeout.current = setTimeout(() => {
+      setVisibleNavbar(true);
+    }, 300); // Adjust delay (in milliseconds)
+  };
+
+  // Handle hover leave (cancel timeout if not yet executed)
+  const handleMouseLeave = () => {
+    if (hoverTimeout.current) {
+      clearTimeout(hoverTimeout.current);
+      hoverTimeout.current = null;
+    }    
+  };
   
   return (
     <>
        
+
+       <div        
+        className="hover-area"
+        onMouseEnter={handleMouseEnter}
+        onMouseLeave={handleMouseLeave}
+      />
   
   
     {/* <div className="navbar "  style={{display:visibleNavbar? 'block':'none', transition:'translate 1s'}}>     */}
