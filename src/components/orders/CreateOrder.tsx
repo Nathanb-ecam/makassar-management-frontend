@@ -154,8 +154,8 @@ const CreateOrder = ({handleOrderCreated} : Props) => {
             <div className="create-order">
                 <form onSubmit={hanldeCreateOrder}>
 
-                    <div className="customer-selection create-order-field">
-                        <label htmlFor="customer-select-id">Customer: </label>
+                    <div className="customer-selection create-order-field flex flex-col">
+                        <label className='text-primary' htmlFor="customer-select-id">Customer: </label>
                         <select 
                             name="customerId" id="customer-select-id"
                             onChange={handleElementChange}                            

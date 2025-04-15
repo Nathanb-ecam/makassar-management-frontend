@@ -63,7 +63,7 @@ const styles = StyleSheet.create({
   }
 });
 
-const OrderInvoiceTemplate = ({ user, detailedOrder }: Props) => {
+const  OrderInvoiceTemplate = ({ user, detailedOrder }: Props) => {
   return (
     <Document
       // title={`${detailedOrder?.customer?.name || 'Unknown Customer'}-${detailedOrder?.orderNumber || ''}`}

@@ -8,8 +8,8 @@ import '../css/navbar.css'
 
 import { IoColorPalette } from "react-icons/io5";
 import { FaHouse,FaRegPenToSquare,FaBagShopping,FaPerson, FaAngleLeft } from 'react-icons/fa6';
-import { IoMdClose } from 'react-icons/io';
-import { MdAccountCircle } from 'react-icons/md';
+import { IoMdClose, IoMdHome } from 'react-icons/io';
+import { MdAccountCircle, MdDashboard } from 'react-icons/md';
 
 
 
@@ -69,6 +69,10 @@ const MainNavbar = () => {
           <FaHouse className='nav-icons'/>
           <button className="nav-button" >Dashboard</button>
         </li> */}
+        <li className={`nav-li-item ${selectedItem === "dashboard" ? "selected" : "" }`} onClick={(e)=>navigateTo("/dashboard","dashboard")}>
+          <IoMdHome className='nav-icons'/>          
+          <button className="nav-button" >Home</button>
+        </li>
         <li className={`nav-li-item ${selectedItem === "orders" ? "selected" : "" }`} onClick={(e)=>navigateTo("/orders","orders")}>
           <FaRegPenToSquare className='nav-icons' />
           <button className="nav-button" >Orders</button>
